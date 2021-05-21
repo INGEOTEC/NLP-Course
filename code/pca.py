@@ -20,4 +20,11 @@ plt.tight_layout()
 plt.savefig("iris-pca.png", dpi=300) 
 
 
+for x in X[:2]:
+    _ = ["$%0.2f$" % i for i in x]
+    print("&".join(_) + "\\\\")
 
+hX = pca.inverse_transform(Xn)
+for x in hX[:2]:
+    _ = ["$%0.2f$" % i for i in x]
+    print("&".join(_) + "\\\\")
