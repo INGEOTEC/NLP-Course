@@ -29,5 +29,6 @@ for cluster, ax, pivot in zip([clusters, second_cl], axs,
     ax.plot(pivot[:, 0], pivot[:, 1], '*')
 
 [(remove_ticks(ax), ax.grid()) for ax in axs]
+[ax.set_title(title) for title, ax in zip(["1st step", "2nd step"], axs)]
 plt.savefig("kmeans-2steps.png", dpi=300)
 
