@@ -15,6 +15,7 @@ from sklearn.datasets import load_iris
 from scipy.special import logsumexp
 from sklearn.naive_bayes import GaussianNB
 import numpy as np
+from nb_likelihood import li
 X, y = load_iris(return_X_y=True)
 labels, prior = np.unique(y, return_counts=True)
 prior = prior / prior.sum()
