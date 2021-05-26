@@ -13,6 +13,8 @@
 # limitations under the License.
 from sklearn.datasets import load_iris
 import numpy as np
+from scipy.special import logsumexp
+from sklearn.naive_bayes import GaussianNB
 X, y = load_iris(return_X_y=True)
 classes = np.unique(y)
 mu = [X[y == cl].mean(axis=0) for cl in classes]
@@ -21,5 +23,14 @@ var = np.array([X[y == cl].var(axis=0)
 li = -0.5 * np.sum(np.log(2 * np.pi * var),
                    axis=1)
 li = li - 0.5 *\
-     np.array([np.sum((X - mu_i)**2 / var_i, axis=1)
+     np.array([np.sum((X - mu_i)**2 / var_i,axis=1)
                for mu_i, var_i in zip(mu, var)]).T
+
+labels, prior = np.unique(y, return_counts=True)
+prior = prior / prior.sum()
+hy = li + np.log(prior)
+hy = hy - np.atleast_2d(logsumexp(hy, axis=1)).T
+hy = np.exp(hy)
+
+m = GaussianNB().fit(X, y)
+hhy = m.predict_proba(X)
