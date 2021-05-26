@@ -16,6 +16,7 @@ from microtc.utils import tweet_iterator
 from os.path import join, dirname
 from collections import Counter
 import numpy as np
+from scipy.special import logsumexp
 tweets = join(dirname(base.__file__),
               'tests', 'tweets.json')
 T = [x['text'] for x in tweet_iterator(tweets)]
@@ -32,6 +33,21 @@ for i, s in enumerate(T):
     if index.shape[0]:
         X[i, index] = 1
 
-labels = [x['klass']
-          for x in tweet_iterator(tweets)]
-labels = np.array(labels)
+y = np.array([x['klass']
+     for x in tweet_iterator(tweets)])
+
+labels, prior = np.unique(y, return_counts=True)
+prior = np.log(prior / prior.sum())
+p = [X[y == i].sum(axis=0) for i in labels]
+p = np.array([(x + 1) / ((y == i).sum() + 2)
+              for x, i in zip(p, labels)])
+pos, neg = np.log(p), np.log(1 - p)
+hy = [X * p + (1 - X) *n
+      for p, n in zip(pos, neg)]
+hy = np.array([x.sum(axis=1) for x in hy]).T
+hy = hy + prior
+hy = hy - np.atleast_2d(logsumexp(hy, axis=1)).T
+hy = np.exp(hy)
+hy_l = labels[hy.argmax(axis=1)]
+print((y == hy_l).mean())
+# 0.748
