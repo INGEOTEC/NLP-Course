@@ -16,6 +16,14 @@ Mario Graff (mgraffg en ieee.org)
 
 # Introduction
 
+# Notation
+
+- $$x$$ Variable $$x \in \mathbb R$$ 
+- $$\mathbf x$$ Vector $$\mathbf x \in \mathbb R^d$$
+- $$d$$ Dimension
+- $$N$$ Number of examples
+- $$K$$ Number of classes or labels
+
 # Bibliography
 
 - Introduction to machine learning, Third Edition. Ethem Alpaydin. MIT Press
