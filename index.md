@@ -27,6 +27,7 @@ Mario Graff (mgraffg en ieee.org)
 |$$\mathbf w \cdot \mathbf x$$ | Dot product    |
 |$$N$$             | Number of examples           |
 |$$K$$             | Number of classes or labels  |
+|$$\mathbb 1(e)$$  | Indicator function; one only if $$e$$ is true |
 
 #  Requirements
 
