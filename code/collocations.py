@@ -227,10 +227,9 @@ plt.tight_layout()
 plt.savefig("wordcloud_comparison_tweets.png", dpi=300)
 
 
-
 _ = {k: v for k, v in voc.items() if k.count("~")}
 wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis("off")
 plt.tight_layout()   
-plt.savefig("wordcloud_tweets.png", dpi=300) 
+plt.savefig("wordcloud_tweets.png", dpi=300)
