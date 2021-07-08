@@ -93,7 +93,7 @@ class LM(object):
         return np.exp(self.log_prob(ngram))
 
 
-tm = TokenCount.textModel(token_list=[-1])
+tm = TokenCount.textModel(token_list=[-3])
 token = TokenCount(tokenizer=tm.tokenize)
 read = Read(glob("books/*.txt"),
             n_gram=tm.token_list[0] * -1)
