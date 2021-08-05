@@ -35,6 +35,7 @@ Mario Graff (mgraffg en ieee.org)
 
 - [NumPy](https://numpy.org)
 - [scikit-learn](https://scikit-learn.org/stable/index.html)
+- [spacy](https://spacy.io)
 - [$$\mu$$TC](https://microtc.readthedocs.io/en/latest/)
 - [EvoMSA](https://evomsa.readthedocs.io/en/latest/)
 
