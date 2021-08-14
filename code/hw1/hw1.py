@@ -1,5 +1,5 @@
 import re
-from typing import Tuple
+from typing import Tuple, List
 from collections import Counter
 
 
@@ -33,4 +33,28 @@ def entity_identification(txt: str) -> Counter:
     Counter({'America': 2, 'U.S.A.': 1, 'Mexico': 1})
     >>> entity_identification("USA. U.S.A America.")
     Counter({'USA.': 1, 'U.S.A': 1, 'America.': 1})
+    """
+
+
+def replace_user(txt: str) -> str:
+    """Replace the appearance of a username (e.g. @mario) with the tag @user
+    Usage:
+
+    >>> replace_user("Hi @mgraffg!")
+    'Hi @user!'
+    >>> replace_user("@_mgraffg @mgraffg_ @mgraffg_2 @mgraffg?")
+    '@user @user @user @user?'
+    """
+
+
+def sentence_accuracy(y: List[str], hy: List[str]) -> float:
+    """Computes the accuracy of a sentece tokenizer.
+    Usage:
+    
+    >>> sentence_accuracy(['a', 'b'], ['b', 'a'])
+    1.0
+    >>> sentence_accuracy(['a', 'a'], ['a'])
+    0.5
+    >>> sentence_accuracy(['a', 'b', 'b', 'a'], ['b', 'a', 'a'])
+    0.75
     """
