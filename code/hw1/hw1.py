@@ -9,9 +9,9 @@ def start_project(txt: str) -> Tuple[int, int]:
     The ... indicates any text except the carriage return. 
     Usage: 
 
-    >>> start_project("*** START OF THE PROJECT GUTENBERG EBOOK THE ILIAD ***")
+    #>>> start_project("*** START OF THE PROJECT GUTENBERG EBOOK THE ILIAD ***")
     (0, 54)
-    >>> start_project("Hi! *** START OF THE PROJECT GUTENBERG EBOOK WAR AND PEACE *** Excellent book")
+    #>>> start_project("Hi! *** START OF THE PROJECT GUTENBERG EBOOK WAR AND PEACE *** Excellent book")
     (4, 77)
 
     This function will be tested on two of the 
@@ -25,13 +25,13 @@ def entity_identification(txt: str) -> Counter:
     each word starting with a capital letter or an abbreviation.
     Usage:
     
-    >>> entity_identification("America is a continent.")
+    #>>> entity_identification("America is a continent.")
     Counter({'America': 1})
-    >>> entity_identification("The United States is in America")
+    #>>> entity_identification("The United States is in America")
     Counter({'The': 1, 'United': 1, 'States': 1, 'America': 1})
-    >>> entity_identification("U.S.A. is in America and Mexico is in America")
+    #>>> entity_identification("U.S.A. is in America and Mexico is in America")
     Counter({'America': 2, 'U.S.A.': 1, 'Mexico': 1})
-    >>> entity_identification("USA. U.S.A America.")
+    #>>> entity_identification("USA. U.S.A America.")
     Counter({'USA.': 1, 'U.S.A': 1, 'America.': 1})
     """
 
@@ -40,9 +40,9 @@ def replace_user(txt: str) -> str:
     """Replace the appearance of a username (e.g. @mario) with the tag @user
     Usage:
 
-    >>> replace_user("Hi @mgraffg!")
+    #>>> replace_user("Hi @mgraffg!")
     'Hi @user!'
-    >>> replace_user("@_mgraffg @mgraffg_ @mgraffg_2 @mgraffg?")
+    #>>> replace_user("@_mgraffg @mgraffg_ @mgraffg_2 @mgraffg?")
     '@user @user @user @user?'
     """
 
