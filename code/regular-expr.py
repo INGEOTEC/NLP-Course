@@ -17,15 +17,23 @@ from glob import glob
 cdn = """
 Hi! 
 
-The email you are looking is mm@gg.com;
-however, you can also send an email to vv@gg.com
+The emael you are looking is mm@gg.com;
+however, you can also send an email to vv.x@gg.com
 """
 
-output = re.search("gg\.com", cdn)
+output = re.search("gg", cdn)
 print(output.group(0), output)
+
+re.search("ema.l", cdn)
+
+re.search("gg\.com$", cdn)
+
+re.search("gg\.com", cdn)
 # gg.com <span=(38, 44), match='gg.com'>
 
-[x for x in re.finditer("\w+@gg\.com", cdn)]
+[x for x in re.finditer("gg\.com", cdn)]
+
+[x for x in re.finditer("[\w.]+@gg\.com", cdn)]
 
 [x for x in re.finditer("\w+@gg\.com$", cdn)]
 
@@ -34,3 +42,39 @@ print(output.group(0), output)
 
 _ = re.sub(r'(?P<name>\w+@\w+\.\w+)',
            "<mailto: \g<name>>", cdn)
+
+output = []
+for x in re.finditer("gg\.com", cdn):
+    output.append(x)
+output
+
+[x for x in re.finditer("ema[ei]l", cdn)]
+
+[x for x in re.finditer("g+\.com", cdn)]
+
+for x in ["ja", "jaja", "j", "a"]:
+    _ = re.search("[ja]*", x)
+    print(_)
+
+
+for x in ["ja", "jaja", "j", "a"]:
+    _ = re.search("(ja)+", x)
+    print(_)
+
+
+for x in ["ja", "jaja", "j", "a", "e", "je", "jeje", "jajeja"]:
+    _ = re.search("(ja)+|(je)+", x)
+    print(_)
+
+
+for x in ["ja", "jaja", "j", "a"]:
+    _ = re.sub("(ja)+", ":) -> \g<1>", x)
+    print(_)
+
+for x in ["ja", "jaja", "j", "a", "jeje"]:
+    _ = re.sub("((ja)+|(je)+)", ":) -> \g<1>", x)
+    print(_)    
+
+for x in ["ja", "jaja", "j", "a"]:
+    _ = re.sub("(ja)+", r':) -> \g<1>', x)
+    print(_)
