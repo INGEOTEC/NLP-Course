@@ -38,7 +38,7 @@ re.search("gg\.com", cdn)
 [x for x in re.finditer("\w+@gg\.com$", cdn)]
 
 [x for x in 
- re.finditer(r'\s\w+(?=\s\w+@\w+\.\w+)', cdn)]
+ re.finditer(r'\b\w+(?=\s\w+@\w+\.\w+)', cdn)]
 
 _ = re.sub(r'(?P<name>\w+@\w+\.\w+)',
            "<mailto: \g<name>>", cdn)
@@ -56,16 +56,13 @@ for x in ["ja", "jaja", "j", "a"]:
     _ = re.search("[ja]*", x)
     print(_)
 
-
 for x in ["ja", "jaja", "j", "a"]:
     _ = re.search("(ja)+", x)
     print(_)
 
-
 for x in ["ja", "jaja", "j", "a", "e", "je", "jeje", "jajeja"]:
     _ = re.search("(ja)+|(je)+", x)
     print(_)
-
 
 for x in ["ja", "jaja", "j", "a"]:
     _ = re.sub("(ja)+", ":) -> \g<1>", x)
@@ -77,4 +74,8 @@ for x in ["ja", "jaja", "j", "a", "jeje"]:
 
 for x in ["ja", "jaja", "j", "a"]:
     _ = re.sub("(ja)+", r':) -> \g<1>', x)
+    print(_)
+
+for x in ["bla mm@gg.com", "# do xx@yy.com"]:
+    _ = re.search(r'(?<=mm@)([\w.]+)', x)
     print(_)
