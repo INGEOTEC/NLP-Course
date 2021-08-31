@@ -18,7 +18,7 @@ from collections import Counter
 
 def start_project(txt: str) -> Tuple[int, int]:
     """Use regular expressions to find 
-    the start and end point of the line *** START OF THE PROJECT ... ***.
+    the start and end point of the line *** START OF THE PROJECT ... *** ...
     The ... indicates any text except the carriage return. 
     Usage: 
 
