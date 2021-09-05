@@ -103,3 +103,17 @@ res = minimize(error, [1, 0.7],
                options={'disp': True})
 
 res.x
+
+
+def n_grams(words: list, n: int):
+    ww = [words[i:] for i in range(n)]
+    _ = ["~".join(x) for x in zip(*ww)]
+    return _
+
+words = ['a', 'b', 'c', 'd']
+n_grams(words, 2)
+# ['a~b', 'b~c', 'c~d']
+n_grams(words, 3)
+# ['a~b~c', 'b~c~d']
+n_grams(words, 4)
+# ['a~b~c~d']
