@@ -42,18 +42,6 @@ plt.axis("off")
 plt.tight_layout()
 plt.savefig("books_wordcloud.png", dpi=300)
 
-# 
-bigrams["in~the"]
-# 9913
-sum(bigrams.values())
-# 2274130
-N = sum(bigrams.values())
-prob_bigrams = {k: v / N for k, v in bigrams.items()}
-prob_bigrams["in~the"]
-# 0.004359029606926605
-sum(prob_bigrams.values())
-# 1.0000000000142464
-
 # Histogram
 hist = defaultdict(list)
 _ = [hist[v].append(k) for k, v in bigrams.items()]
@@ -63,6 +51,73 @@ plt.xlabel("Frequency")
 plt.ylabel("Number of bigrams (log-scale)")
 plt.tight_layout()
 plt.savefig("books_hist.png", dpi=300)
+
+
+## Wald test
+bigrams["in~the"]
+# 12670
+sum([x for x in bigrams.values()])
+# 2982163
+N = sum([x for x in bigrams.values()])
+prob_bigrams = {k: v / N for k, v in bigrams.items()}
+prob_bigrams["in~the"]
+# 0.004248594057400619
+sum([x for x in prob_bigrams.values()])
+# 0.9999999999999999
+
+words = {k: v for k, v in token.counter.items() if k.count("~") == 0}
+wald = dict()
+for w, v in prob_bigrams.items():
+    w1, w2 = w.split("~")
+    se = np.sqrt(v * (1 - v) / N)
+    if not np.isfinite(se):
+        print("hhhh")
+    p1 = words.get(w1, 1) / N
+    p2 = words.get(w2, 1) / N
+    wald[w] = (v - (p1 * p2)) / se
+
+wc = WC().generate_from_frequencies(wald)
+plt.imshow(wc)
+plt.axis("off")
+plt.tight_layout()
+plt.savefig("books_wald.png", dpi=300)
+
+
+wald_max = dict()
+for w, v in prob_bigrams.items():
+    w1, w2 = w.split("~")
+    se = np.sqrt(v * (1 - v) / N)
+    p1 = words.get(w1, 1) / N
+    p2 = words.get(w2, 1) / N
+    w_value = (v - (p1 * p2)) / se
+    freq = bigrams[w]
+    if wald_max.get(freq, 0) < w_value:
+        wald_max[freq] = w_value
+
+x = list(wald_max.keys())
+x.sort()
+plt.plot([wald_max[k] for k in x if k <=100], '-')
+plt.xlabel("Frequency")
+plt.ylabel("Max Wald statistic")
+plt.savefig("max_wald.png", dpi=300)
+
+wald = dict()
+for w, v in prob_bigrams.items():
+    if bigrams[w] != 15:
+        continue
+    w1, w2 = w.split("~")
+    se = np.sqrt(v * (1 - v) / N)
+    if not np.isfinite(se):
+        print("hhhh")
+    p1 = words.get(w1, 1) / N
+    p2 = words.get(w2, 1) / N
+    wald[w] = (v - (p1 * p2)) / se
+
+wc = WC().generate_from_frequencies(wald)
+plt.imshow(wc)
+plt.axis("off")
+plt.tight_layout()
+plt.savefig("max_wald_15.png", dpi=300)
 
 
 # Collocations
