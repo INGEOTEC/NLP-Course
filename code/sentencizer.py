@@ -4,6 +4,8 @@ import numpy as np
 
 
 class Sent(Sentencizer):
+    pass
+
     def predict(self, docs):    
         """Apply the pipe to a batch of docs, without modifying them.
 
@@ -23,8 +25,8 @@ class Sent(Sentencizer):
                 doc_guesses[0] = True
                 for i, token in enumerate(doc):
                     is_in_punct_chars = token.text in self.punct_chars
-                    if not is_in_punct_chars:
-                        is_in_punct_chars = "." in token.text
+                    # if not is_in_punct_chars:
+                    #    is_in_punct_chars = "." in token.text
                     print("Doing token:", token, is_in_punct_chars)
                     if seen_period and not token.is_punct and not is_in_punct_chars:
                         doc_guesses[start] = True
@@ -39,8 +41,15 @@ class Sent(Sentencizer):
 
 nlp = English()
 sent = Sent()
-doc = nlp("I am living in the U.S. I work in ...")
-sent(doc)
+a = "I live in the U.S. with my family. I am in Colgate University." 
+doc = sent(nlp(a))
+[(x, x.is_sent_start) for x in doc]
+
+b = "I live in the U.S. with my family# I am in Colgate University#"
+doc2 = sent(nlp(b))
+[(x, x.is_sent_start) for x in doc2]
+
+
 len(list(doc.sents))
 
 [(x, x.is_sent_start) for x in doc]
