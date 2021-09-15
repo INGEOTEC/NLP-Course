@@ -15,7 +15,6 @@ def metrics(a, b):
 def performance(colgate=None):
     colgate = colgate if colgate is not None else Sentencizer()
     nlp = English()
-    # colgate = ColgateSBD()
 
     output = []
     for test in glob("marked-*.txt"):
