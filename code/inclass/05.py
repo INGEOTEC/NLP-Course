@@ -76,7 +76,7 @@ sent_bi = n_grams(sentence, 2)
 
 output = 1
 for x in sent_bi:
-    print("prob", prob(x))
+    print("prob", x, prob(x))
     ## compute prob
     output = output * prob(x)
 output    
