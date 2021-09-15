@@ -4,6 +4,7 @@ wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O min
 chmod 755 miniconda.sh
 ./miniconda.sh -b
 export PATH=$HOME/miniconda3/bin:$PATH
+conda config --append channels conda-forge
 conda update --yes conda
 
 apt-get install -y python3 python3-pip python3-dev
