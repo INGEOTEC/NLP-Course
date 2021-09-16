@@ -107,13 +107,15 @@ class NgramLM(object):
     def process_file(self, fname: str):
         txt = open(fname).read()
         para = [x for x in re.finditer(r"\n\n", txt)]
-        # break
-        ## SHOW 
         index = [0] + [x.end(0) for x in para]
-        # break
-        ## SHOW
         para = [txt[i:j] for i, j in zip(index, index[1:])]
         self.process_paragraphs([x for x in para if len(x) > 2])
+
+    @staticmethod
+    def n_grams(tokens: list, n: int):
+        ww = [tokens[i:] for i in range(n)]
+        _ = ["~".join(x) for x in zip(*ww)]
+        return _
 
     @staticmethod
     def tokenize(txt: str) -> List[str]:
@@ -126,14 +128,10 @@ class NgramLM(object):
         return _
 
     def process_paragraphs(self, para: List[str]):
-        # break
-        ## SHOW
         for p in para:
             _ = self.tokenize(p)
-            # break
-            ## SHOW
             self._tokens.update(_)
-            _ = n_grams(_, n=self.n)
+            _ = self.n_grams(_, n=self.n)
             self._n_grams.update(_)
 
     def prob(self, n_gram: str) -> float:
@@ -144,7 +142,7 @@ class NgramLM(object):
 
     def sentence_prob(self, txt: str) -> float:
         tokens = self.tokenize(txt)
-        ngrams = n_grams(tokens, n=self.n)
+        ngrams = self.n_grams(tokens, n=self.n)
         p = 1
         for x in ngrams:
             p = p * self.prob(x)
