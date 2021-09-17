@@ -68,18 +68,20 @@ class NgramLM(object):
             _.append("</P>")
         return _
 
-    def n_grams(self, tokens: list):
+    def n_grams(self, tokens: list, n: int=None):
         """Create n-grams from a list of tokens
         
         :param tokens: List of tokens
+        :param n: Size of the n-gram
+        :type n: int
 
         >>> ngram = NgramLM(n=3)
         >>> tokens = ngram.tokenize("Good morning!")
         >>> ngram.n_grams(tokens)
         ['<P>~good~morning', 'good~morning~!', 'morning~!~</P>']
         """
-
-        ww = [tokens[i:] for i in range(self.n)]
+        n = self.n if n is None else n
+        ww = [tokens[i:] for i in range(n)]
         _ = ["~".join(x) for x in zip(*ww)]
         return _
 
@@ -135,6 +137,9 @@ class NgramLM(object):
             _ = self.prob(x)
             p = p * _
         return p
+
+    def log_sentence_prob(self, txt: str, markers: bool=True) -> float:
+        pass
 
     def generate_sentence(self, prev: str=None, n_tokens: int=10, random_size: int=5) -> List[str]:
         """
