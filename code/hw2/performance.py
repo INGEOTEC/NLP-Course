@@ -42,5 +42,10 @@ if __name__ == "__main__":
     output = performance(ColgateSBD())
     for input, perf, n_sent in output:
         print("Input:", input, perf, "Number of sentences:", n_sent)
+    print("*" * 5, "Sentencizer", "*" * 5)
+    output = performance()
+    for input, perf, n_sent in output:
+        print("Input:", input, perf, "Number of sentences:", n_sent)
+
 
 
