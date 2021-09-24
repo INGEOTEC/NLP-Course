@@ -21,7 +21,9 @@ class ColgateSBD(Sentencizer):
                 doc_guesses[0] = True
                 for i, token in enumerate(doc):
                     is_in_punct_chars = token.text in self.punct_chars
-                    if seen_period and not token.is_punct and not is_in_punct_chars:
+                    if not is_in_punct_chars:
+                       is_in_punct_chars = "." in token.text
+                    if seen_period and not token.is_punct and not is_in_punct_chars and not token.is_space:
                         doc_guesses[start] = True
                         start = token.i
                         seen_period = False

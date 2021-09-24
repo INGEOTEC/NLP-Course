@@ -23,10 +23,16 @@ def performance(colgate=None):
         tokens = nlp(open(test).read())
         hy_tokens = colgate(nlp(txt))
         assert len(tokens) == len(hy_tokens)
-        _ = [b.is_punct and a.text == "#"
-             for a, b in zip(tokens, hy_tokens)]
-        y = np.empty_like(_, dtype=bool)
-        y[1:] = _[:-1]
+        y = [False] * len(tokens)
+        seen_period = False
+        for i, tok in enumerate(tokens):
+            is_in_punct_chars = tok.text in Sentencizer.default_punct_chars
+            if seen_period and not tok.is_punct and not is_in_punct_chars and not tok.is_space:
+                y[i] = True
+                seen_period = False
+            elif tok.is_punct and tok.text == "#":
+                seen_period = True
+        y = np.array(y, dtype=bool)
         y[0] = True
         hy = np.array([x.is_sent_start for x in hy_tokens])
         _ = metrics(y, hy)
