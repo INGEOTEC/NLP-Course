@@ -21,6 +21,6 @@ if __name__ == '__main__':
     output = dict(visibility="visible",
                   tests=tests)
     _ = '/autograder/results/results.json'
-    _ = 'results.json'
+    # _ = 'results.json'
     with open(_, 'w') as f:
         json.dump(output, f)
