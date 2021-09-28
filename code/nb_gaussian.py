@@ -31,6 +31,35 @@ prior = prior / prior.sum()
 hy = li + np.log(prior)
 hy = hy - np.atleast_2d(logsumexp(hy, axis=1)).T
 hy = np.exp(hy)
+hy[100]
+# SHOW
 
 m = GaussianNB().fit(X, y)
 hhy = m.predict_proba(X)
+
+hhy[100]
+# SHOW
+
+cl = m.predict(X)
+
+(y == cl).mean()  #Accuracy
+
+index = np.arange(X.shape[0])
+index
+# SHOW
+
+np.random.shuffle(index)
+index
+# SHOW
+
+p = int(index.shape[0] * 0.7)
+p
+# SHOW
+X_train = X[index][:p]
+y_train = y[index][:p]
+X_test = X[index][p:]
+y_test = y[index][p:]
+
+m = GaussianNB().fit(X_train, y_train)
+hy = m.predict(X_test)
+(y_test == hy).mean() #Accuracy
