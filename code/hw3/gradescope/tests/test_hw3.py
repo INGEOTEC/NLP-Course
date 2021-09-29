@@ -6,6 +6,7 @@ import numpy as np
 
 class TestNgramLM(unittest.TestCase):    
     @number("1.1")
+    @weight(10/6)
     def test_bigram_prob(self):
         "Test P(w_2 | w_1)"
         ngram = NgramLM(n=2)
@@ -18,6 +19,7 @@ class TestNgramLM(unittest.TestCase):
         self.assertEqual(p, 0.5)
 
     @number("1.2")
+    @weight(10/6)
     def test_prob(self):
         "Test P(w_2 | w_1, w_2)"
         ngram = NgramLM(n=3)
@@ -38,6 +40,7 @@ class TestNgramLM(unittest.TestCase):
         self.assertEqual(p, 0.0)
 
     @number("1.3")
+    @weight(10/6)
     def test_bigram_log_sentence_prob(self):
         "Test P(w_1, w_2, w_3)"
         ngram = NgramLM(n=2)
@@ -48,6 +51,7 @@ class TestNgramLM(unittest.TestCase):
         self.assertAlmostEqual(pr, np.exp(pr_log))
 
     @number("1.4")
+    @weight(10/6)
     def test_log_sentence_prob(self):
         "Test P(w_1, w_2, w_3, w_4) on 3-grams"
         ngram = NgramLM(n=3)
@@ -60,6 +64,7 @@ class TestNgramLM(unittest.TestCase):
         self.assertAlmostEqual(np.exp(pr_log), 1 / 3)
 
     @number("2.1")
+    @weight(10/6)
     def test_bigram_generate_sentence(self):
         "Generate a sentece using a bigram Language Model"
         ngram = NgramLM(n=2)
@@ -70,7 +75,8 @@ class TestNgramLM(unittest.TestCase):
         self.assertEqual(len(sent), 3)
 
     @number("2.2")
-    def test_bigram_generate_sentence(self):
+    @weight(10/6)
+    def test_generate_sentence(self):
         "Generate a sentece using a 3-gram Language Model"
         ngram = NgramLM(n=3)
         ngram.process_paragraphs(["xxx xyx xxy xxa",
