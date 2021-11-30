@@ -2,6 +2,7 @@ from microtc.utils import tweet_iterator, load_model
 from b4msa.textmodel import TextModel
 from sklearn.svm import LinearSVC
 from EvoMSA.utils import download
+import numpy as np
 
 train = tweet_iterator('snli_train.json')
 test = tweet_iterator('snli_test.json')
@@ -14,7 +15,7 @@ def dataset(lst):
         output.append(_)
     return output
 
-train = dataset(train)
+train = dataset(train)[:10000]
 test = dataset(test)
 # tm = TextModel(lang="english").fit(train)
 tm = load_model(download('b4msa_En.tm'))
@@ -22,3 +23,5 @@ Xt = tm.transform(train)
 
 m = LinearSVC().fit(Xt, [x['klass'] for x in train])
 hy = m.predict(tm.transform(test))
+y = np.array([x['klass'] for x in test])
+(y == hy).mean()
