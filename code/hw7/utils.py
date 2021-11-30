@@ -17,7 +17,8 @@ def dataset(lst):
 def transform(data):
     tm = load_model(download('b4msa_En.tm'))
     i, X = data
-    return i, tm.transform(X)
+    concat = [[x['sentence1'], x['sentence2']] for x in X]
+    return i, tm.transform(concat)
 
 
 def transform2(data):
