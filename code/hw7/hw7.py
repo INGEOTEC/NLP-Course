@@ -3,6 +3,9 @@ from b4msa.textmodel import TextModel
 from sklearn.svm import LinearSVC
 from EvoMSA.utils import download
 import numpy as np
+from multiprocessing import Pool, cpu_count
+from tqdm import tqdm
+
 
 train = tweet_iterator('snli_train.json')
 test = tweet_iterator('snli_test.json')
@@ -15,10 +18,19 @@ def dataset(lst):
         output.append(_)
     return output
 
-train = dataset(train)[:10000]
+def transform(data):
+    i, data = data
+    return i, tm.transform(data)
+
+train = dataset(train)
 test = dataset(test)
 # tm = TextModel(lang="english").fit(train)
 tm = load_model(download('b4msa_En.tm'))
+
+with Pool(cpu_count() - 1) as pool:
+    _ = [(i, train[i:i+10000]) for i in range(0, len(train), 10000)]
+    Xt = [i for i in tqdm(pool.imap_unordered(transform, _), len=len(_))]
+
 Xt = tm.transform(train)
 
 m = LinearSVC().fit(Xt, [x['klass'] for x in train])
