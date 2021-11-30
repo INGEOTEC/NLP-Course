@@ -19,6 +19,7 @@ def dataset(lst):
     return output
 
 def transform(data):
+    tm = load_model(download('b4msa_En.tm'))
     i, data = data
     return i, tm.transform(data)
 
@@ -29,7 +30,7 @@ tm = load_model(download('b4msa_En.tm'))
 
 with Pool(cpu_count() - 1) as pool:
     _ = [(i, train[i:i+10000]) for i in range(0, len(train), 10000)]
-    Xt = [i for i in tqdm(pool.imap_unordered(transform, _), len=len(_))]
+    Xt = [i for i in tqdm(pool.imap_unordered(transform, _), total=len(_))]
 
 Xt = tm.transform(train)
 
