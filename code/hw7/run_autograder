@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Set up autograder files
+export PATH=$HOME/miniconda3/bin:$PATH
+
+# cp /autograder/submission/*.py /autograder/source/
+cp /autograder/submission/snli_test.json /autograder/source/
+
+
+cd /autograder/source
+
+PYTHONPATH="." python3 test.py
