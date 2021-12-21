@@ -23,6 +23,54 @@ The journey of natural language processing starts with the simple procedure of c
 
 At this point, let us define a word as a sequence of characters bounded by a space - this is a shallow definition; however, it is suitable for most words written in Latin languages and English.
 
+## Frequency of words
+
+The frequency of words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (`word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
+
+```python
+from microtc.utils import tweet_iterator
+from EvoMSA.tests.test_base import TWEETS
+
+words = dict()
+for tw in tweet_iterator(TWEETS):
+    text = tw['text']
+    for w in text.split():
+        key = w.strip()
+        try:
+            words[key] += 1
+        except KeyError:
+            words[key] = 1
+```
+
+Method `split` returns a list of strings where the split occurs on the space character, which follows the definition of a word. Please note the use of an exception to handle the case where the keyword is not in the dictionary. As an example, the word _si_ (yes in Spanish) appears 29 times in the corpus.
+
+```python
+words['si']
+29
+```
+
+The counting pattern is frequent, so it is implemented in the Counter class under the package collections; the following code implements the method described using it; the key element is the method `update,` and to make the code shorter, [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is used. 
+
+```python
+from microtc.utils import tweet_iterator
+from EvoMSA.tests.test_base import TWEETS
+from collections import Counter
+
+words = Counter()
+for tw in tweet_iterator(TWEETS):
+    text = tw['text']
+    words.update([x.strip() for x in text.split()])
+```
+
+Counter class has another helpful method to analyze the frequencies; in particular, the `most_common` method returns the most frequent keywords. For example, the following code gets the five most common keywords. 
+
+```python
+words.most_common(5)
+[('de', 299), ('que', 282), ('a', 205), ('la', 182), ('el', 147)]
+```
+
+These are the words, _of_, _what_, _a_, _the_, and _the_, respectively.
+
 # Herdan’s Law / Heaps' Law
 
 # Regular Expressions
