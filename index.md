@@ -22,16 +22,18 @@ The goal of the course is to introduce the students to the field of Natural Lang
 
 # Notation
 
-|Symbol            | Meaning                      |
-|------------------|------------------------------|
-|$$x$$             | Variable $$x \in \mathbb R$$ |
-|$$\mathbb R$$     | The real numbers             |
-|$$\mathbf x$$     | Vector $$\mathbf x \in \mathbb R^d$$ |
-|$$d$$             | Dimension                    |
-|$$\mathbf w \cdot \mathbf x$$ | Dot product    |
-|$$N$$             | Number of examples           |
-|$$K$$             | Number of classes or labels  |
-|$$\mathbb 1(e)$$  | Indicator function; one only if $$e$$ is true |
+|Symbol            | Meaning                                            |
+|------------------|----------------------------------------------------|
+|$$x$$             | Variable                                           |
+|$$\mathbb R$$     | The real numbers                                   |
+|$$\mathbf x$$     | Vector $$\mathbf x \in \mathbb R^d$$               |
+|$$d$$             | Dimension                                          |
+|$$\mathbf w^\intercal \cdot \mathbf x$$ | Dot  product where $$\mathbf w$$ and $$\mathbf x \in \mathbb R^d$$ |
+|$$N$$             | Number of examples                                 | 
+|$$K$$             | Number of classes or labels                        |
+|$$P(A)$$          | Probability of event $A$                           |
+|$$f(\cdot)$$          | Probability distribution function (pdf)        |
+|$$\mathbb \delta(e)$$  | Indicator function; $$1$$ only if $$e$$ is true |
 
 #  Requirements
 

@@ -19,6 +19,10 @@ The **objective** is to
 
 # Introduction
 
+The journey of natural language processing starts with the simple procedure of counting words; with it, we will be able to model some characteristics of the languages, identify patterns in a text, and perform exploratory data analysis on a collection of Tweets. 
+
+At this point, let us define a word as a sequence of characters bounded by a space - this is a shallow definition; however, it is suitable for most words written in Latin languages and English.
+
 # Herdan’s Law / Heaps' Law
 
 # Regular Expressions
