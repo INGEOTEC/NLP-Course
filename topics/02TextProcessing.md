@@ -7,8 +7,6 @@ nav_order: 2
 # Text Processing
 {: .fs-10 .no_toc }
 
-The **objective** is to 
-
 ## Contents
 {: .no_toc .text-delta }
 
@@ -25,7 +23,7 @@ At this point, let us define a word as a sequence of characters bounded by a spa
 
 ## Frequency of words
 
-The frequency of words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (`word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
+The frequency of words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (variable `word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
 
 ```python
 from microtc.utils import tweet_iterator
@@ -49,7 +47,7 @@ words['si']
 29
 ```
 
-The counting pattern is frequent, so it is implemented in the Counter class under the package collections; the following code implements the method described using it; the key element is the method `update,` and to make the code shorter, [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is used. 
+The counting pattern is frequent, so it is implemented in the [Counter](https://docs.python.org/3/library/collections.html#collections.Counter) class under the package [collections](https://docs.python.org/3/library/collections.html); the following code implements the method described using `Counter`; the key element is the method `update,` and to make the code shorter, [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is used. 
 
 ```python
 from microtc.utils import tweet_iterator
@@ -62,7 +60,7 @@ for tw in tweet_iterator(TWEETS):
     words.update([x.strip() for x in text.split()])
 ```
 
-Counter class has another helpful method to analyze the frequencies; in particular, the `most_common` method returns the most frequent keywords. For example, the following code gets the five most common keywords. 
+`Counter` has another helpful method to analyze the frequencies; in particular, the `most_common` method returns the most frequent keywords. For example, the following code gets the five most common keywords. 
 
 ```python
 words.most_common(5)
