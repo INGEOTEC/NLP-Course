@@ -47,5 +47,6 @@ The goal of the course is to introduce the students to the field of Natural Lang
 
 # Bibliography
 
+- Speech and Language Processing. An Introduction to Natural Language Processing, Computational Linguistics, and Speech Recognition. Third Edition draft. Daniel Jurafsky and James H. Martin. [pdf](https://web.stanford.edu/~jurafsky/slp3/ed3book_sep212021.pdf)
 - Introduction to machine learning, Third Edition. Ethem Alpaydin. MIT Press
 - All of Statistics. A Concise Course in Statistical Inference. Larry Wasserman. MIT Press.
