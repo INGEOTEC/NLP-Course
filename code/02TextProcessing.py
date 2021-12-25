@@ -35,7 +35,8 @@ words['si']
 from matplotlib import pylab as plt
 
 freq = [f for _, f  in words.most_common()]
-plt.plot(range(1, len(freq) + 1), freq, '.')
+rank = range(1, len(freq) + 1)
+plt.plot(rank, freq, '.')
 plt.grid()
 plt.xlabel('Rank')
 plt.ylabel('Frequency')
@@ -43,13 +44,14 @@ plt.tight_layout()
 plt.savefig('zipf_law.png', dpi=300)
 
 
-## Log-Log
+## Inverse rank
 import numpy as np
 
 freq = [f for _, f  in words.most_common()]
-plt.plot(1 / np.arange(1, len(freq) + 1), freq, '.')
+rank = 1 / np.arange(1, len(freq) + 1)
+plt.plot(rank, freq, '.')
 plt.grid()
-plt.xlabel('Rank')
+plt.xlabel('Inverse Rank')
 plt.ylabel('Frequency')
 plt.tight_layout()
 plt.savefig('zipf_law2.png', dpi=300)

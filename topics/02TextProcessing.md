@@ -75,24 +75,33 @@ The word frequency allows defining some empirical characteristics of the languag
 
 Let us start with Zipf's law. The law relates the frequency of a word with its rank. In an order set, the rank corresponds to the element's position, e.g., the first element has the rank of one, the second has the second rank, and so on.  Explicitly, the relationship is defined as $$f \cdot r = c $$, where $$f$$ is the frequency, $$r$$ is the rank, and $$c$$ is a constant. For example, the frequency is $$f=\frac{c}{r}$$; as can be seen when the rank equals the constant, then the frequency is one, meaning that the rest of the words are infrequent and that there are only frequent few words. 
 
+The following figure depicts the described characteristic. It shows a scatter plot between rank and frequency. 
+
+![Zipf's Law](/NLP-Course/assets/images/zipf_law.png)
+
+The frequency and the rank can be computed using the following two lines using the dataset of the previous example. 
+
 ```python
 freq = [f for _, f  in words.most_common()]
+rank = range(1, len(freq) + 1)
 ```
+
+Once the frequency and the rank are computed, the figure is created using the following code. 
 
 ```python
 from matplotlib import pylab as plt
-plt.plot(range(1, len(freq) + 1), freq)
+plt.plot(rank, freq, '.')
 plt.grid()
 plt.xlabel('Rank')
 plt.ylabel('Frequency')
 plt.tight_layout()
-plt.savefig('zipf_law.png', dpi=300)
 ```
 
-![Zipf's Law](/NLP-Course/assets/images/zipf_law.png)
+
 
 ```python
-plt.loglog(range(1, len(freq) + 1), freq)
+freq = [f for _, f  in words.most_common()]
+rank = 1 / np.arange(1, len(freq) + 1)
 ```
 
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
