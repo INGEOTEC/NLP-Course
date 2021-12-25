@@ -79,7 +79,7 @@ The following figure depicts the described characteristic. It shows a scatter pl
 
 ![Zipf's Law](/NLP-Course/assets/images/zipf_law.png)
 
-The frequency and the rank can be computed using the following two lines using the dataset of the previous example. 
+The frequency and the rank can be computed with the following two lines using the dataset of the previous example. 
 
 ```python
 freq = [f for _, f  in words.most_common()]
@@ -97,12 +97,14 @@ plt.ylabel('Frequency')
 plt.tight_layout()
 ```
 
-
+The previous figure does not depict the relation $$f=\frac{c}{r}$$, in order to show it let us draw the figure scatter plot between the rank inverse and the frequency; this can be obtained by changing the following two lines into the previous procedure. 
 
 ```python
 freq = [f for _, f  in words.most_common()]
 rank = 1 / np.arange(1, len(freq) + 1)
 ```
+
+
 
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 

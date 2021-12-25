@@ -56,3 +56,9 @@ plt.ylabel('Frequency')
 plt.tight_layout()
 plt.savefig('zipf_law2.png', dpi=300)
 
+## OLS
+
+X = np.atleast_2d(rank).T
+coef = np.linalg.lstsq(X, freq, rcond=None)[0]
+coef
+
