@@ -75,9 +75,27 @@ The word frequency allows defining some empirical characteristics of the languag
 
 Let us start with Zipf's law. The law relates the frequency of a word with its rank. In an order set, the rank corresponds to the element's position, e.g., the first element has the rank of one, the second has the second rank, and so on.  Explicitly, the relationship is defined as $$f \cdot r = c $$, where $$f$$ is the frequency, $$r$$ is the rank, and $$c$$ is a constant. For example, the frequency is $$f=\frac{c}{r}$$; as can be seen when the rank equals the constant, then the frequency is one, meaning that the rest of the words are infrequent and that there are only frequent few words. 
 
+```python
+freq = [f for _, f  in words.most_common()]
+```
 
+```python
+from matplotlib import pylab as plt
+plt.plot(range(1, len(freq) + 1), freq)
+plt.grid()
+plt.xlabel('Rank')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('zipf_law.png', dpi=300)
+```
 
-![Zipf's Law](/NLP-Course/assets/images/zipf_law.png) 
+![Zipf's Law](/NLP-Course/assets/images/zipf_law.png)
+
+```python
+plt.loglog(range(1, len(freq) + 1), freq)
+```
+
+![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 
 
 # Herdan’s Law / Heaps' Law

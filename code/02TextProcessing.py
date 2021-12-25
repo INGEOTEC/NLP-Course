@@ -28,3 +28,27 @@ for tw in tweet_iterator(TWEETS):
     words.update([x.strip() for x in text.split()])
 
 words['si']
+
+# Zipf's Law
+
+%pylab inline
+from matplotlib import pylab as plt
+
+freq = [f for _, f  in words.most_common()]
+plt.plot(range(1, len(freq) + 1), freq)
+plt.grid()
+plt.xlabel('Rank')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('zipf_law.png', dpi=300)
+
+
+## Log-Log
+
+freq = [f for _, f  in words.most_common()]
+plt.loglog(range(1, len(freq) + 1), freq)
+plt.grid()
+plt.xlabel('Rank')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('zipf_law2.png', dpi=300)
