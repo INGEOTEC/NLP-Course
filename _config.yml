@@ -81,7 +81,7 @@ footer_content: "Copyright &copy; 2021 Mario Graff Guerrero. Distributed by an <
 gh_edit_link: true # show or hide edit this page link
 gh_edit_link_text: "Edit this page on GitHub"
 gh_edit_repository: "https://github.com/ingeotec/NLP-Course" # the github URL for your repo
-gh_edit_branch: "master" # the branch that your docs is served from
+gh_edit_branch: "main" # the branch that your docs is served from
 # gh_edit_source: "" # the source that your files originate from
 gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into the editor immediately
 
