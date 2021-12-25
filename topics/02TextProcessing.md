@@ -98,6 +98,8 @@ plt.loglog(range(1, len(freq) + 1), freq)
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 
 
+
+
 # Herdan’s Law / Heaps' Law
 
 
