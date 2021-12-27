@@ -104,11 +104,11 @@ freq = [f for _, f  in words.most_common()]
 rank = 1 / np.arange(1, len(freq) + 1)
 ```
 
-
+As observed from the following figure, Zipf’s Law is a rough estimate of the relationship between rank and frequency. Nonetheless, it provides all the elements to understand the importance of this relationship. 
 
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 
-
+The missing step is to estimate the value of $$c$$. Constant $$c$$ can be calculated using ordinary least squares. The idea is to create a system of equations where the unknown is $$c$$, and the dependent variable is $$f$$. These can represent in matrix notation as $$A \cdot \mathbf c = \mathbf f$$, where $$A \in \mathbb R^{N \times 1}$$ is composed by $$N$$ inverse rank measurements, $$c \in \mathbb R^1$$ is the parameter to be identified, and $$\mathbf f \in \mathbb R^N$$ is a column vector containing the frequency measurements.
 
 
 # Herdan’s Law / Heaps' Law
