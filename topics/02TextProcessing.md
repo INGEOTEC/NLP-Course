@@ -114,14 +114,27 @@ The coefficients can be computed using the function `np.linalg.lstsq` described 
 
 ```python
 X = np.atleast_2d(rank).T
-coef = np.linalg.lstsq(X, freq, rcond=None)[0]
-coef
+c = np.linalg.lstsq(X, freq, rcond=None)[0]
+c
 array([461.40751913])
 ```
 
 Once $$c$$ has been identified, it can be used to predict the model; the following figure presents the measurements and the predicted points using the identified coefficient.
 
-![Zipf's Law - model](/NLP-Course/assets/images/zipf_law3.png) 
+![Zipf's Law - model](/NLP-Course/assets/images/zipf_law3.png)
+
+The previous figure was created with the following code; the variable `hy` contains the predicted frequency.
+
+```python
+hy = np.dot(X, c)
+plt.plot(rank, freq, '.')
+plt.plot(rank, hy)
+plt.legend(["Measured", "Predicted"])
+plt.grid()
+plt.xlabel('Inverse Rank')
+plt.ylabel('Frequency')
+plt.tight_layout()
+```
 
 
 # Herdan’s Law / Heaps' Law

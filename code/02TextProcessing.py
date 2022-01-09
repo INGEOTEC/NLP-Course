@@ -59,9 +59,9 @@ plt.savefig('zipf_law2.png', dpi=300)
 ## OLS
 
 X = np.atleast_2d(rank).T
-coef = np.linalg.lstsq(X, freq, rcond=None)[0]
-coef
-hy = np.dot(X, coef)
+c = np.linalg.lstsq(X, freq, rcond=None)[0]
+c
+hy = np.dot(X, c)
 plt.plot(rank, freq, '.')
 plt.plot(rank, hy)
 plt.legend(["Measured", "Predicted"])
