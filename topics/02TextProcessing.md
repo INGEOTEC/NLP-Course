@@ -97,9 +97,10 @@ plt.ylabel('Frequency')
 plt.tight_layout()
 ```
 
-The previous figure does not depict the relation $$f=\frac{c}{r}$$, in order to show it let us draw the figure scatter plot between the rank inverse and the frequency; this can be obtained by changing the following two lines into the previous procedure. 
+The previous figure does not depict the relation $$f=\frac{c}{r}$$, in order to show it let us draw the figure scatter plot between the rank inverse and the frequency; this can be obtained by changing the following lines into the previous procedure -- [numpy](https://numpy.org) is used in the following code to create an array of elements.
 
 ```python
+import numpy as np
 freq = [f for _, f  in words.most_common()]
 rank = 1 / np.arange(1, len(freq) + 1)
 ```
@@ -138,7 +139,27 @@ plt.tight_layout()
 
 # Herdan’s Law / Heaps' Law
 
+A language used evolves new words are incorporated in the language, and the relationship between the vocabulary size and the number of words (tokens) is expressed in the Heaps' Law. Let $$\mid V \mid$$ represents the vocabulary size, and $$N$$ the number of words; then the relationship between these elements is $$\mid V \mid = k N^\beta$$ where $$k$$ and $$\beta$$ are the parameters that need to be identified. 
+
+The following figure depicts the relation between $$N$$ and $$\mid V \mid$$ using the dataset of the previous examples.
+
 ![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
+
+The code used is the following
+
+```python
+words = Counter()
+tokens_voc= list()
+for tw in tweet_iterator(TWEETS):
+    text = tw['text']
+    words.update([x.strip() for x in text.split()])
+    tokens_voc.append([sum(list(words.values())),
+                       len(words)])
+
+N = [x[0] for x in tokens_voc]
+V = [x[1] for x in tokens_voc]
+```
+
 
 # Regular Expressions
 
