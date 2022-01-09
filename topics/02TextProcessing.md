@@ -129,16 +129,16 @@ The previous figure was created with the following code; the variable `hy` conta
 hy = np.dot(X, c)
 plt.plot(rank, freq, '.')
 plt.plot(rank, hy)
-plt.legend(["Measured", "Predicted"])
+plt.legend(['Measured', 'Predicted'])
 plt.grid()
 plt.xlabel('Inverse Rank')
 plt.ylabel('Frequency')
 plt.tight_layout()
 ```
 
-
 # Herdan’s Law / Heaps' Law
 
+![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
 
 # Regular Expressions
 
