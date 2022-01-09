@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Natural Language Inference
-nav_order: 8
+title: Question Answering
+nav_order: 10
 ---
 
-# Natural Language Inference
+# Question Answering
 {: .fs-10 .no_toc }
 
 The **objective** is to 
@@ -18,4 +18,3 @@ The **objective** is to
 ---
 
 # Introduction
-

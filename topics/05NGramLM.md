@@ -1,7 +1,7 @@
 ---
 layout: default
 title: N-Gram Language Model
-nav_order: 3
+nav_order: 5
 ---
 
 # N-Gram Language Model

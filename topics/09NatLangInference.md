@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Name Entity Recognition
-nav_order: 5
+title: Natural Language Inference
+nav_order: 9
 ---
 
-# Name Entity Recognition
+# Natural Language Inference
 {: .fs-10 .no_toc }
 
 The **objective** is to 
@@ -18,3 +18,4 @@ The **objective** is to
 ---
 
 # Introduction
+

@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Question Answering
-nav_order: 9
+title: Name Entity Recognition
+nav_order: 7
 ---
 
-# Question Answering
+# Name Entity Recognition
 {: .fs-10 .no_toc }
 
 The **objective** is to 
