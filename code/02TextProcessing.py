@@ -61,4 +61,13 @@ plt.savefig('zipf_law2.png', dpi=300)
 X = np.atleast_2d(rank).T
 coef = np.linalg.lstsq(X, freq, rcond=None)[0]
 coef
+hy = np.dot(X, coef)
+plt.plot(rank, freq, '.')
+plt.plot(rank, hy)
+plt.legend(["Measured", "Predicted"])
+plt.grid()
+plt.xlabel('Inverse Rank')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.savefig('zipf_law3.png', dpi=300)
 

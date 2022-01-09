@@ -108,7 +108,20 @@ As observed from the following figure, Zipf’s Law is a rough estimate of the r
 
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 
-The missing step is to estimate the value of $$c$$. Constant $$c$$ can be calculated using ordinary least squares. The idea is to create a system of equations where the unknown is $$c$$, and the dependent variable is $$f$$. These can represent in matrix notation as $$A \cdot \mathbf c = \mathbf f$$, where $$A \in \mathbb R^{N \times 1}$$ is composed by $$N$$ inverse rank measurements, $$c \in \mathbb R^1$$ is the parameter to be identified, and $$\mathbf f \in \mathbb R^N$$ is a column vector containing the frequency measurements.
+The missing step is to estimate the value of $$c$$. Constant $$c$$ can be calculated using ordinary least squares (OLS). The idea is to create a system of equations where the unknown is $$c$$, and the dependent variable is $$f$$. These can represent in matrix notation as $$A \cdot \mathbf c = \mathbf f$$, where $$A \in \mathbb R^{N \times 1}$$ is composed by $$N$$ inverse rank measurements, $$c \in \mathbb R^1$$ is the parameter to be identified, and $$\mathbf f \in \mathbb R^N$$ is a column vector containing the frequency measurements.
+
+The coefficients can be computed using the function `np.linalg.lstsq` described in the following code.
+
+```python
+X = np.atleast_2d(rank).T
+coef = np.linalg.lstsq(X, freq, rcond=None)[0]
+coef
+array([461.40751913])
+```
+
+Once $$c$$ has been identified, it can be used to predict the model; the following figure presents the measurements and the predicted points using the identified coefficient.
+
+![Zipf's Law - model](/NLP-Course/assets/images/zipf_law3.png) 
 
 
 # Herdan’s Law / Heaps' Law
