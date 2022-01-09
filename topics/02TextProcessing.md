@@ -160,6 +160,7 @@ N = [x[0] for x in tokens_voc]
 V = [x[1] for x in tokens_voc]
 ```
 
+<!---
 
 # Regular Expressions
 
@@ -176,3 +177,4 @@ This exercise asks to create a function that computes the performance of a sente
 $$\frac{1}{\mid y \mid} \sum_{x \in y} \delta(x \in \hat y),$$
 
 where the operation $$x \in \hat y$$ deletes the sentence $$x$$ from $$\hat y$$ once it has been tested; this is not normal behavior but it is necessary to compute the accuracy in this situation.
+-->
