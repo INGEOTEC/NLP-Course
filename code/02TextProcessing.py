@@ -64,10 +64,28 @@ c
 hy = np.dot(X, c)
 plt.plot(rank, freq, '.')
 plt.plot(rank, hy)
-plt.legend(["Measured", "Predicted"])
+plt.legend(['Measured', 'Predicted'])
 plt.grid()
 plt.xlabel('Inverse Rank')
 plt.ylabel('Frequency')
 plt.tight_layout()
 plt.savefig('zipf_law3.png', dpi=300)
 
+# Heaps' Law
+
+words = Counter()
+tokens_voc= list()
+for tw in tweet_iterator(TWEETS):
+    text = tw['text']
+    words.update([x.strip() for x in text.split()])
+    tokens_voc.append([sum(list(words.values())),
+                       len(words)])
+
+N = [x[0] for x in tokens_voc]
+V = [x[1] for x in tokens_voc]
+plt.plot(N, V, '.')
+plt.grid()
+plt.xlabel('Number of tokens')
+plt.ylabel('Vocabulary Size')
+plt.tight_layout()
+plt.savefig('heaps_law.png', dpi=300)
