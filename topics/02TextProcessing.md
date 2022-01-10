@@ -143,10 +143,9 @@ A language used evolves new words are incorporated in the language, and the rela
 
 The following figure depicts the relation between $$N$$ and $$\mid V \mid$$ using the dataset of the previous examples.
 
-[^Heaps]: 
 ![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
 
-The code used is the following
+Taking the procedure used in Zipf's Law as a starting point, it is only needed to collect, for each line, the number of words and the vocabulary.
 
 ```python
 words = Counter()
@@ -159,10 +158,11 @@ for tw in tweet_iterator(TWEETS):
 
 N = [x[0] for x in tokens_voc]
 V = [x[1] for x in tokens_voc]
-
 ```
 
-[^Heaps]
+Once the points (number of words and vocabulary size) are measured, it is time to estimate the parameters $$k$$ and $$\beta$$. As can be observed, it is not possible to express the Heaps' Law as a system of equations such as $$A \cdot [k, \beta]^\intercal = \mid \mathbf V \mid$$; consequently, these parameters cannot be estimated using OLS.
+
+
 
 <!---
 
