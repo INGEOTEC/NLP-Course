@@ -109,6 +109,8 @@ As observed from the following figure, Zipf’s Law is a rough estimate of the r
 
 ![Log Zipf's Law](/NLP-Course/assets/images/zipf_law2.png) 
 
+## Ordinary Least Squares
+
 The missing step is to estimate the value of $$c$$. Constant $$c$$ can be calculated using ordinary least squares (OLS). The idea is to create a system of equations where the unknown is $$c$$, and the dependent variable is $$f$$. These can represent in matrix notation as $$A \cdot \mathbf c = \mathbf f$$, where $$A \in \mathbb R^{N \times 1}$$ is composed by $$N$$ inverse rank measurements, $$c \in \mathbb R^1$$ is the parameter to be identified, and $$\mathbf f \in \mathbb R^N$$ is a column vector containing the frequency measurements.
 
 The coefficients can be computed using the function `np.linalg.lstsq` described in the following code.
@@ -161,6 +163,17 @@ v = [x[1] for x in tokens_voc]
 ```
 
 Once the points (number of words and vocabulary size) are measured, it is time to estimate the parameters $$k$$ and $$\beta$$. As can be observed, it is not possible to express the Heaps' Law as a system of equations such as $$A \cdot [k, \beta]^\intercal = \mid \mathbf v \mid$$; consequently, these parameters cannot be estimated using OLS.
+
+## Optimization
+
+The values of these parameters can be estimated by posing them as an optimization problem. An optimization problem consists in minimizing (maximizing) a function. The objective is to find the inputs corresponding to the minimum (maximum) of the function, i.e., 
+
+$$\textsf{min}_{\mathbf x \in \Omega} f(\mathbf x)$$
+
+where $\mathbf x$ are the inputs of the function $$f$$, and $$\Omega$$ is the search space, namely the set containing all the possible values of the inputs, e.g., $$\Omega = \mathbb R^d$$.
+
+
+
 
 
 
