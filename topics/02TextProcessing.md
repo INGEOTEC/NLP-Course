@@ -215,7 +215,7 @@ Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the
 
 # Activities
 
-Zipf's Law and Heaps' Law characterize a language using parameters $$c$$ and $$k$$ and $$\beta$$ respectively. 
+Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  
 
 
 <!---
