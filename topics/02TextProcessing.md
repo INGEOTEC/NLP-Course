@@ -166,14 +166,17 @@ Once the points (number of words and vocabulary size) are measured, it is time t
 
 ## Optimization
 
-The values of these parameters can be estimated by posing them as an optimization problem. An optimization problem consists in minimizing (maximizing) a function. The objective is to find the inputs corresponding to the minimum (maximum) of the function, i.e., 
+The values of these parameters can be estimated by posing them as an optimization problem. An optimization problem minimizes (maximizes) an objective function. The goal is to find the inputs corresponding to the minimum (maximum) of the function, i.e., 
 
 $$\textsf{min}_{\mathbf x \in \Omega} f(\mathbf x)$$
 
-where $\mathbf x$ are the inputs of the function $$f$$, and $$\Omega$$ is the search space, namely the set containing all the possible values of the inputs, e.g., $$\Omega = \mathbb R^d$$.
+where $\mathbf x$ are the inputs of the function $$f$$, and $$\Omega$$ is the search space, namely the set containing all feasible values of the inputs, e.g., $$\Omega = \{\mathbf x \mid \mathbf x \in \mathbb R^d, \forall_i \mathbf x_i \geq 0\}$$ that represents all the vector of dimension $$d$$ whose components are equal or greater than zero. 
 
+There are many optimization algorithms; some are designed to tackle all possible optimization problems, and others are tailored for a particular class of problems. For example, OLS is an optimization algorithm where the objective function $$f$$ is defined as:
 
+$$f(\mathbf x) = \sum_{i=1}^N (y_i - \mathbf a_i \cdot \mathbf x)^2,$$
 
+where $$\mathbf x$$ is a vector containing the parameters, and $$\mathbf a_i$$ is the $$i$$-th measurement of the independent variables, and $$y_i$$ is the corresponding dependent variable.  
 
 
 
