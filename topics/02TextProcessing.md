@@ -170,7 +170,7 @@ The values of these parameters can be estimated by posing them as an optimizatio
 
 $$\min_{\mathbf w \in \Omega} f(\mathbf w),$$
 
-where $\mathbf w$ are the inputs of the function $$f$$, and $$\Omega$$ is the search space, namely the set containing all feasible values of the inputs, e.g., $$\Omega = \{\mathbf w \mid \mathbf w \in \mathbb R^d, \forall_i \mathbf w_i \geq 0\}$$ that represents all the vector of dimension $$d$$ whose components are equal or greater than zero. 
+where $$\mathbf w$$ are the inputs of the function $$f$$, and $$\Omega$$ is the search space, namely the set containing all feasible values of the inputs, e.g., $$\Omega = \{\mathbf w \mid \mathbf w \in \mathbb R^d, \forall_i \mathbf w_i \geq 0\}$$ that represents all the vector of dimension $$d$$ whose components are equal or greater than zero. 
 
 There are many optimization algorithms; some are designed to tackle all possible optimization problems, and others are tailored for a particular class of problems. For example, OLS is an optimization algorithm where the objective function $$f$$ is defined as:
 
@@ -178,13 +178,15 @@ $$f(\mathbf w) = \sum_{i=1}^N (y_i - \mathbf a_i \cdot \mathbf w)^2,$$
 
 where $$\mathbf w$$ is a vector containing the parameters, and $$\mathbf a_i$$ is the $$i$$-th measurement of the independent variables, and $$y_i$$ is the corresponding dependent variable. In the Zipf's Law example, $$\mathbf w$$ corresponds to the parameter $$c$$, $$\mathbf a_i$$ is the $$i$$-the measure of the inverse rank, and $$y_i$$ is the corresponding frequency. 
 
-Let us analyze in more detail the previous objective function. The sum goes for all the measurements; there are $$N$$ pairs of observations composed by the response (dependent variable) and the independent variables. For each observation $$i$$, the square error is computed between the dependent variable ($$y_i$$) and the dot product of the independent variable ($$\mathbf a_i$$) and parameters $$\mathbf x$$. 
+Let us analyze in more detail the previous objective function. The sum goes for all the measurements; there are $$N$$ pairs of observations composed by the response (dependent variable) and the independent variables. For each observation $$i$$, the square error is computed between the dependent variable ($$y_i$$) and the dot product of the independent variable ($$\mathbf a_i$$) and parameters ($$\mathbf x$$). 
 
-This notation is specific for OLS; however, it is helpful to define the general case. The first step is to define the set $$\mathcal X$$ composed by the $$N$$ observations, i.e., $$\mathcal X=\{(y_i, \mathbf x_i) \mid 1 \leq i \leq N\}$$ where $$y_i$$ is the response variable and $$\mathbf x$$ contains the independent variables. The second step is to  use an unspecified loss function as $$L(y, \hat y) = (y - \hat y)^2$$. The last step is to abstract the model, that is replace $$\mathbf a_i \cdot \mathbf w$$ with a function $$g(\mathbf x) = \mathbf a_i \cdot \mathbf w$$. Combining these components the optimization problem can be expressed as:
+This notation is specific for OLS; however, it is helpful to define the general case. The first step is to define the set $$\mathcal X$$ composed by the $$N$$ observations, i.e., $$\mathcal X=\{(y_i, \mathbf x_i) \mid 1 \leq i \leq N\}$$ where $$y_i$$ is the response variable and $$\mathbf x$$ contains the independent variables. The second step is to  use an unspecified loss function as $$L(y, \hat y) = (y - \hat y)^2$$. The last step is to abstract the model, that is replace $$\mathbf a_i \cdot \mathbf w$$ with a function $$g(\mathbf x) = \mathbf a_i \cdot \mathbf w$$.  Combining these components the general version of the OLS optimization problem can be expressed as:
 
 $$\min_{g \in \Omega} \sum_{(y, \mathbf x) \in \mathcal X} L(y, g(\mathbf x)),$$
  
-where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal X$$ contains $$N$$ pairs of observations. 
+where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal X$$ contains $$N$$ pairs of observations. This optimization problem is known as **supervised learning** in machine learning.
+
+
 
 <!---
 
