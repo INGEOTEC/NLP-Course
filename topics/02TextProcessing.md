@@ -186,7 +186,11 @@ $$\min_{g \in \Omega} \sum_{(y, \mathbf x) \in \mathcal X} L(y, g(\mathbf x)),$$
  
 where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal X$$ contains $$N$$ pairs of observations. This optimization problem is known as **supervised learning** in machine learning.
 
+Returning to Heaps' Law problem where the goal is to identify the coefficients $$k$$ and $$\beta$$ of the model $$\mid v \mid = kn^\beta$$. That is, function $$g$$ can be defined as $$g_{k,\alpha}(n) = kn^\beta$$ and using the square error as $$L$$ the optimization problem is:
 
+$$\min_{(k, \beta) \in \mathbb R^2} \sum_{(\mid v \mid, n) \in \mathcal X} (\mid v \mid -  kn^\beta)^2.$$
+
+As mentioned previously, there are many optimization algorithms; some can be found on the function [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html). The function admits as arguments the objective function and the initial values of the parameters. 
 
 <!---
 
