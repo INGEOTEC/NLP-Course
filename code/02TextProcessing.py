@@ -89,3 +89,24 @@ plt.xlabel('Number of tokens')
 plt.ylabel('Vocabulary Size')
 plt.tight_layout()
 plt.savefig('heaps_law.png', dpi=300)
+
+
+from scipy.optimize import minimize
+n = np.array(n)
+v = np.array(v)
+def f(w):
+    k, beta = w
+    return ((v - k * n**beta)**2).sum()
+
+res = minimize(f, np.array([1, 0.5]))
+k, beta = res.x
+k, beta
+
+plt.plot(n, v, '.')
+plt.plot(n, k*n**beta)
+plt.legend(['Measured', 'Predicted'])
+plt.grid()
+plt.xlabel('Number of tokens')
+plt.ylabel('Vocabulary Size')
+plt.tight_layout()
+plt.savefig('heaps_law2.png', dpi=300)

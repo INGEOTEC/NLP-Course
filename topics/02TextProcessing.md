@@ -192,6 +192,26 @@ $$\min_{(k, \beta) \in \mathbb R^2} \sum_{(\mid v \mid, n) \in \mathcal X} (\mid
 
 As mentioned previously, there are many optimization algorithms; some can be found on the function [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html). The function admits as arguments the objective function and the initial values of the parameters. 
 
+The following code solves the optimization problem using the `minimize` function. 
+
+```python
+from scipy.optimize import minimize
+n = np.array(n)
+v = np.array(v)
+def f(w):
+    k, beta = w
+    return ((v - k * n**beta)**2).sum()
+
+res = minimize(f, np.array([1, 0.5]))
+k, beta = res.x
+k, beta
+(2.351980550243793, 0.8231559504194587)
+```
+
+Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the Heaps' Law and produce a figure containing the measurements and predicted values.
+
+![Heaps' Law - model](/NLP-Course/assets/images/heaps_law2.png) 
+
 <!---
 
 # Regular Expressions
