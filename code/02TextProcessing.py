@@ -90,6 +90,7 @@ plt.ylabel('Vocabulary Size')
 plt.tight_layout()
 plt.savefig('heaps_law.png', dpi=300)
 
+## Optimization
 
 from scipy.optimize import minimize
 n = np.array(n)

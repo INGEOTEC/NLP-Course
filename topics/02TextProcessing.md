@@ -210,7 +210,13 @@ k, beta
 
 Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the Heaps' Law and produce a figure containing the measurements and predicted values.
 
-![Heaps' Law - model](/NLP-Course/assets/images/heaps_law2.png) 
+![Heaps' Law - model](/NLP-Course/assets/images/heaps_law2.png)
+
+
+# Activities
+
+Zipf's Law and Heaps' Law characterize a language using parameters $$c$$ and $$k$$ and $$\beta$$ respectively. 
+
 
 <!---
 
