@@ -139,9 +139,9 @@ plt.tight_layout()
 
 # Herdan’s Law / Heaps' Law
 
-A language used evolves new words are incorporated in the language, and the relationship between the vocabulary size and the number of words (tokens) is expressed in the Heaps' Law. Let $$\mid V \mid$$ represents the vocabulary size, and $$N$$ the number of words; then the relationship between these elements is $$\mid V \mid = k N^\beta$$ where $$k$$ and $$\beta$$ are the parameters that need to be identified. 
+A language used evolves new words are incorporated in the language, and the relationship between the vocabulary size and the number of words (tokens) is expressed in the Heaps' Law. Let $$\mid V \mid$$ represents the vocabulary size, and $$n$$ the number of words; then the relationship between these elements is $$\mid v \mid = k n^\beta$$ where $$k$$ and $$\beta$$ are the parameters that need to be identified. 
 
-The following figure depicts the relation between $$N$$ and $$\mid V \mid$$ using the dataset of the previous examples.
+The following figure depicts the relation between $$n$$ and $$\mid v \mid$$ using the dataset of the previous examples.
 
 ![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
 
@@ -156,11 +156,11 @@ for tw in tweet_iterator(TWEETS):
     tokens_voc.append([sum(list(words.values())),
                        len(words)])
 
-N = [x[0] for x in tokens_voc]
-V = [x[1] for x in tokens_voc]
+n = [x[0] for x in tokens_voc]
+v = [x[1] for x in tokens_voc]
 ```
 
-Once the points (number of words and vocabulary size) are measured, it is time to estimate the parameters $$k$$ and $$\beta$$. As can be observed, it is not possible to express the Heaps' Law as a system of equations such as $$A \cdot [k, \beta]^\intercal = \mid \mathbf V \mid$$; consequently, these parameters cannot be estimated using OLS.
+Once the points (number of words and vocabulary size) are measured, it is time to estimate the parameters $$k$$ and $$\beta$$. As can be observed, it is not possible to express the Heaps' Law as a system of equations such as $$A \cdot [k, \beta]^\intercal = \mid \mathbf v \mid$$; consequently, these parameters cannot be estimated using OLS.
 
 
 

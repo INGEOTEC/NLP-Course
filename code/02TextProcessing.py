@@ -81,9 +81,9 @@ for tw in tweet_iterator(TWEETS):
     tokens_voc.append([sum(list(words.values())),
                        len(words)])
 
-N = [x[0] for x in tokens_voc]
-V = [x[1] for x in tokens_voc]
-plt.plot(N, V, '.')
+n = [x[0] for x in tokens_voc]
+v = [x[1] for x in tokens_voc]
+plt.plot(n, v, '.')
 plt.grid()
 plt.xlabel('Number of tokens')
 plt.ylabel('Vocabulary Size')
