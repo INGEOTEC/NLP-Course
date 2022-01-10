@@ -143,7 +143,8 @@ A language used evolves new words are incorporated in the language, and the rela
 
 The following figure depicts the relation between $$N$$ and $$\mid V \mid$$ using the dataset of the previous examples.
 
-[^Heaps]: ![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
+[^Heaps]: 
+![Heaps' Law](/NLP-Course/assets/images/heaps_law.png) 
 
 The code used is the following
 
@@ -159,8 +160,9 @@ for tw in tweet_iterator(TWEETS):
 N = [x[0] for x in tokens_voc]
 V = [x[1] for x in tokens_voc]
 
-[^Heaps]
 ```
+
+[^Heaps]
 
 <!---
 
