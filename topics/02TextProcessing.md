@@ -235,6 +235,8 @@ plt.axis('off')
 plt.tight_layout()
 ```
 
+## Zipf's Law - $$f=\frac{c}{r}$$
+
 ```python
 from joblib import Parallel, delayed
 from tqdm import tqdm
@@ -295,6 +297,9 @@ tokens = [sum(list(w.values())) for w in words]
 X = np.array([(b[0], c) for b, c in zip(zipf_c, tokens)])
 corr = np.corrcoef(X.T)
 ```
+
+## Zipf's Law - $$f=\frac{c}{r^\alpha}$$
+
 
 <!---
 
