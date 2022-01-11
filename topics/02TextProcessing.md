@@ -235,7 +235,66 @@ plt.axis('off')
 plt.tight_layout()
 ```
 
+```python
+from joblib import Parallel, delayed
+from tqdm import tqdm
 
+countries = ['MX', 'CO', 'ES', 'AR',
+             'PE', 'VE', 'CL', 'EC',
+             'GT', 'CU', 'BO', 'DO', 
+             'HN', 'PY', 'SV', 'NI', 
+             'CR', 'PA', 'UY']
+vocs = Parallel(n_jobs=-1)(delayed(Vocabulary)(date,
+                                               lang='Es',
+                                               country=country)
+                               for country in tqdm(countries))
+words = [{k: v for k, v in voc.voc.items() if not k.count('~')}
+         for voc in vocs]
+```
+
+```python
+def zipf(data):
+    freq = [f for _, f  in Counter(data).most_common()]
+    rank = 1 / np.arange(1, len(freq) + 1)
+    X = np.atleast_2d(rank).T
+    return np.linalg.lstsq(X, freq, rcond=None)[0]
+
+zipf_c = [zipf(w) for w in words]
+tokens = [sum(list(w.values())) for w in words]
+```
+
+| Country | $$c$$ | $$n$$| 
+|---------|-------|------|
+| AR | 28383.27 | 405802 |
+| ES | 21392.39 | 267724 |
+| MX | 20166.90 | 269211 |
+| CO | 11549.12 | 153952 |
+| CL | 8324.78 | 114394 |
+| VE | 4704.40 | 56019 |
+| UY | 3714.85 | 52058 |
+| PE | 2996.51 | 39945 |
+| EC | 2768.21 | 35822 |
+| PY | 1914.56 | 24544 |
+| DO | 1843.01 | 22969 |
+| PA | 1575.23 | 20726 |
+| GT | 1312.07 | 17237 |
+| NI | 756.56 | 8967 |
+| HN | 704.90 | 8243 |
+| CR | 607.04 | 6994 |
+| CU | 604.96 | 6989 |
+| SV | 513.01 | 5703 |
+| BO | 416.46 | 4306 |
+
+
+|     |$$c$$   |$$n$$   |
+|-----|--------|--------|
+|$$c$$| 1.0000 | 0.9979 |
+|$$n$$| 0.9979 | 1.0000 |
+
+```python
+X = np.array([(b[0], c) for b, c in zip(zipf_c, tokens)])
+corr = np.corrcoef(X.T)
+```
 
 <!---
 
