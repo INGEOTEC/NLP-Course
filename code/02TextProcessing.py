@@ -31,7 +31,7 @@ words['si']
 
 # Zipf's Law
 
-%pylab inline
+# %pylab inline
 from matplotlib import pylab as plt
 
 freq = [f for _, f  in words.most_common()]
