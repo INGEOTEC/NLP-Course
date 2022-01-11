@@ -198,11 +198,11 @@ The following code solves the optimization problem using the `minimize` function
 from scipy.optimize import minimize
 n = np.array(n)
 v = np.array(v)
-def f(w):
+def f(w, y, x):
     k, beta = w
-    return ((v - k * n**beta)**2).sum()
+    return ((y - k * x**beta)**2).sum()
 
-res = minimize(f, np.array([1, 0.5]))
+res = minimize(f, np.array([1, 0.5]), (v, n))
 k, beta = res.x
 k, beta
 (2.351980550243793, 0.8231559504194587)
@@ -216,6 +216,25 @@ Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the
 # Activities
 
 Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  
+
+```python
+from text_models import Vocabulary
+date = dict(year=2022, month=1, day=10)
+voc = Vocabulary(date, lang='Es', country='MX')
+words = {k: v for k, v in voc.voc.items() if not k.count('~')}
+```
+
+![Word Cloud (MX)](/NLP-Course/assets/images/wordcloud_mx.png)
+
+
+```python
+from wordcloud import WordCloud as WC
+wc = WC().generate_from_frequencies(words)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+```
+
 
 
 <!---
