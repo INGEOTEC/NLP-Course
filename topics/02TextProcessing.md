@@ -265,7 +265,7 @@ words = [{k: v for k, v in voc.voc.items() if not k.count('~')}
          for voc in vocs]
 ```
 
-The next step is to estimate the $$c$$ coefficient of Zipf's Law. Function `zipf` identifies the coefficient using OLS from a dictionary of words frequency. Variable `zipf_c` contains the coefficient values for each country, and we also computed the number of tokens seen, which is stored in variable `tokens.` 
+The next step is to estimate the $$c$$ coefficient of Zipf's Law. Function `zipf` identifies the coefficient using OLS from a dictionary of words frequency. Variable `zipf_c` contains the coefficient values for each country, and we also computed the number of words seen, which is stored in variable `tokens.` 
 
 ```python
 def zipf(data):
@@ -302,11 +302,14 @@ The following table presents the coefficient $$c$$ and the number of words ($$n$
 | SV | 513.01 | 5703 |
 | BO | 416.46 | 4306 |
 
+The following table shows the correlation of $$c$$ and $$n$$; it is observed that the correlation between them is higher than $$0.99$$, this means that measuring the number of words is enough and there is no need to estimate $$c$$. 
 
 |     |$$c$$   |$$n$$   |
 |-----|--------|--------|
 |$$c$$| 1.0000 | 0.9979 |
 |$$n$$| 0.9979 | 1.0000 |
+
+The correlation is obtained using the following code.
 
 ```python
 X = np.array([(b[0], c) for b, c in zip(zipf_c, tokens)])
@@ -314,6 +317,10 @@ corr = np.corrcoef(X.T)
 ```
 
 ## Zipf's Law - $$f=\frac{c}{r^\alpha}$$
+
+Zipf's Law has different versions; we started with the simpler one; however, that version does not provide information that the one contained in the number of words. A straightforward approach is to change the constant in Zipf's Law with a parameter and then use an algorithm to estimate that constant. Zipf's Law has the following form $$f=\frac{c}{r^1}$$, where the constant is $$1$$; changing $$1$$ by $$\alpha$$ it is obtained $$f=\frac{c}{r^\alpha}$$. 
+
+
 
 | Country | $$c$$ | $$\alpha$$ | $$n$$ |
 |---------|-------|------------|-------|
