@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Text Processing
+title: Vocabulary Laws
 nav_order: 2
 ---
 
-# Text Processing
+# Vocabulary Laws
 {: .fs-10 .no_toc }
 
 ## Contents
@@ -215,7 +215,11 @@ Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the
 
 # Activities
 
-Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  
+Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  So far, we have identified these parameters using a toy dataset. In order to illustrate how these parameters can be used to compare languages, we are going to use a dataset of words (and bi-grams) available in a library [text_models](https://arxiv.org/pdf/2009.01826.pdf). 
+
+`text_models` contains the frequency of words and bigrams of words measured from tweets written in different languages (Arabic, Spanish, and English) and collected from the Twitter open stream. 
+
+The first step is to retrieve the information from a particular date, location, and language. As an example, let us retrieve the data corresponding to January 10, 2022, in Mexico and written in Spanish, which can be done with the following code. 
 
 ```python
 from text_models import Vocabulary
@@ -224,8 +228,13 @@ voc = Vocabulary(date, lang='Es', country='MX')
 words = {k: v for k, v in voc.voc.items() if not k.count('~')}
 ```
 
+Variable `voc` contains the frequency of words and bigrams and some useful functions to distill the information and perform an exploratory data analysis on the data. The raw data is stored in a dictionary on the variable `voc.voc`. The bi-grams are identified with the character '~', e.g., 'of~the' corresponds to the bi-gram of the words _of_ and _the_. Finally, the variable `words` contains the frequency of the words.
+
+A traditional approach to explore the information of a list of words and their frequencies is to create a word cloud. The following figure is the word cloud of the frequency of words retrieved from `text_models.` 
+
 ![Word Cloud (MX)](/NLP-Course/assets/images/wordcloud_mx.png)
 
+The previous figure was created with the following code.
 
 ```python
 from wordcloud import WordCloud as WC
