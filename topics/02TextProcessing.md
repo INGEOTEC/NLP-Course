@@ -278,6 +278,8 @@ zipf_c = [zipf(w) for w in words]
 tokens = [sum(list(w.values())) for w in words]
 ```
 
+The following table presents the coefficient $$c$$ and the number of words ($$n$$) for all the countries. The table is sorted by $$c$$ in descending order. It can be seen that $$c$$ and $$n$$ are highly correlated, so this version of Zipf's Law only characterizes the total number of words seen on the dataset. 
+
 | Country | $$c$$ | $$n$$| 
 |---------|-------|------|
 | AR | 28383.27 | 405802 |
