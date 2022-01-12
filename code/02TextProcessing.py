@@ -1,14 +1,14 @@
-import numpy as np
 from microtc.utils import tweet_iterator
 from EvoMSA.tests.test_base import TWEETS
 from text_models import Vocabulary
 from text_models.utils import date_range
+from wordcloud import WordCloud as WC
+import numpy as np
 from collections import Counter
 from matplotlib import pylab as plt
 from scipy.optimize import minimize
 from joblib import Parallel, delayed
 from tqdm import tqdm
-from wordcloud import WordCloud as WC
 # %pylab inline
 
 ## Frequency of words
