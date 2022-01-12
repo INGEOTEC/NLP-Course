@@ -318,8 +318,11 @@ corr = np.corrcoef(X.T)
 
 ## Zipf's Law - $$f=\frac{c}{r^\alpha}$$
 
-Zipf's Law has different versions; we started with the simpler one; however, that version does not provide information that the one contained in the number of words. A straightforward approach is to change the constant in Zipf's Law with a parameter and then use an algorithm to estimate that constant. Zipf's Law has the following form $$f=\frac{c}{r^1}$$, where the constant is $$1$$; changing $$1$$ by $$\alpha$$ it is obtained $$f=\frac{c}{r^\alpha}$$. 
+Zipf's Law has different versions; we started with the simpler one; however, that version does not provide information that the one contained in the number of words. A straightforward approach is to change the constant in Zipf's Law with a parameter and then use an algorithm to estimate that constant. Zipf's Law has the following form $$f=\frac{c}{r^1}$$, where the constant is $$1$$; changing $$1$$ by $$\alpha$$ it is obtained $$f=\frac{c}{r^\alpha}$$. Without considering the meaning of the variables on this later version of Zipf's Law, one can see the similarities between Zipf's Law and Heap's Law formulation; both have a multiplying constant $$c$$ and $$k$$, and an exponential one $$\alpha$$ and $$\beta$$. 
 
+Coefficients $$c$$ and $$\alpha$$ can be estimated using the dataset stored in variable `words,` the procedure is a combination of the approach used to identify $$c$$ in the previous formulation and the algorithm described to estimate $$k$$ and $$\beta$$ of the Heap's Law.
+
+The following table shows the values of the coefficients $$c$$, $$\alpha$$, and the number of words for the different countries. 
 
 
 | Country | $$c$$ | $$\alpha$$ | $$n$$ |
@@ -344,7 +347,7 @@ Zipf's Law has different versions; we started with the simpler one; however, tha
 | SV | 435.75 | 0.7460 | 5703 |
 | BO | 352.77 | 0.7409 | 4306 |
 
-
+The correlation of these variables can be seen in the following table. It is observed that $$c$$ is highly correlated with the number of words $$n$$. On the other hand, the correlation between $$\alpha$$ and $$n$$ indicates that these variables contain different information. 
 
 |        |$$c$$   |$$\alpha$$|$$n$$ |
 |--------|--------|--------|--------|
