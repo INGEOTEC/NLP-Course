@@ -21,9 +21,9 @@ The journey of natural language processing starts with the simple procedure of c
 
 At this point, let us define a word as a sequence of characters bounded by a space - this is a shallow definition; however, it is suitable for most words written in Latin languages and English.
 
-## Frequency of words
+## Frequency of the words
 
-The frequency of words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (variable `word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
+The frequency of the words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (variable `word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
 
 ```python
 from microtc.utils import tweet_iterator
@@ -228,9 +228,9 @@ voc = Vocabulary(date, lang='Es', country='MX')
 words = {k: v for k, v in voc.voc.items() if not k.count('~')}
 ```
 
-Variable `voc` contains the frequency of words and bigrams and some useful functions to distill the information and perform an exploratory data analysis on the data. The raw data is stored in a dictionary on the variable `voc.voc`. The bi-grams are identified with the character '~', e.g., 'of~the' corresponds to the bi-gram of the words _of_ and _the_. Finally, the variable `words` contains the frequency of words.
+Variable `voc` contains the frequency of the words and bigrams and some useful functions to distill the information and perform an exploratory data analysis on the data. The raw data is stored in a dictionary on the variable `voc.voc`. The bi-grams are identified with the character '~', e.g., 'of~the' corresponds to the bi-gram of the words _of_ and _the_. Finally, the variable `words` contains the frequency of the words.
 
-A traditional approach to explore the information of a list of words and their frequencies is to create a word cloud. The following figure is the word cloud of the frequency of words retrieved from `text_models.` 
+A traditional approach to explore the information of a list of words and their frequencies is to create a word cloud. The following figure is the word cloud of the frequency of the words retrieved from `text_models.` 
 
 ![Word Cloud (MX)](/NLP-Course/assets/images/wordcloud_mx.png)
 
@@ -357,6 +357,43 @@ The correlation of these variables can be seen in the following table. It is obs
 
 
 ## Heaps' Law - $$\mid v \mid = kn^\beta$$
+
+Heaps' Law models the relationship between the number of words ($$n$$) and the size of the vocabulary $$\mid v \mid$$. In order to estimate the parameters, it is needed to obtain a dataset where $$n$$ is varied and for each one compute $$\mid v \mid$$. The dataset used to estimate the coefficients of Zipf's Law contains $$n$$ and $$\mid v \mid$$ for a particular date, country, and language. $$\mid v \mid$$ corresponds to the length of the dictionary, that is, the number of different words, namely the number for keys in it. Consequently, the dataset needed to estimate the coefficients of Heap's Law can be obtained by collecting measuring $$n$$ and $$\mid v \mid$$ on different days. 
+
+The dataset can be obtained by first creating a helper function that contains the code used to retrieve the words in the function `get_words.`
+
+```python
+COUNTRIES = ['MX', 'CO', 'ES', 'AR',
+             'PE', 'VE', 'CL', 'EC',
+             'GT', 'CU', 'BO', 'DO', 
+             'HN', 'PY', 'SV', 'NI', 
+             'CR', 'PA', 'UY'] 
+
+def get_words(date=dict(year=2022, month=1, day=10)):
+   
+
+    vocs = Parallel(n_jobs=-1)(delayed(Vocabulary)(date,
+                                                   lang='Es',
+                                                   country=country)
+                                   for country in tqdm(COUNTRIES))
+    words = [{k: v for k, v in voc.voc.items() if not k.count('~')}
+             for voc in vocs]
+    return words
+```
+
+Function `get_words` retrieves the words for all the countries on a particular date; consequently,  the next step is to decide the dates to create the dataset. The following code uses the function `date_range` to create a list of dates starting from November 1, 2021, and finishing on November 30, 2021 (inclusive). Variable `words` is a list where each element corresponds to a different day containing the words frequency of all the countries; however, to estimate the coefficients, it is needed to have a dataset for each country with all the days. The last line created the desired dataset; it is a list where each element has the frequency of the words for all the days of a particular country. 
+
+```python
+from text_models.utils import date_range
+init = dict(year=2021, month=11, day=1)
+end = dict(year=2021, month=11, day=30)
+dates = date_range(init, end)
+words = [get_words(d) for d in dates]
+ww = [[w[index] for w in words] for index in range(len(COUNTRIES))]
+```
+
+
+
 
 | Country | $$k$$ | $$\beta$$ | $$\max n$$ |
 |---------|-------|------------|-------|
