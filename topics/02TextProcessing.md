@@ -228,7 +228,7 @@ voc = Vocabulary(date, lang='Es', country='MX')
 words = {k: v for k, v in voc.voc.items() if not k.count('~')}
 ```
 
-Variable `voc` contains the frequency of words and bigrams and some useful functions to distill the information and perform an exploratory data analysis on the data. The raw data is stored in a dictionary on the variable `voc.voc`. The bi-grams are identified with the character '~', e.g., 'of~the' corresponds to the bi-gram of the words _of_ and _the_. Finally, the variable `words` contains the frequency of the words.
+Variable `voc` contains the frequency of words and bigrams and some useful functions to distill the information and perform an exploratory data analysis on the data. The raw data is stored in a dictionary on the variable `voc.voc`. The bi-grams are identified with the character '~', e.g., 'of~the' corresponds to the bi-gram of the words _of_ and _the_. Finally, the variable `words` contains the frequency of words.
 
 A traditional approach to explore the information of a list of words and their frequencies is to create a word cloud. The following figure is the word cloud of the frequency of words retrieved from `text_models.` 
 
@@ -246,6 +246,8 @@ plt.tight_layout()
 
 ## Zipf's Law - $$f=\frac{c}{r}$$
 
+We are in the position to identify the Zips' Law coefficient from a dataset retrieved from `text_models.` In this part, the goal is to estimate $$c$$ from all the Spanish-speaking countries on a particular date, January 10, 2022. On this occasion, the library [joblib](https://joblib.readthedocs.io/en/latest/) is used to parallelize the code, particularly the class `Parallel.` As can be seen, the variable `words` is a list of dictionaries containing the words frequency for all the countries.
+
 ```python
 from joblib import Parallel, delayed
 from tqdm import tqdm
@@ -262,6 +264,8 @@ vocs = Parallel(n_jobs=-1)(delayed(Vocabulary)(date,
 words = [{k: v for k, v in voc.voc.items() if not k.count('~')}
          for voc in vocs]
 ```
+
+The next step is to estimate the $$c$$ coefficient of Zipf's Law. Function `zipf` identifies the coefficient using OLS from a dictionary of words frequency. Variable `zipf_c` contains the coefficient values for each country, and we also computed the number of tokens seen, which is stored in variable `tokens.` 
 
 ```python
 def zipf(data):
