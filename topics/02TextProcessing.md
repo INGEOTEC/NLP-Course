@@ -412,8 +412,7 @@ For example, `voc_tokens` can be used to create $$n$$ and $$\mid v \mid$$ of Mex
 n_mx, v_mx = voc_tokens(ww[0])
 ```
 
-
-
+Having described how to obtain $$n$$ and $$\mid v$$ for each country, it is time to use the procedure to estimate the country's $$k$$ and $$\beta$$ coefficients. The following table shows the values of these coefficients for each country; it also includes the maximum number of words $$\max n$$ in the last column.  
 
 | Country | $$k$$ | $$\beta$$ | $$\max n$$ |
 |---------|-------|------------|-------|
