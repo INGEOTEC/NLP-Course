@@ -1,8 +1,17 @@
-# Introduction
-
-## Frequency of words
+import numpy as np
 from microtc.utils import tweet_iterator
 from EvoMSA.tests.test_base import TWEETS
+from text_models import Vocabulary
+from text_models.utils import date_range
+from collections import Counter
+from matplotlib import pylab as plt
+from scipy.optimize import minimize
+from joblib import Parallel, delayed
+from tqdm import tqdm
+from wordcloud import WordCloud as WC
+# %pylab inline
+
+## Frequency of words
 
 words = dict()
 for tw in tweet_iterator(TWEETS):
@@ -18,10 +27,6 @@ words['si']
 
 ## Simpler version using Counter
 
-from microtc.utils import tweet_iterator
-from EvoMSA.tests.test_base import TWEETS
-from collections import Counter
-
 words = Counter()
 for tw in tweet_iterator(TWEETS):
     text = tw['text']
@@ -30,9 +35,6 @@ for tw in tweet_iterator(TWEETS):
 words['si']
 
 # Zipf's Law
-
-# %pylab inline
-from matplotlib import pylab as plt
 
 freq = [f for _, f  in words.most_common()]
 rank = range(1, len(freq) + 1)
@@ -45,7 +47,6 @@ plt.savefig('zipf_law.png', dpi=300)
 
 
 ## Inverse rank
-import numpy as np
 
 freq = [f for _, f  in words.most_common()]
 rank = 1 / np.arange(1, len(freq) + 1)
@@ -92,7 +93,6 @@ plt.savefig('heaps_law.png', dpi=300)
 
 ## Optimization
 
-from scipy.optimize import minimize
 n = np.array(n)
 v = np.array(v)
 def f(w, y, x):
@@ -114,12 +114,10 @@ plt.savefig('heaps_law2.png', dpi=300)
 
 
 # Activities
-from text_models import Vocabulary
 date = dict(year=2022, month=1, day=10)
 voc = Vocabulary(date, lang='Es', country='MX')
 words = {k: v for k, v in voc.voc.items() if not k.count('~')}
 
-from wordcloud import WordCloud as WC
 wc = WC().generate_from_frequencies(words)
 plt.imshow(wc)
 plt.axis('off')
@@ -127,8 +125,6 @@ plt.tight_layout()
 plt.savefig('wordcloud_mx.png', dpi=300)
 
 ## Zipf's Law - $$f=\frac{c}{r}$$
-from joblib import Parallel, delayed
-from tqdm import tqdm
 
 countries = ['MX', 'CO', 'ES', 'AR',
              'PE', 'VE', 'CL', 'EC',
@@ -165,3 +161,42 @@ corr = np.corrcoef(X.T)
 
 for c in corr:
     print("| {:0.4f} | {:0.4f} |".format(*c))
+
+
+## Heaps' Law - $$\mid v \mid = kn^\beta$$
+
+COUNTRIES = ['MX', 'CO', 'ES', 'AR',
+             'PE', 'VE', 'CL', 'EC',
+             'GT', 'CU', 'BO', 'DO', 
+             'HN', 'PY', 'SV', 'NI', 
+             'CR', 'PA', 'UY']
+
+def get_words(date=dict(year=2022, month=1, day=10)):
+   
+
+    vocs = Parallel(n_jobs=-1)(delayed(Vocabulary)(date,
+                                                   lang='Es',
+                                                   country=country)
+                                   for country in tqdm(COUNTRIES))
+    words = [{k: v for k, v in voc.voc.items() if not k.count('~')}
+             for voc in vocs]
+    return words 
+
+
+def voc_tokens(data):
+    cnt = Counter(data[0])
+    output = [[len(cnt), sum(list(cnt.values()))]]
+    for x in data[1:]:
+        cnt.update(x)
+        _ = [len(cnt), sum(list(cnt.values()))]
+        output.append(_)
+    output = np.array(output)
+    return output[:, 0], output[:, 1]
+
+init = dict(year=2021, month=11, day=1)
+end = dict(year=2021, month=11, day=30)
+dates = date_range(init, end)
+words = [get_words(d) for d in dates]
+ww = [[w[index] for w in words] for index in range(len(COUNTRIES))]
+
+n_mx, v_mx = voc_tokens(ww[0])
