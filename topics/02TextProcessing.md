@@ -412,7 +412,7 @@ For example, `voc_tokens` can be used to create $$n$$ and $$\mid v \mid$$ of Mex
 n_mx, v_mx = voc_tokens(ww[0])
 ```
 
-Having described how to obtain $$n$$ and $$\mid v$$ for each country, it is time to use the procedure to estimate the country's $$k$$ and $$\beta$$ coefficients. The following table shows the values of these coefficients for each country; it also includes the maximum number of words $$\max n$$ in the last column.  
+Having described how to obtain $$n$$ and $$\mid v$$ for each country, it is time to use the procedure to estimate the country's $$k$$ and $$\beta$$ coefficients. The following table shows the values of these coefficients for each country; it also includes the maximum number of words ($$\max n$$) in the last column.  
 
 | Country | $$k$$ | $$\beta$$ | $$\max n$$ |
 |---------|-------|------------|-------|
@@ -436,11 +436,16 @@ Having described how to obtain $$n$$ and $$\mid v$$ for each country, it is time
 | CR | 5.71 | 0.5276 | 223434 |
 | BO | 2.55 | 0.5958 | 159700 |
 
+As we have seen previously, the correlation between the variables displays the relation between the coefficients; it was helpful to realize that the first version of Zipf's Law was not needed. The following table shows the correlation between $$k$$, $$\beta$$, and $$\max n$$. It is observed that $$k$$ and $$\beta$$ are uncorrelated to $$\max n$$, and that there is a negative correlation between $$k$$ and $$\beta$$. 
+
 |        | $$k$$ | $$\beta$$ | $$\max n$$ |
 |--------|-------|-----------|-------|
 |$$k$$| 1.0000 | -0.8643 | 0.0587 |
 |$$\beta$$| -0.8643 | 1.0000 | 0.3235 |
 |$$\max n$$| 0.0587 | 0.3235 | 1.0000 |
+
+## Comparing Spanish-speaking countries
+
 
 
 ![Spanish - $$\alpha$$, $$\beta$$](/NLP-Course/assets/images/es_alpha_beta.png)
