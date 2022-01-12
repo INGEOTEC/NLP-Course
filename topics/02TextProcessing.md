@@ -444,9 +444,9 @@ As we have seen previously, the correlation between the variables displays the r
 |$$\beta$$| -0.8643 | 1.0000 | 0.3235 |
 |$$\max n$$| 0.0587 | 0.3235 | 1.0000 |
 
-## Comparing Spanish-speaking countries
+## Comparison of Spanish-speaking countries
 
-
+Coefficients $$\alpha$$ and $$\beta$$ characterize the vocabulary on a particular region, language, and dates. These coefficients can be used to compare the similarities between the countries. A simple approach is to create a scatter problem between $$\alpha$$ and $$\beta$$. The following figure shows the scatter plot of the Spanish-speaking countries. 
 
 ![Spanish - $$\alpha$$, $$\beta$$](/NLP-Course/assets/images/es_alpha_beta.png)
 
