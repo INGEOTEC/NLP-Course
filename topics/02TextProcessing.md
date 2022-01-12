@@ -13,6 +13,22 @@ nav_order: 2
 1. TOC
 {:toc}
 
+## Libraries used
+{: .no_toc .text-delta }
+```python
+import numpy as np
+from microtc.utils import tweet_iterator
+from EvoMSA.tests.test_base import TWEETS
+from text_models import Vocabulary
+from text_models.utils import date_range
+from collections import Counter
+from matplotlib import pylab as plt
+from scipy.optimize import minimize
+from joblib import Parallel, delayed
+from tqdm import tqdm
+from wordcloud import WordCloud as WC
+```
+
 ---
 
 # Introduction
@@ -26,9 +42,6 @@ At this point, let us define a word as a sequence of characters bounded by a spa
 The frequency of the words in a document can be computed using a dictionary. A dictionary is a data structure that associates a keyword with a value. The following code uses a dictionary (variable `word`) to count the word frequencies of texts stored in a JSON format, each one per line. It uses the function `tweet_iterator` that iterates over the file, scanning one line at a time and converting the JSON into a dictionary where the keyword text contains the text.
 
 ```python
-from microtc.utils import tweet_iterator
-from EvoMSA.tests.test_base import TWEETS
-
 words = dict()
 for tw in tweet_iterator(TWEETS):
     text = tw['text']
@@ -50,10 +63,6 @@ words['si']
 The counting pattern is frequent, so it is implemented in the [Counter](https://docs.python.org/3/library/collections.html#collections.Counter) class under the package [collections](https://docs.python.org/3/library/collections.html); the following code implements the method described using `Counter`; the key element is the method `update,` and to make the code shorter, [list comprehension](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) is used. 
 
 ```python
-from microtc.utils import tweet_iterator
-from EvoMSA.tests.test_base import TWEETS
-from collections import Counter
-
 words = Counter()
 for tw in tweet_iterator(TWEETS):
     text = tw['text']
@@ -89,7 +98,6 @@ rank = range(1, len(freq) + 1)
 Once the frequency and the rank are computed, the figure is created using the following code. 
 
 ```python
-from matplotlib import pylab as plt
 plt.plot(rank, freq, '.')
 plt.grid()
 plt.xlabel('Rank')
@@ -100,7 +108,6 @@ plt.tight_layout()
 The previous figure does not depict the relation $$f=\frac{c}{r}$$, in order to show it let us draw the figure scatter plot between the rank inverse and the frequency; this can be obtained by changing the following lines into the previous procedure -- [numpy](https://numpy.org) is used in the following code to create an array of elements.
 
 ```python
-import numpy as np
 freq = [f for _, f  in words.most_common()]
 rank = 1 / np.arange(1, len(freq) + 1)
 ```
@@ -195,13 +202,12 @@ As mentioned previously, there are many optimization algorithms; some can be fou
 The following code solves the optimization problem using the `minimize` function. 
 
 ```python
-from scipy.optimize import minimize
-n = np.array(n)
-v = np.array(v)
 def f(w, y, x):
     k, beta = w
     return ((y - k * x**beta)**2).sum()
 
+n = np.array(n)
+v = np.array(v)
 res = minimize(f, np.array([1, 0.5]), (v, n))
 k, beta = res.x
 k, beta
@@ -222,7 +228,6 @@ Zipf's Law and Heaps' Law model two language characteristics; these characterist
 The first step is to retrieve the information from a particular date, location, and language. As an example, let us retrieve the data corresponding to January 10, 2022, in Mexico and written in Spanish, which can be done with the following code. 
 
 ```python
-from text_models import Vocabulary
 date = dict(year=2022, month=1, day=10)
 voc = Vocabulary(date, lang='Es', country='MX')
 words = {k: v for k, v in voc.voc.items() if not k.count('~')}
@@ -237,7 +242,6 @@ A traditional approach to explore the information of a list of words and their f
 The previous figure was created with the following code.
 
 ```python
-from wordcloud import WordCloud as WC
 wc = WC().generate_from_frequencies(words)
 plt.imshow(wc)
 plt.axis('off')
@@ -249,9 +253,6 @@ plt.tight_layout()
 We are in the position to identify the Zips' Law coefficient from a dataset retrieved from `text_models.` In this part, the goal is to estimate $$c$$ from all the Spanish-speaking countries on a particular date, January 10, 2022. On this occasion, the library [joblib](https://joblib.readthedocs.io/en/latest/) is used to parallelize the code, particularly the class `Parallel.` As can be seen, the variable `words` is a list of dictionaries containing the words frequency for all the countries.
 
 ```python
-from joblib import Parallel, delayed
-from tqdm import tqdm
-
 countries = ['MX', 'CO', 'ES', 'AR',
              'PE', 'VE', 'CL', 'EC',
              'GT', 'CU', 'BO', 'DO', 
@@ -384,7 +385,6 @@ def get_words(date=dict(year=2022, month=1, day=10)):
 Function `get_words` retrieves the words for all the countries on a particular date; consequently,  the next step is to decide the dates to create the dataset. The following code uses the function `date_range` to create a list of dates starting from November 1, 2021, and finishing on November 30, 2021 (inclusive). Variable `words` is a list where each element corresponds to a different day containing the words frequency of all the countries; however, to estimate the coefficients, it is needed to have a dataset for each country with all the days. The last line created the desired dataset; it is a list where each element has the frequency of the words for all the days of a particular country. 
 
 ```python
-from text_models.utils import date_range
 init = dict(year=2021, month=11, day=1)
 end = dict(year=2021, month=11, day=30)
 dates = date_range(init, end)

@@ -93,12 +93,12 @@ plt.savefig('heaps_law.png', dpi=300)
 
 ## Optimization
 
-n = np.array(n)
-v = np.array(v)
 def f(w, y, x):
     k, beta = w
     return ((y - k * x**beta)**2).sum()
 
+n = np.array(n)
+v = np.array(v)
 res = minimize(f, np.array([1, 0.5]), (v, n))
 k, beta = res.x
 k, beta
