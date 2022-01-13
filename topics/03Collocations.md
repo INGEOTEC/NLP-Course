@@ -109,7 +109,7 @@ A natural example of independent random variables is the tossing of a coin. For 
 
 A natural example of independent random variables is the tossing of a coin. For example, observing the sequence $$(1, 0, 0, 1, 1)$$ and knowing that these come from tossing a coin five times, then our intuition indicates that the estimated parameter $$p$$ correspond to the fraction between the number of ones (3) and the number of tosses (5). In this case, our intuition corresponds to the maximum likelihood method defined as follows:
 
-$$\mathcal L_N(\theta) = \prod_{i=1}^N f_{\mathcal X}(X_i \mid \theta),$$
+$$\mathcal L_{f_{\mathcal X}}(\theta) = \prod_{i=1}^N f_{\mathcal X}(X_i \mid \theta),$$
 
-where $$f_{\mathcal X}$$ corresponds to the probability function, in the case discrete random variable corresponds to $$\mathbb P(X=x) = f_{\mathcal X}(x),$$ and the notation $$f_{\mathcal X}(X_i \mid \theta)$$ indicates that $$f$$ depends on a set of parameters refered as $\theta$.
+where $$f_{\mathcal X}$$ corresponds to the probability density function, in the case discrete random variable corresponds to $$\mathbb P(X=x) = f_{\mathcal X}(x),$$ and the notation $$f_{\mathcal X}(X_i \mid \theta)$$ indicates that $$f$$ depends on a set of parameters refered as $\theta$.
 
