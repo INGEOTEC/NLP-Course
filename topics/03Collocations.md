@@ -62,3 +62,5 @@ for bigram, cnt in bigrams.most_common():
         co_occurrence[index[b], index[a]] = cnt
 ```
 
+The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. As can be observed, the co-occurrence matrix can be transformed into a bivariate distribution and use a statistical approach to retrieve some prominent pairs. 
+
