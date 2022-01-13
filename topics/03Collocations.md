@@ -85,4 +85,6 @@ The co-occurrence matrix contains the information of two random variables; each 
 
 # Bernoulli Distribution
 
-Let $$X=\{1, 0\}$$ be a random variable with two outcomes, this variable corresponds to a language that only has two words. At this point, one might realize that different experiments can be represented with a random variable of two outcomes; perhaps the most famous one is tossing a coin. 
+Let $$\mathcal X=\{1, 0\}$$ be a random variable with two outcomes, this variable corresponds to a language that only has two words. At this point, one might realize that different experiments can be represented with a random variable of two outcomes; perhaps the most famous one is tossing a coin. 
+
+$$\mathcal X$$ has a Bernoulli distribution, i.e., $$\mathcal X \sim \textsf{Bernoulli}(p)$$, in the that $$\mathbb P(\mathcal X=1)=p$$ and $$\mathbb P(\mathcal X=0)=1 - p$$ for $$p \in [0, 1]$$.
