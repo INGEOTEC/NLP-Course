@@ -91,11 +91,10 @@ The random variable $$\mathcal{X}$$ has a Bernoulli distribution, i.e., $$\mathc
 
 For example, the language under study has two words _good_ and _bad_, and we encountered a sequence "good bad bad good good." Using the following mapping 
 
-$$X(w) = \begin{cases}
+$$\mathcal X(w) = \begin{cases}
 1 \text{when } w \text{ is good}\\
 0 \text{ when } w \text{ is good}
 \end{cases}.$$
 
-The sequence is represented as $$(1, 0, 0, 1, 1)$$
-
+The sequence is represented as $$(1, 0, 0, 1, 1)$$ and in general a sequence of five elements is $$(\mathcal X_1, \mathcal X_2, \mathcal X_3, \mathcal X_4, \mathcal X_5);$$ as expected a sequence of $$N$$ observations is $$(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_N)$$. Different studies can be applied to a sequence; however, at this point we would like to impose some constraints on the way it was obtained. The first constraint is to assume that $$\mathcal X_i \sim \textsf{Bernoulli}(p),$$ then one is interested in estimating the value of the parameter $$p$$. The second assumption is that the random variables where indepedently collected, that is, the outcome of the variable $$\mathcal X_i$$ is independent of $$\mathcal X_j$$ for $$j \neq i.$$
 
