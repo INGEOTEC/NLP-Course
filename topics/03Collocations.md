@@ -62,7 +62,7 @@ for bigram, cnt in bigrams.most_common():
         co_occurrence[index[b], index[a]] = cnt
 ```
 
-The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. As can be observed, the co-occurrence matrix can be transformed into a bivariate distribution and use a statistical approach to retrieve some prominent pairs. Before going into the details of these algorithms, it is necessary to describe how the words in the co-occurrence matrix are considered random variables. 
+The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. The first step is to transform the co-occurrence matrix into a bivariate distribution and then use statistical approaches to retrieve some prominent pairs. Before going into the details of these algorithms, it is pertinent to describe the relationship between words and random variables.
 
 Each element in the matrix can be uniquely identified by the pair words, e.g., the frequency of pair (_in_, _of_) is $$122502$$. However, it is also possible to identify the same element using an index. For example, if the first word (_the_) is assigned the index $$0$$, the index $$4$$ corresponds to word _in_ and $$2$$ to _of_. Consequently, the element (_in_, _of_) can uniquely identify with the pair (4, 2). One can create a mapping between words and natural numbers such that each different word has a unique identifier. The mapping allows working with natural numbers instead of words which facilitates the analysis and returns to the words (using the inverse mapping) when the result is obtained. 
 
@@ -76,6 +76,13 @@ for bigram, cnt in bigrams.items():
         if x not in index:
             index[x] = len(index)
 len(index)
+9598
 ```
 
+It is essential to mention that a random variable is a mapping that assigns a real number to each outcome. In this case, the outcome is observing a word and the mapping is the transformation of the word into the natural number. 
 
+The co-occurrence matrix contains the information of two random variables; each one can have $$d$$ (length of the dictionary) different outcomes. Sometimes, working with two random variables might be challenging, so a more suitable approach is starting the description with the most simple case, which corresponds to a single random variable with only two outcomes. 
+
+# Bernoulli Distribution
+
+Let $$X=\{1, 0\}$$ be a random variable with two outcomes, this variable corresponds to a language that only has two words. At this point, one might realize that different experiments can be represented with a random variable of two outcomes; perhaps the most famous one is tossing a coin. 
