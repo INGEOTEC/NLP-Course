@@ -100,3 +100,5 @@ The sequence is represented as $$(1, 0, 0, 1, 1)$$ and in general a sequence of 
 There is an important characteristic for independen random variables, i.e., $$(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_N)$$ which is 
 
 $$\mathbb P(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_N) = \prod_{i=1}^N \mathbb P(\mathcal X_i).$$
+
+Returning to the example "good bad bad good good," the independent assumption means that observing _bad_ as the second word is not influenced by getting _good_ as the first word. 
