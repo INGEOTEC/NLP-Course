@@ -92,9 +92,10 @@ The random variable $$\mathcal{X}$$ has a Bernoulli distribution, i.e., $$\mathc
 For example, the language under study has two words _good_ and _bad_, and we encountered a sequence "good bad bad good good." Using the following mapping 
 
 $$X(w) = \begin{cases}
-1\text{~if~} w=\text{good}\\
-0\text{~if~} w=\text{bad}
+1 \text{when } w \text{ is good}\\
+0 \text{ when } w \text{ is good}
 \end{cases}.$$
 
+The sequence is represented as $$(1, 0, 0, 1, 1)$$
 
 
