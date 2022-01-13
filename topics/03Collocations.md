@@ -62,5 +62,20 @@ for bigram, cnt in bigrams.most_common():
         co_occurrence[index[b], index[a]] = cnt
 ```
 
-The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. As can be observed, the co-occurrence matrix can be transformed into a bivariate distribution and use a statistical approach to retrieve some prominent pairs. 
+The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. As can be observed, the co-occurrence matrix can be transformed into a bivariate distribution and use a statistical approach to retrieve some prominent pairs. Before going into the details of these algorithms, it is necessary to describe how the words in the co-occurrence matrix are considered random variables. 
+
+Each element in the matrix can be uniquely identified by the pair words, e.g., the frequency of pair (_in_, _of_) is $$122502$$. However, it is also possible to identify the same element using an index. For example, if the first word (_the_) is assigned the index $$0$$, the index $$4$$ corresponds to word _in_ and $$2$$ to _of_. Consequently, the element (_in_, _of_) can uniquely identify with the pair (4, 2). One can create a mapping between words and natural numbers such that each different word has a unique identifier. The mapping allows working with natural numbers instead of words which facilitates the analysis and returns to the words (using the inverse mapping) when the result is obtained. 
+
+The mapping can be implemented using a dictionary, as seen from the following code where the variable of interest is `index.` 
+
+```python
+index = dict()
+for bigram, cnt in bigrams.items():
+    a, b = bigram.split('~')
+    for x in [a, b]:
+        if x not in index:
+            index[x] = len(index)
+len(index)
+```
+
 
