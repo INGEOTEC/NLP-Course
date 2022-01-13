@@ -115,7 +115,7 @@ where $$f_{\mathcal X}$$ corresponds to the probability density function, in the
 
 The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$ or equivalent maximizing $$l_{\mathcal X}(\theta) =  \log \mathcal L_{f_{\mathcal X}}(\theta).$$ 
 
-Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$\mathcal L_{f_{\mathcal X}}(p) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the function, which can be solved analytically by following the next steps.
+Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$f_{\mathcal X}(p) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the likelihood function, which can be solved analytically by following the next steps.
 
 $$\begin{eqnarray} 
 \frac{d}{dp} \mathcal l_{f_{\mathcal X}}(p) &=& 0 \\ 
@@ -126,4 +126,13 @@ $$\begin{eqnarray}
 \end{eqnarray},$$
 
 solving for $$p$$ it is obtained $$\hat p = \frac{1}{N}\sum_{i=1}^N x_i.$$
+
+For example, the following code creates an array of 100 elements where each element is the outcome of a Bernoulli distributed random variable. The second line estimates the parameter $$p$$. 
+
+```python
+x = np.random.binomial(1, 0.3, size=100)
+hp = x.mean()
+```
+
+# Categorical distribution
 
