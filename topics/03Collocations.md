@@ -89,3 +89,12 @@ Let $$\mathcal{X}=\{1, 0\}$$ be a random variable with two outcomes, this variab
 
 The random variable $$\mathcal{X}$$ has a Bernoulli distribution, i.e., $$\mathcal X \sim \textsf{Bernoulli}(p)$$, in the case that $$\mathbb P(\mathcal X=1)=p$$ and $$\mathbb P(\mathcal X=0)=1 - p$$ for $$p \in [0, 1]$$, where the probability (mass) function is $$f_{\mathcal X}(x) = p^x(1-p)^{1-x}.$$
 
+For example, the language under study has two words _good_ and _bad_, and we encountered a sequence "good bad bad good good." Using the following mapping 
+
+$$X(w) = \begin{cases}
+1\text{~if~} w=\text{good}\\
+0\text{~if~} w=\text{bad}
+\end{cases}.$$
+
+
+
