@@ -113,15 +113,17 @@ $$\mathcal L_{f_{\mathcal X}}(\theta) = \prod_{i=1}^N f_{\mathcal X}(x_i \mid \t
 
 where $$f_{\mathcal X}$$ corresponds to the probability density function, in the case discrete random variable corresponds to $$\mathbb P(X=x) = f_{\mathcal X}(x),$$ and the notation $$f_{\mathcal X}(x_i \mid \theta)$$ indicates that $$f$$ depends on a set of parameters refered as $$\theta$$.
 
-The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$. 
+The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$ or equivalent maximizing $$l_{\mathcal X}(\theta) =  \log \mathcal L_{f_{\mathcal X}}(\theta).$$ 
 
-$$ 
-\begin{eqnarray} 
+Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$\mathcal L_{f_{\mathcal X}}(p) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the function, which can be solved analytically by following the next steps.
+
+$$\begin{eqnarray} 
 \frac{d}{dp} \mathcal l_{f_{\mathcal X}}(p) &=& 0 \\ 
 \frac{d}{dp} [ \sum_{i=1}^N x_i \log p + (1-x_i) \log (1 - p)] &=& 0 \\ 
 \frac{d}{d p} [ \sum_{i=1}^N x_i \log p + \log (1 - p) (N - \sum_{i=1}^N x_i) ] &=& 0\\ 
 \sum_{i=1}^N x_i \frac{d}{d p} \log \mathcal p + (N - \sum_{i=1}^N x_i) \frac{d}{d p} \log (1 - \mathcal p) &=& 0\\
 \sum_{i=1}^N x_i \frac{1}{p} + (N - \sum_{i=1}^N x_i) \frac{-1}{(1 - p)} &=& 0 \\
-\end{eqnarray}$$
+\end{eqnarray},$$
 
-$$\hat p = \frac{1}{N}\sum_{i=1}^N x_i $$.
+solving for $$p$$ it is obtained $$\hat p = \frac{1}{N}\sum_{i=1}^N x_i.$$
+
