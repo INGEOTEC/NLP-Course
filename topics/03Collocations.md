@@ -155,6 +155,24 @@ $$\begin{eqnarray}
 
 where the term $$\lambda (\sum_i^d \mathbf p_i -1)$$
 
-For example, 
+For example, one of the most known processes that involve a Categorical distribution is rolling a dice. The following is a procedure to simulate dice rolling using a Multinomial distribution. 
+
+```python
+X = np.random.multinomial(1, [1/6] * 6, size=100)
+x = X.argmax(axis=1)
+x
+```
+
+On the other hand, the maximum likelihood estimator can be implemented as follows:
+
+```python
+var, counts = np.unique(x, return_counts=True)
+N = counts.sum()
+p = counts / N
+p
+```
+
+# Two random variables
+
 
 
