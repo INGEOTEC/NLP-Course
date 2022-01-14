@@ -36,14 +36,11 @@ len(index)
 # Bernoulli Distribution
 x = np.random.binomial(1, 0.3, size=1000)
 hp = x.mean()
-hp
 
 # Categorical distribution
 X = np.random.multinomial(1, [1/6] * 6, size=100)
 x = X.argmax(axis=1)
-x
 
 var, counts = np.unique(x, return_counts=True)
 N = counts.sum()
 p = counts / N
-p
