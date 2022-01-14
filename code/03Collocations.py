@@ -44,3 +44,19 @@ x = X.argmax(axis=1)
 var, counts = np.unique(x, return_counts=True)
 N = counts.sum()
 p = counts / N
+
+co_occurrence = np.zeros((len(index), len(index)))
+for bigram, cnt in bigrams.most_common():
+    a, b = bigram.split('~')
+    if a in index and b in index:
+        co_occurrence[index[a], index[b]] = cnt
+        co_occurrence[index[b], index[a]] = cnt
+co_occurrence = co_occurrence / co_occurrence.sum()
+
+keys = list(index.items())
+keys.sort(key=lambda x: x[1])
+
+print(' | ' + ' | '.join([k for k, _ in keys[:5]]) + ' | ')
+for c, (k, _) in zip(co_occurrence, keys[:5]):
+    _ = " | ".join(map(lambda x: '{: 0.5f}'.format(x), c[:5]))
+    print('{} | {} |'.format(k, _))

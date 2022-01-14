@@ -174,9 +174,30 @@ p = counts / N
 
 We have all the elements to realize that the co-occurrence matrix is the realization of two random variables (each one can have $$d$$ outcomes); it keeps track of the number of times a bigram appear in a corpus. So far, we have not worked with two random variables; however, the good news is that the co-occurrence matrix contains all the information needed to define a bivariate distribution for this process.
 
-The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of seeing a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$122502$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
+The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of getting a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$122502$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
 
-The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is seen one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix.
+The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. The following code builds the bivariate distribution from the co-occurrence matrix.
+
+```python
+co_occurrence = np.zeros((len(index), len(index)))
+for bigram, cnt in bigrams.most_common():
+    a, b = bigram.split('~')
+    if a in index and b in index:
+        co_occurrence[index[a], index[b]] = cnt
+        co_occurrence[index[b], index[a]] = cnt
+co_occurrence = co_occurrence / co_occurrence.sum()
+```
+
+The following table presents an extract of the bivariate distribution. 
+
+|    | the      | to       | of       | in       | and      | 
+|----|----------|----------|----------|----------|----------|    
+|the |  0.00000 |  0.00120 |  0.00115 |  0.00086 |  0.00084 |
+|to  |  0.00120 |  0.00000 |  0.00045 |  0.00043 |  0.00061 |
+|of  |  0.00115 |  0.00045 |  0.00000 |  0.00033 |  0.00035 |
+|in  |  0.00086 |  0.00043 |  0.00033 |  0.00000 |  0.00033 |
+|and |  0.00084 |  0.00061 |  0.00035 |  0.00033 |  0.00000 |
+
 
 
 
