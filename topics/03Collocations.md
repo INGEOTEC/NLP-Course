@@ -113,7 +113,7 @@ $$\mathcal L_{f_{\mathcal X}}(\theta) = \prod_{i=1}^N f_{\mathcal X}(x_i \mid \t
 
 where $$f_{\mathcal X}$$ corresponds to the probability density function, in the case discrete random variable corresponds to $$\mathbb P(X=x) = f_{\mathcal X}(x),$$ and the notation $$f_{\mathcal X}(x_i \mid \theta)$$ indicates that $$f$$ depends on a set of parameters refered as $$\theta$$.
 
-The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$ or equivalent maximizing $$l_{\mathcal X}(\theta) =  \log \mathcal L_{f_{\mathcal X}}(\theta).$$ 
+The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$ or equivalent maximizing $$l_{f_\mathcal X}(\theta) =  \log \mathcal L_{f_{\mathcal X}}(\theta).$$ 
 
 Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$f_{\mathcal X}(p) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the likelihood function, which can be solved analytically by following the next steps.
 
@@ -144,14 +144,17 @@ The estimated parameter is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(
 
 The maximum likelihood estimator can be obtained by maximizing the log-likelihood, i.e., 
 
-$$l_{\mathcal X}(\mathbf p_j) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$
+$$l_{f_\mathcal X}(\mathbf p_j) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$ 
 
-subject to the constraint $$\sum_i^d \mathbf p_i=1$$. The system of equations that need to be solved is the following. 
+subject to the constraint $$\sum_i^d \mathbf p_i=1$$. An optimization problem with a equality constraint can be solved using Langrage multipliers which requieres setting the constraint in the original formulation and making a derivative on a introduce variable $$\lambda$$. Using Langrage multiplier the system of equations that need to be solved is the following: 
 
 $$\begin{eqnarray}
 \frac{\partial}{\partial \mathbf p_j} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
 \frac{\partial}{\partial \lambda} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
-\end{eqnarray}$$
+\end{eqnarray},$$
 
+where the term $$\lambda (\sum_i^d \mathbf p_i -1)$$
+
+For example, 
 
 
