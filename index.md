@@ -34,7 +34,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$\mathbb P(A)$$  | Probability of event $$A$$                         |
 |$$\mathcal X$$    | Random variable                                    |
 |$$f(\cdot)$$      | Probability distribution function (pdf)            |
-|$$\mathbb \delta(e)$$  | Indicator function; $$1$$ only if $$e$$ is true |
+|$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true    |
 |$$\Omega$$        | Search space                                       |
 
 #  Requirements
