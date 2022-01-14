@@ -60,3 +60,27 @@ print(' | ' + ' | '.join([k for k, _ in keys[:5]]) + ' | ')
 for c, (k, _) in zip(co_occurrence, keys[:5]):
     _ = " | ".join(map(lambda x: '{: 0.5f}'.format(x), c[:5]))
     print('{} | {} |'.format(k, _))
+
+
+#### 
+
+cnt = 4
+X = np.random.multinomial(1, [1/cnt] * 4, size=10000).argmax(axis=1)
+Y = np.random.multinomial(1, [1/cnt] * 4, size=10000).argmax(axis=1)
+# Z = [[x, y] for x, y in zip(X, Y) if x !=y]
+Z = [[x, y] for x, y in zip(X, Y)]
+
+W = np.zeros((cnt, cnt))
+for x, y in Z:
+    W[y, x] += 1
+W = W / W.sum()
+W
+
+X = np.atleast_2d(W.sum(axis=0))
+Y = np.atleast_2d(W.sum(axis=1))
+ind = np.dot(Y.T, X)
+W - ind
+
+for w in (W-ind):
+    _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
+    print(r"{} \\".format(_))

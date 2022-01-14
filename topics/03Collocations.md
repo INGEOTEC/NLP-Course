@@ -200,9 +200,23 @@ The following table presents an extract of the bivariate distribution.
 
 Once the information of the bigrams has been transformed into a bivariate distribution, we can start analyzing it. As mentioned previously, the idea is to identify those bigrams that can be considered collocations. However, the frequency of the bigrams does not contain semantic information of the words or the phrase at hand, which can be used to identify a collocation precisely. Nonetheless, a collocation is a phrase where its components do not appear by chance; that is, the elements composing it are not drawn independently from a distribution. Therefore, the bivariate distribution can be used to identify those words that are not independent, which is a hard constraint for being considered a collocation. 
 
+$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+\begin{pmatrix}
+0.0018 & -0.0004 & 0.0016 & -0.0030 \\
+0.0003 & -0.0003 & -0.0015 & 0.0015 \\
+-0.0005 & 0.0006 & -0.0026 & 0.0025 \\
+-0.0016 & 0.0002 & 0.0025 & -0.0010 \\
+\end{pmatrix}
+$$
 
-
-
+$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+\begin{pmatrix}
+-0.0641 & 0.0217 & 0.0186 & 0.0239 \\
+0.0238 & -0.0619 & 0.0198 & 0.0183 \\
+0.0212 & 0.0173 & -0.0601 & 0.0216 \\
+0.0191 & 0.0230 & 0.0217 & -0.0638 \\
+\end{pmatrix}
+$$
 
 
 
