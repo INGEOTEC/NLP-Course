@@ -146,7 +146,7 @@ The maximum likelihood estimator can be obtained by maximizing the log-likelihoo
 
 $$l_{\mathcal X}(\mathbf p_j) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$
 
-subject to the constraint $$\sum_i^d \mathbf p_i=1$$. 
+subject to the constraint $$\sum_i^d \mathbf p_i=1$$. The system of equations that need to be solved is the following. 
 
 $$\begin{eqnarray}
 \frac{\partial}{\partial \mathbf p_j} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
