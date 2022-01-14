@@ -198,7 +198,7 @@ The following table presents an extract of the bivariate distribution.
 |in  |  0.00086 |  0.00043 |  0.00033 |  0.00000 |  0.00033 |
 |and |  0.00084 |  0.00061 |  0.00035 |  0.00033 |  0.00000 |
 
-
+Once the information of the bigrams has been transformed into a bivariate distribution, we can start analyzing it. As mentioned previously, the idea is to identify those bigrams that can be considered collocations. However, the frequency of the bigrams does not contain semantic information of the words or the phrase at hand, which can be used to identify a collocation precisely. Nonetheless, a collocation is a phrase where its components do not appear by chance; that is, the elements composing it are not drawn independently from a distribution. Therefore, the bivariate distribution can be used to identify those words that are not independent, which is a hard constraint for being considered a collocation. 
 
 
 
