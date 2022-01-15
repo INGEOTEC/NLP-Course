@@ -176,7 +176,7 @@ We have all the elements to realize that the co-occurrence matrix is the realiza
 
 The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of getting a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$122502$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
 
-The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. The following code builds the bivariate distribution from the co-occurrence matrix.
+The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. For example, the following code builds the bivariate distribution from the co-occurrence matrix.
 
 ```python
 co_occurrence = np.zeros((len(index), len(index)))
@@ -200,23 +200,57 @@ The following table presents an extract of the bivariate distribution.
 
 Once the information of the bigrams has been transformed into a bivariate distribution, we can start analyzing it. As mentioned previously, the idea is to identify those bigrams that can be considered collocations. However, the frequency of the bigrams does not contain semantic information of the words or the phrase at hand, which can be used to identify a collocation precisely. Nonetheless, a collocation is a phrase where its components do not appear by chance; that is, the elements composing it are not drawn independently from a distribution. Therefore, the bivariate distribution can be used to identify those words that are not independent, which is a hard constraint for being considered a collocation. 
 
-$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
-\begin{pmatrix}
-0.0018 & -0.0004 & 0.0016 & -0.0030 \\
-0.0003 & -0.0003 & -0.0015 & 0.0015 \\
--0.0005 & 0.0006 & -0.0026 & 0.0025 \\
--0.0016 & 0.0002 & 0.0025 & -0.0010 \\
-\end{pmatrix}
-$$
+
+```python
+d = 4
+R = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
+C = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
+Z = [[r, c] for r, c in zip(R, C)]
+
+W = np.zeros((d, d))
+for r, c in Z:
+    W[r, c] += 1
+W = W / W.sum()
+
+C = np.atleast_2d(W.sum(axis=0))
+R = np.atleast_2d(W.sum(axis=1))
+ind = np.dot(R.T, C)
+W - ind
+```
 
 $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
 \begin{pmatrix}
--0.0641 & 0.0217 & 0.0186 & 0.0239 \\
-0.0238 & -0.0619 & 0.0198 & 0.0183 \\
-0.0212 & 0.0173 & -0.0601 & 0.0216 \\
-0.0191 & 0.0230 & 0.0217 & -0.0638 \\
+-0.0010 & -0.0011 & -0.0006 & 0.0026 \\
+0.0037 & 0.0007 & -0.0022 & -0.0022 \\
+-0.0040 & -0.0003 & 0.0047 & -0.0004 \\
+0.0012 & 0.0007 & -0.0019 & 0.0000 \\
 \end{pmatrix}
 $$
 
+```python
+Z = [[r, c] for r, c in zip(R, C) if r != c]
+```
+
+$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+\begin{pmatrix}
+-0.0603 & 0.0197 & 0.0223 & 0.0183 \\
+0.0229 & -0.0645 & 0.0197 & 0.0219 \\
+0.0199 & 0.0257 & -0.0654 & 0.0197 \\
+0.0175 & 0.0191 & 0.0233 & -0.0599 \\
+\end{pmatrix}
+$$
+
+```python
+Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
+```
+
+$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+\begin{pmatrix}
+0.0031 & -0.0070 & 0.0034 & 0.0006 \\
+0.0026 & -0.0035 & 0.0007 & 0.0002 \\
+-0.0039 & 0.0144 & -0.0052 & -0.0053 \\
+-0.0018 & -0.0039 & 0.0011 & 0.0046 \\
+\end{pmatrix}
+$$
 
 
