@@ -62,20 +62,23 @@ for c, (k, _) in zip(co_occurrence, keys[:5]):
     print('{} | {} |'.format(k, _))
 
 
-#### 
+# Independent Random Variables
 
-
-d = 4
-R = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
-C = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
-# Z = [[r, c] for r, c in zip(R, C)]
-Z = [[r, c] for r, c in zip(R, C) if r != c]
+d = 6
+R = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+C = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+Z = [[r, c] for r, c in zip(R, C)]
+# Z = [[r, c] for r, c in zip(R, C) if r != c]
 # Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
 
 W = np.zeros((d, d))
 for r, c in Z:
     W[r, c] += 1
 W = W / W.sum()
+
+for w in (W):
+    _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
+    print(r"{} \\".format(_))
 
 C = np.atleast_2d(W.sum(axis=0))
 R = np.atleast_2d(W.sum(axis=1))
