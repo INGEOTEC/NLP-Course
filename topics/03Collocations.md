@@ -202,6 +202,15 @@ Once the information of the bigrams has been transformed into a bivariate distri
 
 # Independent Random Variables
 
+The bivariate distribution shown in the previous table contains the probability of obtaining a bigram, i.e., $$\mathbb P(\mathcal X_r=r, \mathcal X_c=c)$$; this information is helpful when combined with the concept of independence and marginal distribution.
+
+Two random variables $$\mathcal X$$ and $$\mathcal Y$$ are independent if
+$$\mathbb P(\mathcal X, \mathcal Y)=\mathbb P(\mathcal X) \mathbb(\mathcal Y).$$ 
+
+The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\mathbb P(\mathcal Y)$$ are unknown. Fortunately, the **marginal distribution** definition describes the procedure to obtain $$\mathbb P(\mathcal X=x)$$ and $$\mathbb P(\mathcal Y=y)$$ from the bivariate distribution. Let $f_{\mathcal X, \mathcal Y}$ be the joint distribution mass function (i.e., $$f_{\mathcal X, \mathcal Y}(x, y)=\mathbb P(\mathcal X=x, \mathcal Y=y)$$) then the marginal mass function for $$\mathcal X$$ is 
+
+$$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
+
 ```python
 d = 4
 R = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
@@ -221,10 +230,12 @@ W - ind
 
 $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
 \begin{pmatrix}
--0.0010 & -0.0011 & -0.0006 & 0.0026 \\
-0.0037 & 0.0007 & -0.0022 & -0.0022 \\
--0.0040 & -0.0003 & 0.0047 & -0.0004 \\
-0.0012 & 0.0007 & -0.0019 & 0.0000 \\
+0.0000 & -0.0004 & 0.0014 & -0.0004 & 0.0009 & -0.0015 \\
+-0.0012 & 0.0006 & -0.0003 & -0.0006 & -0.0009 & 0.0025 \\
+-0.0002 & -0.0013 & 0.0003 & 0.0016 & 0.0007 & -0.0012 \\
+0.0005 & -0.0005 & -0.0007 & -0.0003 & 0.0018 & -0.0008 \\
+0.0011 & 0.0007 & -0.0005 & -0.0004 & -0.0003 & -0.0005 \\
+-0.0002 & 0.0009 & -0.0002 & 0.0001 & -0.0022 & 0.0015 \\
 \end{pmatrix}
 $$
 
