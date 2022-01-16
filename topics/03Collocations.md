@@ -211,7 +211,7 @@ The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\ma
 
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
 
-# Example two dices
+# Example of rolling two dices
 
 The interaction of these concepts can be better understood with a simple example in where all details are known. The following code simulated the rolling of two dices. Variables `R` and `C` contain the rolling of the two dices, and the variable `Z` has the outcome of the pair. 
 
@@ -247,32 +247,24 @@ W=\mathbb P(\mathcal R, \mathcal C) =
 The next step is to compute $$\mathbb P(\mathcal R)$$ and $$\mathbb P(\mathcal C)$$ which can be done as follows
 
 ```python
-C = W.sum(axis=0)
 R = W.sum(axis=1)
+C = W.sum(axis=0)
+```
+
+$$\mathbb P(\mathcal R) \mathbb P(\mathcal C)$$ can be computed using the dot product, consequenly `R` and `C` need to be transform into a two dimensional
+array using `np.atleast_2d` function. 
+
+```python
+ind = np.dot(np.atleast_2d(R).T, np.atleast_2d(C))
 ```
 
 
 
 ```python
-d = 4
-R = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
-C = np.random.multinomial(1, [1/d] * 4, size=10000).argmax(axis=1)
-Z = [[r, c] for r, c in zip(R, C)]
-
-W = np.zeros((d, d))
-for r, c in Z:
-    W[r, c] += 1
-W = W / W.sum()
-
-C = np.atleast_2d(W.sum(axis=0))
-R = np.atleast_2d(W.sum(axis=1))
-ind = np.dot(R.T, C)
-W - ind
+W-ind
 ```
 
-
-
-$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+$$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C) = 
 \begin{pmatrix}
 -0.0039 & -0.0012 & 0.0016 & 0.0001 & -0.0011 & 0.0045 \\
 -0.0016 & 0.0005 & 0.0008 & -0.0023 & 0.0011 & 0.0014 \\
