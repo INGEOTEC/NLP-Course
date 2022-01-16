@@ -211,8 +211,6 @@ The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\ma
 
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
 
-
-
 # Example of rolling two dices
 
 The interaction of these concepts can be better understood with a simple example in where all details are known. The following code simulated the rolling of two dices. Variables `R` and `C` contain the rolling of the two dices, and the variable `Z` has the outcome of the pair. 
@@ -238,22 +236,22 @@ The next matrix presents the bivariate distribution `W`
 $$
 W=\mathbb P(\mathcal R, \mathcal C) = 
 \begin{pmatrix}
-0.0234 & 0.0262 & 0.0290 & 0.0276 & 0.0266 & 0.0310 \\
-0.0262 & 0.0284 & 0.0287 & 0.0257 & 0.0293 & 0.0284 \\
-0.0287 & 0.0280 & 0.0265 & 0.0275 & 0.0274 & 0.0249 \\
-0.0318 & 0.0288 & 0.0287 & 0.0279 & 0.0269 & 0.0283 \\
-0.0289 & 0.0269 & 0.0246 & 0.0295 & 0.0295 & 0.0243 \\
-0.0278 & 0.0288 & 0.0297 & 0.0299 & 0.0294 & 0.0248 \\
+0.0295 & 0.0286 & 0.0261 & 0.0265 & 0.0272 & 0.0313 \\
+0.0280 & 0.0293 & 0.0299 & 0.0273 & 0.0280 & 0.0272 \\
+0.0261 & 0.0266 & 0.0258 & 0.0268 & 0.0299 & 0.0294 \\
+0.0301 & 0.0287 & 0.0274 & 0.0290 & 0.0254 & 0.0284 \\
+0.0263 & 0.0279 & 0.0276 & 0.0287 & 0.0301 & 0.0273 \\
+0.0270 & 0.0270 & 0.0254 & 0.0280 & 0.0241 & 0.0281 \\
 \end{pmatrix}.$$
 
-The next step is to compute $$\mathbb P(\mathcal R)$$ and $$\mathbb P(\mathcal C)$$ which can be done as follows
+The next step is to compute the marginal instributions $$\mathbb P(\mathcal R)$$ and $$\mathbb P(\mathcal C)$$ which can be done as follows
 
 ```python
-R = W.sum(axis=1)
-C = W.sum(axis=0)
+R_m = W.sum(axis=1)
+C_m = W.sum(axis=0)
 ```
 
-$$\mathbb P(\mathcal R) \mathbb P(\mathcal C)$$ can be computed using the dot product, consequenly `R` and `C` need to be transform into a two dimensional
+The marginal distribution and the definition of independence are used to obtain $$\mathbb P(\mathcal R) \mathbb P(\mathcal C)$$ which can be computed using the dot product, consequenly `R` and `C` need to be transform into a two dimensional
 array using `np.atleast_2d` function. 
 
 ```python
@@ -264,15 +262,16 @@ ind = np.dot(np.atleast_2d(R).T, np.atleast_2d(C))
 
 $$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C) = 
 \begin{pmatrix}
--0.0039 & -0.0012 & 0.0016 & 0.0001 & -0.0011 & 0.0045 \\
--0.0016 & 0.0005 & 0.0008 & -0.0023 & 0.0011 & 0.0014 \\
-0.0015 & 0.0008 & -0.0008 & 0.0001 & -0.0002 & -0.0015 \\
-0.0030 & -0.0000 & -0.0001 & -0.0011 & -0.0023 & 0.0004 \\
-0.0016 & -0.0005 & -0.0028 & 0.0020 & 0.0018 & -0.0022 \\
--0.0006 & 0.0003 & 0.0012 & 0.0013 & 0.0006 & -0.0028 \\
+0.0012 & 0.0002 & -0.0013 & -0.0016 & -0.0007 & 0.0022 \\
+-0.0003 & 0.0008 & 0.0024 & -0.0009 & 0.0001 & -0.0019 \\
+-0.0014 & -0.0011 & -0.0009 & -0.0006 & 0.0028 & 0.0011 \\
+0.0019 & 0.0003 & -0.0000 & 0.0009 & -0.0024 & -0.0006 \\
+-0.0017 & -0.0003 & 0.0004 & 0.0008 & 0.0024 & -0.0015 \\
+0.0003 & 0.0002 & -0.0005 & 0.0015 & -0.0022 & 0.0007 \\
 \end{pmatrix}
 $$
 
+It is observed from the matrix that all its elements are close to zero, which is expected given that by construction, the two variables are independent. 
 
 ```python
 Z = [[r, c] for r, c in zip(R, C) if r != c]
@@ -280,10 +279,12 @@ Z = [[r, c] for r, c in zip(R, C) if r != c]
 
 $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
 \begin{pmatrix}
--0.0603 & 0.0197 & 0.0223 & 0.0183 \\
-0.0229 & -0.0645 & 0.0197 & 0.0219 \\
-0.0199 & 0.0257 & -0.0654 & 0.0197 \\
-0.0175 & 0.0191 & 0.0233 & -0.0599 \\
+-0.0280 & 0.0063 & 0.0037 & 0.0040 & 0.0054 & 0.0085 \\
+0.0057 & -0.0284 & 0.0082 & 0.0049 & 0.0063 & 0.0034 \\
+0.0037 & 0.0040 & -0.0276 & 0.0046 & 0.0089 & 0.0064 \\
+0.0083 & 0.0063 & 0.0052 & -0.0280 & 0.0032 & 0.0050 \\
+0.0041 & 0.0058 & 0.0059 & 0.0071 & -0.0270 & 0.0041 \\
+0.0062 & 0.0060 & 0.0045 & 0.0075 & 0.0033 & -0.0275 \\
 \end{pmatrix}
 $$
 
@@ -293,10 +294,12 @@ Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
 
 $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
 \begin{pmatrix}
-0.0031 & -0.0070 & 0.0034 & 0.0006 \\
-0.0026 & -0.0035 & 0.0007 & 0.0002 \\
--0.0039 & 0.0144 & -0.0052 & -0.0053 \\
--0.0018 & -0.0039 & 0.0011 & 0.0046 \\
+0.0019 & -0.0032 & -0.0007 & -0.0010 & -0.0000 & 0.0029 \\
+0.0001 & -0.0012 & 0.0028 & -0.0005 & 0.0004 & -0.0015 \\
+-0.0036 & 0.0100 & -0.0031 & -0.0028 & 0.0006 & -0.0011 \\
+0.0023 & -0.0017 & 0.0004 & 0.0013 & -0.0020 & -0.0002 \\
+-0.0013 & -0.0024 & 0.0008 & 0.0012 & 0.0029 & -0.0011 \\
+0.0007 & -0.0015 & -0.0002 & 0.0018 & -0.0019 & 0.0010 \\
 \end{pmatrix}
 $$
 
