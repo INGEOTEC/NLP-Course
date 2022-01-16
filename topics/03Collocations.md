@@ -271,13 +271,15 @@ $$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C)
 \end{pmatrix}
 $$
 
-It is observed from the matrix that all its elements are close to zero, which is expected given that by construction, the two variables are independent. 
+It is observed from the matrix that all its elements are close to zero, which is expected given that by construction, the two variables are independent. On the other hand, a simulation where the variables are not independent would produce a matrix where its components are different from zero. Such an example can be quickly be done by changing variable `Z.` The following code simulates the case where the two dices cannot have the same value: the events $$(1, 1), (2, 2), \ldots,$$ are unfeasible. It is hard to imagine how this experiment can be done with two physical dice; however, simulating it is only a condition, as seen in the following code.   
 
 ```python
 Z = [[r, c] for r, c in zip(R, C) if r != c]
 ```
 
-$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+The difference between the estimated bivariate distribution and the product of the marginal distributions is presented in the following matrix. It can be observed that the values in the diagonal are negative because $$\mathbb P(\mathcal R=x, \mathcal C=x)=0$$ given that the event is not possible in this experiment. 
+
+$$ 
 \begin{pmatrix}
 -0.0280 & 0.0063 & 0.0037 & 0.0040 & 0.0054 & 0.0085 \\
 0.0057 & -0.0284 & 0.0082 & 0.0049 & 0.0063 & 0.0034 \\
@@ -292,7 +294,7 @@ $$
 Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
 ```
 
-$$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
+$$
 \begin{pmatrix}
 0.0019 & -0.0032 & -0.0007 & -0.0010 & -0.0000 & 0.0029 \\
 0.0001 & -0.0012 & 0.0028 & -0.0005 & 0.0004 & -0.0015 \\
