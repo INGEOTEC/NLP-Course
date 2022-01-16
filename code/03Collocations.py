@@ -64,6 +64,7 @@ for c, (k, _) in zip(co_occurrence, keys[:5]):
 
 # Independent Random Variables
 
+
 d = 6
 R = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
 C = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)

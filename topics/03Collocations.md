@@ -200,16 +200,58 @@ The following table presents an extract of the bivariate distribution.
 
 Once the information of the bigrams has been transformed into a bivariate distribution, we can start analyzing it. As mentioned previously, the idea is to identify those bigrams that can be considered collocations. However, the frequency of the bigrams does not contain semantic information of the words or the phrase at hand, which can be used to identify a collocation precisely. Nonetheless, a collocation is a phrase where its components do not appear by chance; that is, the elements composing it are not drawn independently from a distribution. Therefore, the bivariate distribution can be used to identify those words that are not independent, which is a hard constraint for being considered a collocation. 
 
-# Independent Random Variables
+## Independence and Marginal Distribution
 
 The bivariate distribution shown in the previous table contains the probability of obtaining a bigram, i.e., $$\mathbb P(\mathcal X_r=r, \mathcal X_c=c)$$; this information is helpful when combined with the concept of independence and marginal distribution.
 
-Two random variables $$\mathcal X$$ and $$\mathcal Y$$ are independent if
+Two random variables $$\mathcal X$$ and $$\mathcal Y$$ are **independent** if
 $$\mathbb P(\mathcal X, \mathcal Y)=\mathbb P(\mathcal X) \mathbb(\mathcal Y).$$ 
 
 The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\mathbb P(\mathcal Y)$$ are unknown. Fortunately, the **marginal distribution** definition describes the procedure to obtain $$\mathbb P(\mathcal X=x)$$ and $$\mathbb P(\mathcal Y=y)$$ from the bivariate distribution. Let $f_{\mathcal X, \mathcal Y}$ be the joint distribution mass function (i.e., $$f_{\mathcal X, \mathcal Y}(x, y)=\mathbb P(\mathcal X=x, \mathcal Y=y)$$) then the marginal mass function for $$\mathcal X$$ is 
 
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
+
+# Example two dices
+
+The interaction of these concepts can be better understood with a simple example in where all details are known. The following code simulated the rolling of two dices. Variables `R` and `C` contain the rolling of the two dices, and the variable `Z` has the outcome of the pair. 
+
+```python
+d = 6
+R = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+C = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+Z = [[r, c] for r, c in zip(R, C)]
+```
+
+`Z` is transformed first into a frequency matrix, equivalent to a co-occurrence matrix, stored in a variable `W`, and the last line converts `W` into a bivariate distribution.
+
+```python
+W = np.zeros((d, d))
+for r, c in Z:
+    W[r, c] += 1
+W = W / W.sum()
+```
+
+The next matrix presents the bivariate distribution `W`
+
+$$
+W=\mathbb P(\mathcal R, \mathcal C) = 
+\begin{pmatrix}
+0.0234 & 0.0262 & 0.0290 & 0.0276 & 0.0266 & 0.0310 \\
+0.0262 & 0.0284 & 0.0287 & 0.0257 & 0.0293 & 0.0284 \\
+0.0287 & 0.0280 & 0.0265 & 0.0275 & 0.0274 & 0.0249 \\
+0.0318 & 0.0288 & 0.0287 & 0.0279 & 0.0269 & 0.0283 \\
+0.0289 & 0.0269 & 0.0246 & 0.0295 & 0.0295 & 0.0243 \\
+0.0278 & 0.0288 & 0.0297 & 0.0299 & 0.0294 & 0.0248 \\
+\end{pmatrix}.$$
+
+The next step is to compute $$\mathbb P(\mathcal R)$$ and $$\mathbb P(\mathcal C)$$ which can be done as follows
+
+```python
+C = W.sum(axis=0)
+R = W.sum(axis=1)
+```
+
+
 
 ```python
 d = 4
@@ -228,17 +270,7 @@ ind = np.dot(R.T, C)
 W - ind
 ```
 
-$$
-\mathbb P(\mathcal X, \mathcal Y) = 
-\begin{pmatrix}
-0.0234 & 0.0262 & 0.0290 & 0.0276 & 0.0266 & 0.0310 \\
-0.0262 & 0.0284 & 0.0287 & 0.0257 & 0.0293 & 0.0284 \\
-0.0287 & 0.0280 & 0.0265 & 0.0275 & 0.0274 & 0.0249 \\
-0.0318 & 0.0288 & 0.0287 & 0.0279 & 0.0269 & 0.0283 \\
-0.0289 & 0.0269 & 0.0246 & 0.0295 & 0.0295 & 0.0243 \\
-0.0278 & 0.0288 & 0.0297 & 0.0299 & 0.0294 & 0.0248 \\
-\end{pmatrix}
-$$
+
 
 $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X)\mathbb P(\mathcal Y) = 
 \begin{pmatrix}
