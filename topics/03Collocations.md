@@ -207,9 +207,11 @@ The bivariate distribution shown in the previous table contains the probability 
 Two random variables $$\mathcal X$$ and $$\mathcal Y$$ are **independent** if
 $$\mathbb P(\mathcal X, \mathcal Y)=\mathbb P(\mathcal X) \mathbb(\mathcal Y).$$ 
 
-The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\mathbb P(\mathcal Y)$$ are unknown. Fortunately, the **marginal distribution** definition describes the procedure to obtain $$\mathbb P(\mathcal X=x)$$ and $$\mathbb P(\mathcal Y=y)$$ from the bivariate distribution. Let $f_{\mathcal X, \mathcal Y}$ be the joint distribution mass function (i.e., $$f_{\mathcal X, \mathcal Y}(x, y)=\mathbb P(\mathcal X=x, \mathcal Y=y)$$) then the marginal mass function for $$\mathcal X$$ is 
+The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\mathbb P(\mathcal Y)$$ are unknown. Fortunately, the **marginal distribution** definition describes the procedure to obtain $$\mathbb P(\mathcal X=x)$$ and $$\mathbb P(\mathcal Y=y)$$ from the bivariate distribution. Let $$f_{\mathcal X, \mathcal Y}$$ be the joint distribution mass function (i.e., $$f_{\mathcal X, \mathcal Y}(x, y)=\mathbb P(\mathcal X=x, \mathcal Y=y)$$) then the marginal mass function for $$\mathcal X$$ is 
 
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
+
+
 
 # Example of rolling two dices
 
@@ -222,7 +224,7 @@ C = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
 Z = [[r, c] for r, c in zip(R, C)]
 ```
 
-`Z` is transformed first into a frequency matrix, equivalent to a co-occurrence matrix, stored in a variable `W`, and the last line converts `W` into a bivariate distribution.
+`Z` is transformed first into a frequency matrix (variable `W`), equivalent to a co-occurrence matrix, and then, it is converted into a bivariate distribution (last line).
 
 ```python
 W = np.zeros((d, d))
@@ -258,11 +260,7 @@ array using `np.atleast_2d` function.
 ind = np.dot(np.atleast_2d(R).T, np.atleast_2d(C))
 ```
 
-
-
-```python
-W-ind
-```
+`W` contains the estimated bivariate distribution, and `ind` could be the bivariate distribution only if $$\mathcal R$$ and $$\mathcal C$$ are independent. The following matrix shows `W-ind`, which would be a zero matrix if the variables are independent. 
 
 $$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C) = 
 \begin{pmatrix}
@@ -274,6 +272,7 @@ $$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C)
 -0.0006 & 0.0003 & 0.0012 & 0.0013 & 0.0006 & -0.0028 \\
 \end{pmatrix}
 $$
+
 
 ```python
 Z = [[r, c] for r, c in zip(R, C) if r != c]
