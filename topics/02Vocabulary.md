@@ -247,8 +247,10 @@ Variable `voc` contains the frequency of the words and bigrams and some useful f
 A traditional approach to explore the information of a list of words and their frequencies is to create a word cloud. The following figure is the word cloud of the frequency of the words retrieved from `text_models.` 
 
 ![Word Cloud (MX)](/NLP-Course/assets/images/wordcloud_mx.png)
-
-The previous figure was created with the following code.
+<details markdown="block">
+  <summary>
+    Code of the word cloud
+  </summary>
 
 ```python
 wc = WC().generate_from_frequencies(words)
@@ -256,6 +258,8 @@ plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
 ```
+</details>
+
 
 ## Zipf's Law - $$f=\frac{c}{r}$$
 

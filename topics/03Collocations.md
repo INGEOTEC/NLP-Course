@@ -313,10 +313,13 @@ $$
 
 # Example of the [bigrams](#tab:bivariate-distribution)
 
+
+![Wordcloud](/NLP-Course/assets/images/wordcloud_us.png)
 <details markdown="block">
   <summary>
     Code of the bigrams word cloud
   </summary>
+
 ```python
 wc = WC().generate_from_frequencies(bigrams)
 plt.imshow(wc)
@@ -325,8 +328,6 @@ plt.tight_layout()
 ```
 </details>
 
-
-![Wordcloud](/NLP-Course/assets/images/wordcloud_us.png)
 
 ```python
 M = co_occurrence.sum(axis=1)
