@@ -45,6 +45,7 @@ The frequency of the bigrams can be represented in a co-occurrence matrix as the
 |of  |  435030 |  170941 |       0 |  122502 |  130662 |
 |in  |  323450 |  161891 |  122502 |       0 |  125997 |
 |and |  317663 |  228785 |  130662 |  125997 |       0 |
+
 Table: Co-occurence matrix
 {: #co-occurrence .label }
 
