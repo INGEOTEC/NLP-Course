@@ -2,6 +2,7 @@ from numpy.core.fromnumeric import size
 from text_models import Vocabulary
 from collections import Counter
 import numpy as np
+from scipy.stats import norm
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
 # %pylab inline
@@ -125,4 +126,32 @@ plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
 plt.savefig('wordcloud_us2.png', dpi=300)
+
+# Hypothesis testing
+
+N = len(Z)
+se = np.sqrt(W * (1 - W) / N)
+
+wald = (W - ind) / se 
+for w in (wald):
+    _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
+    print(r"{} \\".format(_))
+
+
+N = sum(list(bigrams.values()))
+se = lambda x: np.sqrt(x * (1 - x) / N)
+_ = [(bigram, [index[x] for x in bigram.split("~")]) for bigram in bigrams]
+co = co_occurrence
+wald = {k: (co[i, j] - M[i] * M[j]) / se(co[i, j])
+        for k, (i, j) in _}
+
+alpha = 0.01
+c = norm.ppf(1 - alpha / 2)
+wald = {k: v for k, v in wald.items() if v > c}
+
+wc = WC().generate_from_frequencies(wald)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+
 
