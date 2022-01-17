@@ -38,20 +38,20 @@ As can be expected, finding a collocation is a challenging task; one needs to kn
 
 The frequency of the bigrams can be represented in a co-occurrence matrix as the one shown in the following table. 
 
-{: #co-occurrence }
+{: #tab:co-occurrence }
 |    | the     | to      | of      | in      | and     | 
-|----|---------|---------|---------|---------|---------|    
-|the |       0 |  453796 |  435030 |  323450 |  317663 |
-|to  |  453796 |       0 |  170941 |  161891 |  228785 |
-|of  |  435030 |  170941 |       0 |  122502 |  130662 |
-|in  |  323450 |  161891 |  122502 |       0 |  125997 |
-|and |  317663 |  228785 |  130662 |  125997 |       0 |
+|----|---------|---------|---------|---------|---------|
+|the |       0 |   33390 |   23976 |   29159 |   22768 |
+|to  |   33390 |       0 |   10145 |   18345 |   17816 |
+|of  |   23976 |   10145 |       0 |    6683 |    7802 |
+|in  |   29159 |   18345 |    6683 |       0 |   11536 |
+|and |   22768 |   17816 |    7802 |   11536 |       0 |
 
 The co-occurrence matrix was created using the data obtained from the library `text_models` using the following code. The third line retrieves all the bigrams and stores them in the variable `bigrams.` The loop goes for all the bigrams that contains one of the five words defined in `index,` it is observed that the matrix is symmetric, this is because the `text_models` library does not store the order of the words composing the bigram.
 
 ```python 
 date = dict(year=2022, month=1, day=10)
-voc = Vocabulary(date, lang='En')
+voc = Vocabulary(date, lang='En', country="US")
 bigrams = Counter({k: v for k, v in voc.voc.items() if k.count("~")})
 co_occurrence = np.zeros((5, 5))
 index = {'the': 0, 'to': 1, 'of': 2, 'in': 3, 'and': 4}
@@ -65,7 +65,7 @@ for bigram, cnt in bigrams.most_common():
 
 The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. The first step is to transform the co-occurrence matrix into a bivariate distribution and then use statistical approaches to retrieve some prominent pairs. Before going into the details of these algorithms, it is pertinent to describe the relationship between words and random variables.
 
-Each element in the matrix can be uniquely identified by the pair words, e.g., the frequency of pair (_in_, _of_) is $$122502$$. However, it is also possible to identify the same element using an index. For example, if the first word (_the_) is assigned the index $$0$$, the index $$3$$ corresponds to word _in_ and $$2$$ to _of_. Consequently, the element (_in_, _of_) can uniquely identify with the pair (3, 2). One can create a mapping between words and natural numbers such that each different word has a unique identifier. The mapping allows working with natural numbers instead of words which facilitates the analysis and returns to the words (using the inverse mapping) when the result is obtained. 
+Each element in the matrix can be uniquely identified by the pair words, e.g., the frequency of pair (_in_, _of_) is $$6683$$. However, it is also possible to identify the same element using an index. For example, if the first word (_the_) is assigned the index $$0$$, the index $$3$$ corresponds to word _in_ and $$2$$ to _of_. Consequently, the element (_in_, _of_) can uniquely identify with the pair (3, 2). One can create a mapping between words and natural numbers such that each different word has a unique identifier. The mapping allows working with natural numbers instead of words which facilitates the analysis and returns to the words (using the inverse mapping) when the result is obtained. 
 
 The mapping can be implemented using a dictionary, as seen from the following code where the variable of interest is `index.` 
 
@@ -76,7 +76,7 @@ for bigram, cnt in bigrams.items():
         if x not in index:
             index[x] = len(index)
 len(index)
-9598
+41419
 ```
 
 It is essential to mention that a random variable is a mapping that assigns a real number to each outcome. In this case, the outcome is observing a word and the mapping is the transformation of the word into the natural number. 
@@ -175,7 +175,7 @@ p = counts / N
 
 We have all the elements to realize that the co-occurrence matrix is the realization of two random variables (each one can have $$d$$ outcomes); it keeps track of the number of times a bigram appear in a corpus. So far, we have not worked with two random variables; however, the good news is that the co-occurrence matrix contains all the information needed to define a bivariate distribution for this process.
 
-The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of getting a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$122502$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
+The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of getting a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$6683$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
 
 The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. For example, the following code builds the bivariate distribution from the co-occurrence matrix.
 
@@ -191,14 +191,14 @@ co_occurrence = co_occurrence / co_occurrence.sum()
 
 The following table presents an extract of the bivariate distribution. 
 
-{: #bivariate }
+{: #tab:bivariate-distribution }
 |    | the      | to       | of       | in       | and      | 
-|----|----------|----------|----------|----------|----------|    
-|the |  0.00000 |  0.00120 |  0.00115 |  0.00086 |  0.00084 |
-|to  |  0.00120 |  0.00000 |  0.00045 |  0.00043 |  0.00061 |
-|of  |  0.00115 |  0.00045 |  0.00000 |  0.00033 |  0.00035 |
-|in  |  0.00086 |  0.00043 |  0.00033 |  0.00000 |  0.00033 |
-|and |  0.00084 |  0.00061 |  0.00035 |  0.00033 |  0.00000 |
+|----|----------|----------|----------|----------|----------|  
+|the |  0.00000 |  0.00164 |  0.00118 |  0.00144 |  0.00112 |
+|to  |  0.00164 |  0.00000 |  0.00050 |  0.00090 |  0.00088 |
+|of  |  0.00118 |  0.00050 |  0.00000 |  0.00033 |  0.00038 |
+|in  |  0.00144 |  0.00090 |  0.00033 |  0.00000 |  0.00057 |
+|and |  0.00112 |  0.00088 |  0.00038 |  0.00057 |  0.00000 |
 
 Once the information of the bigrams has been transformed into a bivariate distribution, we can start analyzing it. As mentioned previously, the idea is to identify those bigrams that can be considered collocations. However, the frequency of the bigrams does not contain semantic information of the words or the phrase at hand, which can be used to identify a collocation precisely. Nonetheless, a collocation is a phrase where its components do not appear by chance; that is, the elements composing it are not drawn independently from a distribution. Therefore, the bivariate distribution can be used to identify those words that are not independent, which is a hard constraint for being considered a collocation. 
 
@@ -311,4 +311,37 @@ $$
 \end{pmatrix}
 $$
 
+# Example of the [bigrams](#tab:bivariate-distribution)
 
+![Wordcloud](/NLP-Course/assets/images/wordcloud_us.png)
+
+```python
+marginal = co_occurrence.sum(axis=1)
+
+def get_diff(key):
+    a, b = key.split('~')
+    a, b = index[a], index[b]
+    M = marginal
+    if a == b:
+        return - M[a] * M[b]    
+    return co_occurrence[a, b] - M[a] * M[b]
+```
+
+|     | the      | to       | of       | in       | and      | 
+|-----|----------|----------|----------|----------|----------|
+|the  | -0.00283 | -0.00054 |  0.00023 | -0.00001 | -0.00024 |
+|to   | -0.00054 | -0.00168 | -0.00023 | -0.00021 | -0.00017 |
+|of   |  0.00023 | -0.00023 | -0.00032 | -0.00016 | -0.00007 |
+|in   | -0.00001 | -0.00021 | -0.00016 | -0.00074 | -0.00013 |
+|and  | -0.00024 | -0.00017 | -0.00007 | -0.00013 | -0.00065 |
+
+```python
+freq = {x: get_diff(x) for x in bigrams.keys()}
+freq = {k: v for k, v in freq.items() if v > 0}
+
+wc = WC().generate_from_frequencies(freq)
+plt.imshow(wc)
+plt.axis('off')
+```
+
+![Wordcloud](/NLP-Course/assets/images/wordcloud_us2.png)
