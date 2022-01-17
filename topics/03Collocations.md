@@ -313,15 +313,23 @@ $$
 
 # Example of the [bigrams](#tab:bivariate-distribution)
 
+<details open markdown="block">
+```python
+wc = WC().generate_from_frequencies(bigrams)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+```
+</details>
+
+
 ![Wordcloud](/NLP-Course/assets/images/wordcloud_us.png)
 
 ```python
-marginal = co_occurrence.sum(axis=1)
+M = co_occurrence.sum(axis=1)
 
 def get_diff(key):
-    a, b = key.split('~')
-    a, b = index[a], index[b]
-    M = marginal
+    a, b = [index[x] for x in key.split('~')]
     if a == b:
         return - M[a] * M[b]    
     return co_occurrence[a, b] - M[a] * M[b]

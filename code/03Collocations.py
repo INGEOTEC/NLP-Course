@@ -93,21 +93,21 @@ for w in (W-ind):
     print(r"{} \\".format(_))
 
 # Example of the [bigrams](#tab:bivariate-distribution)
+
 wc = WC().generate_from_frequencies(bigrams)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
-plt.savefig('wordcloud_us.png')
+plt.savefig('wordcloud_us.png', dpi=300)
 
-marginal = co_occurrence.sum(axis=1)
+M = co_occurrence.sum(axis=1)
 
 def get_diff(key):
-    a, b = key.split('~')
-    a, b = index[a], index[b]
-    M = marginal
+    a, b = [index[x] for x in key.split('~')]
     if a == b:
-        return - M[a] * M[b]
+        return - M[a] * M[b]    
     return co_occurrence[a, b] - M[a] * M[b]
+
 
 print(' | ' + ' | '.join([k for k, _ in keys[:5]]) + ' | ')
 for k, _ in keys[:5]:
@@ -122,5 +122,5 @@ wc = WC().generate_from_frequencies(freq)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
-plt.savefig('wordcloud_us2.png')
+plt.savefig('wordcloud_us2.png', dpi=300)
 
