@@ -313,7 +313,10 @@ $$
 
 # Example of the [bigrams](#tab:bivariate-distribution)
 
-<details open markdown="block">
+<details markdown="block">
+  <summary>
+    Code of the bigrams word cloud
+  </summary>
 ```python
 wc = WC().generate_from_frequencies(bigrams)
 plt.imshow(wc)
