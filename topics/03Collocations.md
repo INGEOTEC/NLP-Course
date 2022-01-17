@@ -315,7 +315,7 @@ $$
 
 The example of rolling two dices illustrates the dependency behavior in two random variables. It showed that the difference between the bivariate distribution and the dot product of the marginals could be used to infer independence. There was an interesting case where the difference matrix has a negative diagonal, implying dependency; however, the dependency was because the pair was unfeasible. 
 
-We can use an equivalent procedure with the bivariate distribution of the [bigrams](:#tab:bivariate-distribution). The idea is to compute the difference between the bivariate distribution and the product of the marginals. The aim is that this difference can highlight bigrams that could be considered collocations. 
+We can use an equivalent procedure with the bivariate distribution of the [bigrams](#tab:bivariate-distribution). The idea is to compute the difference between the bivariate distribution and the product of the marginals. The aim is that this difference can highlight bigrams that could be considered collocations. 
 
 It is impossible to show the bivariate distribution using a matrix, so we rely on a word cloud to depict those bigrams with a higher probability. The following figure presents the word cloud of the bivariate distribution. 
 
@@ -335,17 +335,23 @@ plt.tight_layout()
 ```
 </details>
 
-
+The bivariate matrix is symmetric; therefore, the marginal $$f_{\mathcal R}=f_{\mathcal C}$$ which can be stored in an array (variable `M`) as follows:
 
 ```python
 M = co_occurrence.sum(axis=1)
+```
 
+It can be observed that most of the elements of the bivariate matrix are zero, so instead of using computing the difference between the bivariate distribution and the product of the marginals, it is more efficient to compute only for the pairs that appear in the co-occurrence matrix. The difference can be computed using the following function.
+
+```python
 def get_diff(key):
     a, b = [index[x] for x in key.split('~')]
     if a == b:
         return - M[a] * M[b]    
     return co_occurrence[a, b] - M[a] * M[b]
 ```
+
+The following table presents the difference matrix for the first five words. It is seen that the diagonal is negative because, by construction, there are no bigrams of the same word. Outside the diagonal, we can see other negative numbers; it seems that these numbers are closed to zero, indicating that these values could be independent. 
 
 |     | the      | to       | of       | in       | and      | 
 |-----|----------|----------|----------|----------|----------|
@@ -354,6 +360,9 @@ def get_diff(key):
 |of   |  0.00023 | -0.00023 | -0.00032 | -0.00016 | -0.00007 |
 |in   | -0.00001 | -0.00021 | -0.00016 | -0.00074 | -0.00013 |
 |and  | -0.00024 | -0.00017 | -0.00007 | -0.00013 | -0.00065 |
+
+
+The word cloud of the difference can be computed using the following code. Those bigrams that have a negative value were discarded because these cannot be considered collocations because the statistic tells that the words do not appear together. 
 
 ```python
 freq = {x: get_diff(x) for x in bigrams.keys()}
@@ -364,4 +373,7 @@ plt.imshow(wc)
 plt.axis('off')
 ```
 
+The following figure presents the word cloud of the difference.
+
 ![Wordcloud](/NLP-Course/assets/images/wordcloud_us2.png)
+
