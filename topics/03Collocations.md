@@ -63,7 +63,6 @@ for bigram, cnt in bigrams.most_common():
         co_occurrence[index[b], index[a]] = cnt
 ```
 
-[matrix](#co-occurrence)
 The idea is to use the information of the co-occurrence matrix to find the pairs of words that can be considered collocations. The first step is to transform the co-occurrence matrix into a bivariate distribution and then use statistical approaches to retrieve some prominent pairs. Before going into the details of these algorithms, it is pertinent to describe the relationship between words and random variables.
 
 Each element in the matrix can be uniquely identified by the pair words, e.g., the frequency of pair (_in_, _of_) is $$122502$$. However, it is also possible to identify the same element using an index. For example, if the first word (_the_) is assigned the index $$0$$, the index $$3$$ corresponds to word _in_ and $$2$$ to _of_. Consequently, the element (_in_, _of_) can uniquely identify with the pair (3, 2). One can create a mapping between words and natural numbers such that each different word has a unique identifier. The mapping allows working with natural numbers instead of words which facilitates the analysis and returns to the words (using the inverse mapping) when the result is obtained. 
@@ -192,6 +191,7 @@ co_occurrence = co_occurrence / co_occurrence.sum()
 
 The following table presents an extract of the bivariate distribution. 
 
+{: #bivariate }
 |    | the      | to       | of       | in       | and      | 
 |----|----------|----------|----------|----------|----------|    
 |the |  0.00000 |  0.00120 |  0.00115 |  0.00086 |  0.00084 |
@@ -273,13 +273,13 @@ $$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C)
 \end{pmatrix}
 $$
 
-It is observed from the matrix that all its elements are close to zero ($$\mid W_{ij}\mid \leq 0.005$$), which is expected given that by construction, the two variables are independent. On the other hand, a simulation where the variables are not independent would produce a matrix where its components are different from zero. Such an example can be quickly be done by changing variable `Z.` The following code simulates the case where the two dices cannot have the same value: the events $$(1, 1), (2, 2), \ldots,$$ are unfeasible. It is hard to imagine how this experiment can be done with two physical dice; however, simulating it is only a condition, as seen in the following code.   
+It is observed from the matrix that all its elements are close to zero ($$\mid W_{ij}\mid \leq 0.009$$), which is expected given that by construction, the two variables are independent. On the other hand, a simulation where the variables are not independent would produce a matrix where its components are different from zero. Such an example can be quickly be done by changing variable `Z.` The following code simulates the case where the two dices cannot have the same value: the events $$(1, 1), (2, 2), \ldots,$$ are unfeasible. It is hard to imagine how this experiment can be done with two physical dice; however, simulating it is only a condition, as seen in the following code.   
 
 ```python
 Z = [[r, c] for r, c in zip(R, C) if r != c]
 ```
 
-The difference between the estimated bivariate distribution and the product of the marginal distributions is presented in the following matrix. It can be observed that the values in the diagonal are negative because $$\mathbb P(\mathcal R=x, \mathcal C=x)=0$$ given that the event is not possible in this experiment. 
+The difference between the estimated bivariate distribution and the product of the marginal distributions is presented in the following matrix. It can be observed that the values in the diagonal are negative because $$\mathbb P(\mathcal R=x, \mathcal C=x)=0$$ these events are not possible in this experiment. Additionally, the values of the diagonal are higher than $$\mid W_{ii} \mid > 0.09.$$
 
 $$ 
 \begin{pmatrix}
@@ -292,9 +292,13 @@ $$
 \end{pmatrix}
 $$
 
+The last example creates a dependency between $$\mathcal R=2$$ and $$\mathcal C=1$$, that is when $$\mathcal C=1$$ the element $$\mathcal R=2$$ with a $$0.1$$ probability; this behavior can be encoded as follows. 
+
 ```python
 Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
 ```
+
+The following matrix presents the difference between the measured bivariate distribution and the one obtained assuming independence. It can be observed that there is only one element higher than $$0.009$$, which corresponds to the pair where the variables are dependent.
 
 $$
 \begin{pmatrix}
