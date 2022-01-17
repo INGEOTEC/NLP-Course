@@ -38,6 +38,7 @@ As can be expected, finding a collocation is a challenging task; one needs to kn
 
 The frequency of the bigrams can be represented in a co-occurrence matrix as the one shown in the following table. 
 
+{: #co-occurrence }
 |    | the     | to      | of      | in      | and     | 
 |----|---------|---------|---------|---------|---------|    
 |the |       0 |  453796 |  435030 |  323450 |  317663 |
@@ -45,8 +46,6 @@ The frequency of the bigrams can be represented in a co-occurrence matrix as the
 |of  |  435030 |  170941 |       0 |  122502 |  130662 |
 |in  |  323450 |  161891 |  122502 |       0 |  125997 |
 |and |  317663 |  228785 |  130662 |  125997 |       0 |
-
-{: #co-occurrence }
 
 The co-occurrence matrix was created using the data obtained from the library `text_models` using the following code. The third line retrieves all the bigrams and stores them in the variable `bigrams.` The loop goes for all the bigrams that contains one of the five words defined in `index,` it is observed that the matrix is symmetric, this is because the `text_models` library does not store the order of the words composing the bigram.
 
