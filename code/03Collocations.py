@@ -94,7 +94,9 @@ for w in (W-ind):
 
 # Example of the [bigrams](#tab:bivariate-distribution)
 
-wc = WC().generate_from_frequencies(bigrams)
+_ = [(bigram, [index[x] for x in bigram.split("~")]) for bigram in bigrams]
+_ = {key: co_occurrence[i, j] for key, (i, j) in _}
+wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()

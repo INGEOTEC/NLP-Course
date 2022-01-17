@@ -171,7 +171,7 @@ N = counts.sum()
 p = counts / N
 ```
 
-# Bivariate distribution
+# Bivariate distributionI
 
 We have all the elements to realize that the co-occurrence matrix is the realization of two random variables (each one can have $$d$$ outcomes); it keeps track of the number of times a bigram appear in a corpus. So far, we have not worked with two random variables; however, the good news is that the co-occurrence matrix contains all the information needed to define a bivariate distribution for this process.
 
@@ -213,7 +213,7 @@ The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\ma
 
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
 
-# Example of rolling two dices
+## Example of rolling two dices
 
 The interaction of these concepts can be better understood with a simple example in where all details are known. The following code simulated the rolling of two dices. Variables `R` and `C` contain the rolling of the two dices, and the variable `Z` has the outcome of the pair. 
 
@@ -311,8 +311,13 @@ $$
 \end{pmatrix}
 $$
 
-# Example of the [bigrams](#tab:bivariate-distribution)
+## Example of the bigrams
 
+The example of rolling two dices illustrates the dependency behavior in two random variables. It showed that the difference between the bivariate distribution and the dot product of the marginals could be used to infer independence. There was an interesting case where the difference matrix has a negative diagonal, implying dependency; however, the dependency was because the pair was unfeasible. 
+
+We can use an equivalent procedure with the bivariate distribution of the [bigrams](:#tab:bivariate-distribution). The idea is to compute the difference between the bivariate distribution and the product of the marginals. The aim is that this difference can highlight bigrams that could be considered collocations. 
+
+It is impossible to show the bivariate distribution using a matrix, so we rely on a word cloud to depict those bigrams with a higher probability. The following figure presents the word cloud of the bivariate distribution. 
 
 ![Wordcloud](/NLP-Course/assets/images/wordcloud_us.png)
 <details markdown="block">
@@ -321,12 +326,15 @@ $$
   </summary>
 
 ```python
-wc = WC().generate_from_frequencies(bigrams)
+_ = [(bigram, [index[x] for x in bigram.split("~")]) for bigram in bigrams]
+_ = {key: co_occurrence[i, j] for key, (i, j) in _}
+wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
 ```
 </details>
+
 
 
 ```python
