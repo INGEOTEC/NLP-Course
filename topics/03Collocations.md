@@ -529,3 +529,9 @@ plt.axis('off')
 plt.tight_layout()
 ```
 </details>
+
+# Activities
+
+![Wald Test Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypw.png)
+
+![Likelihood Ratio Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypl.png)

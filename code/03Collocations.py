@@ -4,6 +4,7 @@ import numpy as np
 from scipy.stats import norm, chi2
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
+from collections import defaultdict
 # %pylab inline
 
 # Collocations
@@ -194,3 +195,45 @@ plt.axis('off')
 plt.tight_layout()
 plt.savefig('wordcloud_us4.png', dpi=300)
 
+# Activities
+
+scatter = [[bigrams[k], v] for k, v in wald.items()]
+plt.semilogx([x for x, _ in scatter],
+             [y for _, y in scatter], '.')
+plt.grid()
+plt.xlabel('Frequency')
+plt.ylabel('Wald Statistic')
+plt.savefig('scatter_plot_hypw.png', dpi=300)
+
+
+plt.rcParams['text.usetex'] = True
+scatter = [[bigrams[k], v] for k, v in r.items()]
+plt.loglog([x for x, _ in scatter],
+           [y for _, y in scatter], '.')
+plt.xlabel('Frequency')
+plt.ylabel(r'$-2 \log \lambda$')
+plt.savefig('scatter_plot_hypl.png', dpi=300)
+
+
+
+freq = defaultdict(list)
+for k, v in wald.items():
+    c = bigrams[k]
+    freq[c].append(v)
+
+
+x = list(freq.keys())
+x.sort()
+points_max = [[x[0], np.max(freq[x[0]])]]
+for i in x:
+    v = np.max(freq[i])
+    if points_max[-1][1] < v:
+        points_max.append([i, v])
+    v = np.min(freq[i])
+
+plt.semilogx([i for i, _ in points_max],
+             [y for _, y in points_max])
+
+
+plt.semilogx(x, [np.mean(freq[i]) for i in x], '.')
+plt.grid()
