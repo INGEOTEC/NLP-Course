@@ -385,6 +385,15 @@ Hypothesis testing aims to measure whether the data collected agrees with a null
 
 In the case at hand, hypothesis testing is helpful to state the dependency or independence of the random variables. One measures whether the estimated bivariate distribution supports the null hypothesis that the variables are independent, i.e., $$\mathcal H_0: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) = 0;$$ where the alternative hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) \neq 0.$$
 
+One can use different procedures in Hypothesis testing; selecting one of them depends on the characteristics of the random variables and the type of test. We will use two different tests for the problem we are dealing with: the Wald test and the other is Likelihood ratios.
+
+## The Wald Test
+
+The Wald test is defined using the $$\hat \theta$$ which is the estimation of $$\theta$$ and $$\hat \textsf{se}$$ the estimated standard error of $$\hat \theta$$. The null and alternative hypothesis are $$\mathcal H_0: \hat \theta = \theta_0$$ and t$$\mathcal H_1: \hat \theta \neq \theta_0,$$ respectively. Additionally, considering that $$\hat \theta$$ is asymptotically normal, i.e., $$\frac{\hat \theta - \theta_0}{\hat \textsf{se}} \rightsquigarrow \mathcal N(0, 1),$$ the size $$\alpha$$ of the Wald test is rejecting $$\mathcal H_0$$ when $$\mid W \mid > z_{\frac{\alpha}{2}}$$ where
+
+$$W = \frac{\hat \theta - \theta_0}{\hat \textsf{se}}.$$
+
+
 ```python
 N = len(Z)
 se = np.sqrt(W * (1 - W) / N)
