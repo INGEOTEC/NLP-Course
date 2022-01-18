@@ -383,7 +383,6 @@ plt.axis('off')
 The following figure presents the word cloud of the difference. It can be observed that the main difference between the important bigrams of the former figure and this one is that the former presented mostly stopwords, and this one has other words. 
 
 {: #fig:wordcloud-differences}
-
 ![Wordcloud](/NLP-Course/assets/images/wordcloud_us2.png)
 
 # Hypothesis Testing
@@ -462,6 +461,71 @@ As can be seen, the most important bigrams are similar to the ones observed on t
 ## Likelihood ratios
 {: #sec:likelihood-ratios }
 
+The Wald test assumes normality on the estimation, which is a fair assumption when the number of counts is high; however, for the case of bigrams, as we have seen on the [Vocabulary Laws](/topics/02Vocabulary), the majority of words appear infrequent; thus most of the bigrams are also infrequent. 
 
+The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal C=w_2 \mid \mathcal R=w_1) = p = \mathbb P(\mathcal C=w_2 \mid \mathcal R=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal C=w_2 \mid \mathcal R=w_1) = p_1 \neq p2 = \mathbb P(\mathcal C=w_2 \mid \mathcal R=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
+
+$$\log \lambda = \log \frac{\mathcal L(\mathcal H_1)}{\mathcal L(\mathcal H_2)},$$
+
+where $$\mathcal L(\mathcal H_1)$$ is the likelihood of observing the counts for words $$w_1$$ and $$w_2$$ and the bigram $$(w_1, w_2)$$ that corresponds to the hypothesis $$\mathcal H_1.$$ Equivalent, $$\mathcal L(\mathcal H_2)$$ corresponds to the likelihood of observing the counts for the second hypothesis.
+
+Using $$c_1$$, $$c_2$$, and $$c_{12}$$ for the count of the words $w_1$ and $w_2$ and the bigram $(w_1, w_2)$ the likelihood of the hypothesis are $$\mathcal L(\mathcal H_1)=L(c_{12}, c_1, p)L(c_2-c_{12}, N-c_1, p)$$ and $$\mathcal L(\mathcal H_2)=L(c_{12}, c_1, p_1)L(c_2-c_{12}, N-c_1, p_2),$$ where $$L(k, n, x) = x^k(1-x)^{n-k}.$$
+
+The first step is to store the counts $$c_1$$ and $$c_2$$ on the variable `count`.
+
+```python
+count = dict()
+for k, v in bigrams.items():
+    for x in k.split('~'):
+        try:
+            count[x] += v
+        except KeyError:
+            count[x] = v 
+```
+
+The function $$L$$ and the ratio can be computed as follows.
+
+```python
+N = sum(list(count.values()))
+
+def L(k, n, x):
+    f1 = k * np.log(x)
+    f2 = (n - k) * np.log(1 - x)
+    return f1 + f2
+
+def ratio(k):
+    a, b = k.split('~')
+    c12 = bigrams[k]
+    c1 = count[a]
+    c2 = count[b]
+    p = c2 / N
+    p1 = c12 / c1
+    p2 = (c2 - c12) / (N - c1)
+    f1 = L(c12, c1, p) +  L(c2 - c12, N - c1, p)
+    f2 = L(c12, c1, p1) + L(c2 - c12, N - c1, p2)
+    return -2 * (f1 - f2)
+```
+
+The last step is to obtain the statistic for each pair, and select only those bigrams where the null hypothesis (in this case $$\mathcal H_1$$) can be rejected. 
+
+```python
+r = {k: ratio(k) for k, v in bigrams.items()}
+c = chi2.ppf((1 - alpha), 1)
+r = {k: v for k, v in r.items() if np.isfinite(v) and v > c}
+```
+
+The following figure presents the word cloud obtained using the Likelihood method, and please take a minute to compare the three different word clouds produced so far. 
 
 ![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us4.png)
+<details markdown="block">
+  <summary>
+    Code of the Likelihood ratios word cloud
+  </summary>
+
+```python
+wc = WC().generate_from_frequencies(r)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+```
+</details>

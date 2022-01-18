@@ -1,7 +1,7 @@
 from text_models import Vocabulary
 from collections import Counter
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm, chi2
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
 # %pylab inline
@@ -126,7 +126,7 @@ plt.axis('off')
 plt.tight_layout()
 plt.savefig('wordcloud_us2.png', dpi=300)
 
-# Hypothesis testing
+## The Wald Test
 
 N = len(Z)
 se = np.sqrt(W * (1 - W) / N)
@@ -155,7 +155,7 @@ plt.tight_layout()
 plt.savefig('wordcloud_us3.png', dpi=300)
 
 
-## Ratio
+## Likelihood ratios
 count = dict()
 for k, v in bigrams.items():
     for x in k.split('~'):
@@ -180,14 +180,15 @@ def ratio(k):
     p = c2 / N
     p1 = c12 / c1
     p2 = (c2 - c12) / (N - c1)
-    f1 = L(c12, c1, p) + L(c2 - c12, N - c1, p)
+    f1 = L(c12, c1, p) +  L(c2 - c12, N - c1, p)
     f2 = L(c12, c1, p1) + L(c2 - c12, N - c1, p2)
     return -2 * (f1 - f2)
 
 r = {k: ratio(k) for k, v in bigrams.items()}
+c = chi2.ppf((1 - alpha), 1)
+r = {k: v for k, v in r.items() if np.isfinite(v) and v > c}
 
-_ = {k: v for k, v in r.items() if np.isfinite(v)}
-wc = WC().generate_from_frequencies(_)
+wc = WC().generate_from_frequencies(r)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
