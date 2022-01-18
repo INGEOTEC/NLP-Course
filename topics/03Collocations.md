@@ -391,7 +391,7 @@ One can use different procedures in Hypothesis testing; selecting one of them de
 
 The Wald test is defined using the $$\hat \theta$$ which is the estimation of $$\theta$$ and $$\hat{\textsf{se}}$$ the estimated standard error of $$\hat \theta$$. The null and alternative hypothesis are $$\mathcal H_0: \hat \theta = \theta_0$$ and $$\mathcal H_1: \hat \theta \neq \theta_0,$$ respectively. Additionally, considering that $$\hat \theta$$ is asymptotically normal, i.e., $$\frac{\hat \theta - \theta_0}{\hat{\textsf{se}}} \rightsquigarrow \mathcal N(0, 1),$$ it can be defined that the size $$\alpha$$ of the Wald test is rejecting $$\mathcal H_0$$ when $$\mid W \mid > z_{\frac{\alpha}{2}}$$ where
 
-$$W = \frac{\hat \theta - \theta_0}{\hat \textsf{se}}.$$
+$$W = \frac{\hat \theta - \theta_0}{\hat{\textsf{se}}}.$$
 
 The relationship between $$\hat \theta$$, $$\hat{\textsf{se}}$$ and $$\theta_0$$ with $$\mathbb P(\mathcal X, \mathcal Y)$$ and $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y)$$ is the following. $$\theta_0$$ defines the null hypothesis that in our case is that the variables are independent, i.e., $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y).$$ On the other hand, $$\mathbb P(\mathcal X, \mathcal Y)$$ corresponds to $$\hat \theta$$ and $$\hat{\textsf{se}}$$ is the estimated standard error of $$\mathbb P(\mathcal X, \mathcal Y).$$ 
 
