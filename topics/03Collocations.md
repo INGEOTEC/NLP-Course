@@ -214,6 +214,7 @@ The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\ma
 $$f_{\mathcal X}(x) = \mathbb P(\mathcal X=x) = \sum_y \mathbb P(\mathcal X=x, \mathcal Y=y) = \sum_y f_{\mathcal X, \mathcal Y}(x, y).$$
 
 ## Example of rolling two dices
+{: #sec:rolling-two-dices}
 
 The interaction of these concepts can be better understood with a simple example in where all details are known. The following code simulated the rolling of two dices. Variables `R` and `C` contain the rolling of the two dices, and the variable `Z` has the outcome of the pair. 
 
@@ -395,11 +396,17 @@ $$W = \frac{\hat \theta - \theta_0}{\hat{\textsf{se}}}.$$
 
 The relationship between $$\hat \theta$$, $$\hat{\textsf{se}}$$ and $$\theta_0$$ with $$\mathbb P(\mathcal X, \mathcal Y)$$ and $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y)$$ is the following. $$\theta_0$$ defines the null hypothesis that in our case is that the variables are independent, i.e., $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y).$$ On the other hand, $$\mathbb P(\mathcal X, \mathcal Y)$$ corresponds to $$\hat \theta$$ and $$\hat{\textsf{se}}$$ is the estimated standard error of $$\mathbb P(\mathcal X, \mathcal Y).$$ 
 
+We can estimate the values for $$\hat \theta$$ and $$\theta_0$$, the only variable missing is $$\hat{\textsf{se}}$$. The standard error is defined as $$\textsf{se} = \sqrt{V(\hat \theta)}$$, in this case $$\theta = \mathbb P(\mathcal R, \mathcal C)$$ is a bivariate distribution where the pair of random variables are drawn from a Categorical distribution with parameter $$\mathbf p$$. The variance of a Categorical distribution is $$\mathbf p_i = \mathbf p_i (1 - \mathbf p_i),$$ and the variance of $$\hat{\mathbf p_i}$$ is $$\frac{\mathbf p_i (1 - \mathbf p_i)}{N};$$ therefore, $$\hat{\textsf{se}} = \sqrt{\frac{\mathbf p_i (1 - \mathbf p_i)}{N}}.$$ 
+
+For example, the Wald test for data collected on the [two rolling dices](#sec:rolling-two-dices) example is computed as follows. Variable `Z` contains the drawn from two dices with the characteristic that $$\mathcal R=2$$ with a probability $$0.1$$ when $$\mathcal C=1.$$ Variable $$W$$ is the estimated bivariate distribution, i.e., $$\theta$$. The second line computes  $$\hat{\textsf{se}}$$ using `W,` and finally, the third line has the Wald statistic. 
+
 ```python
 N = len(Z)
 se = np.sqrt(W * (1 - W) / N)
 wald = (W - ind) / se 
 ```
+
+
 
 $$z_{\frac{\alpha}{2}} = 2.58$$
 
