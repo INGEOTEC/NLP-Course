@@ -398,7 +398,7 @@ The relationship between $$\hat \theta$$, $$\hat{\textsf{se}}$$ and $$\theta_0$$
 
 We can estimate the values for $$\hat \theta$$ and $$\theta_0$$, the only variable missing is $$\hat{\textsf{se}}$$. The standard error is defined as $$\textsf{se} = \sqrt{V(\hat \theta)}$$, in this case $$\theta = \mathbb P(\mathcal R, \mathcal C)$$ is a bivariate distribution where the pair of random variables are drawn from a Categorical distribution with parameter $$\mathbf p$$. The variance of a Categorical distribution is $$\mathbf p_i = \mathbf p_i (1 - \mathbf p_i),$$ and the variance of $$\hat{\mathbf p_i}$$ is $$\frac{\mathbf p_i (1 - \mathbf p_i)}{N};$$ therefore, $$\hat{\textsf{se}} = \sqrt{\frac{\mathbf p_i (1 - \mathbf p_i)}{N}}.$$ 
 
-For example, the Wald test for data collected on the [two rolling dices](#sec:rolling-two-dices) example is computed as follows. Variable `Z` contains the drawn from two dices with the characteristic that $$\mathcal R=2$$ with a probability $$0.1$$ when $$\mathcal C=1.$$ Variable $$W$$ is the estimated bivariate distribution, i.e., $$\theta$$. The second line computes  $$\hat{\textsf{se}}$$ using `W,` and finally, the third line has the Wald statistic. 
+For example, the Wald test for data collected on the [two rolling dices](#sec:rolling-two-dices) example is computed as follows. Variable `Z` contains the drawn from two dices with the characteristic that $$\mathcal R=2$$ with a probability $$0.1$$ when $$\mathcal C=1.$$ Variable $$W$$ is the estimated bivariate distribution, i.e., $$\theta$$, $$\hat{\textsf{se}}$$ is identified using `W` as shown in the second line, and, finally, the third line has the Wald statistic. 
 
 ```python
 N = len(Z)
@@ -406,9 +406,8 @@ se = np.sqrt(W * (1 - W) / N)
 wald = (W - ind) / se 
 ```
 
+The Wald statistic is seen in the following matrix; the absolute value of the elements are compared against $$z_{\frac{\alpha}{2}}$$ to accept or reject the null hypothesis. $$z_{\alpha}$$ is the inverse of the standard normal distribution (i.e., $$\mathcal N(0, 1)$$) that gives the probability $$1-\alpha$$, traditionally $$\alpha$$ is $$0.1$$ or $$0.05$$. For a $$\alpha=0.01$$ the value of $$z_{\frac{\alpha}{2}}$$ is approximately $$2.58$$. Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=5$$ and $$\mathcal C=1.$$
 
-
-$$z_{\frac{\alpha}{2}} = 2.58$$
 
 $$
 \begin{pmatrix}
