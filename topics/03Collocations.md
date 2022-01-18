@@ -382,6 +382,8 @@ plt.axis('off')
 
 The following figure presents the word cloud of the difference. It can be observed that the main difference between the important bigrams of the former figure and this one is that the former presented mostly stopwords, and this one has other words. 
 
+{: #fig:wordcloud-differences}
+
 ![Wordcloud](/NLP-Course/assets/images/wordcloud_us2.png)
 
 # Hypothesis Testing
@@ -392,9 +394,10 @@ Hypothesis testing aims to measure whether the data collected agrees with a null
 
 In the case at hand, hypothesis testing is helpful to state the dependency or independence of the random variables. One measures whether the estimated bivariate distribution supports the null hypothesis that the variables are independent, i.e., $$\mathcal H_0: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) = 0;$$ where the alternative hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) \neq 0.$$
 
-One can use different procedures in Hypothesis testing; selecting one of them depends on the characteristics of the random variables and the type of test. We will use two different tests for the problem we are dealing with: the Wald test and the other is Likelihood ratios.
+One can use different procedures in Hypothesis testing; selecting one of them depends on the characteristics of the random variables and the type of test. We will use two different tests for the problem we are dealing with: the [Wald test](#sec:wald-test) and the other is [Likelihood ratios](#sec:likelihood-ratios).
 
 ## The Wald Test
+{: #sec:wald-test}
 
 The Wald test is defined using the $$\hat \theta$$ which is the estimation of $$\theta$$ and $$\hat{\textsf{se}}$$ the estimated standard error of $$\hat \theta$$. The null and alternative hypothesis are $$\mathcal H_0: \hat \theta = \theta_0$$ and $$\mathcal H_1: \hat \theta \neq \theta_0,$$ respectively. Additionally, considering that $$\hat \theta$$ is asymptotically normal, i.e., $$\frac{\hat \theta - \theta_0}{\hat{\textsf{se}}} \rightsquigarrow \mathcal N(0, 1),$$ it can be defined that the size $$\alpha$$ of the Wald test is rejecting $$\mathcal H_0$$ when $$\mid W \mid > z_{\frac{\alpha}{2}}$$ where
 
@@ -412,8 +415,14 @@ se = np.sqrt(W * (1 - W) / N)
 wald = (W - ind) / se 
 ```
 
-The Wald statistic is seen in the following matrix; the absolute value of the elements are compared against $$z_{\frac{\alpha}{2}}$$ to accept or reject the null hypothesis. $$z_{\alpha}$$ is the inverse of the standard normal distribution (i.e., $$\mathcal N(0, 1)$$) that gives the probability $$1-\alpha$$, traditionally $$\alpha$$ is $$0.1$$ or $$0.05$$. For a $$\alpha=0.01$$ the value of $$z_{\frac{\alpha}{2}}$$ is approximately $$2.58$$. Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=4$$ and $$\mathcal C=1.$$
+The Wald statistic is seen in the following matrix; the absolute value of the elements are compared against $$z_{\frac{\alpha}{2}}$$ to accept or reject the null hypothesis. $$z_{\alpha}$$ is the inverse of the standard normal distribution (i.e., $$\mathcal N(0, 1)$$) that gives the probability $$1-\alpha$$, traditionally $$\alpha$$ is $$0.1$$ or $$0.05$$. For a $$\alpha=0.01$$ the value of $$z_{\frac{\alpha}{2}}$$ is approximately $$2.58$$ (variable `c`).
 
+```python
+alpha = 0.01
+c = norm.ppf(1 - alpha / 2)
+```
+
+Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=4$$ and $$\mathcal C=1.$$
 
 $$
 \begin{pmatrix}
@@ -438,14 +447,21 @@ wald = {k: (co[i, j] - M[i] * M[j]) / se(co[i, j])
         for k, (i, j) in _}
 ```
 
-
+Variable `wald` contains the statistic for all the bigrams, then we need to compare it against $$z_{\frac{\alpha}{2}}$$; however, in the bigrams case, as mentioned previously, we are interested only on the bigrams that the probability of observing the pair is higher than the product of the marginals. 
 
 ```python
-alpha = 0.01
-c = norm.ppf(1 - alpha / 2)
 wald = {k: v for k, v in wald.items() if v > c}
 ```
 
+It can be observed that variable `wald` has less than 10% of all the bigrams; unfortunately, these are still a lot and cannot be visualized in a table; consequently, we rely on the word cloud shown below. 
+
 ![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us3.png)
+
+As can be seen, the most important bigrams are similar to the ones observed on the [difference figure](#fig:wordcloud-differences); this is because the former approach and the Wald test are equivalent; the advantage of the Wald test is that there is a threshold that can be used to eliminate uninterested bigrams.
+
+## Likelihood ratios
+{: #sec:likelihood-ratios }
+
+
 
 ![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us4.png)
