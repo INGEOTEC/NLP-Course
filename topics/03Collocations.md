@@ -17,6 +17,11 @@ nav_order: 3
 {: .no_toc .text-delta }
 ```python
 from text_models import Vocabulary
+from collections import Counter
+import numpy as np
+from scipy.stats import norm
+from wordcloud import WordCloud as WC
+from matplotlib import pylab as plt
 ```
 
 ## Installing external libraries
@@ -171,7 +176,7 @@ N = counts.sum()
 p = counts / N
 ```
 
-# Bivariate distributionI
+# Bivariate distribution
 
 We have all the elements to realize that the co-occurrence matrix is the realization of two random variables (each one can have $$d$$ outcomes); it keeps track of the number of times a bigram appear in a corpus. So far, we have not worked with two random variables; however, the good news is that the co-occurrence matrix contains all the information needed to define a bivariate distribution for this process.
 
@@ -313,6 +318,7 @@ $$
 $$
 
 ## Example of the bigrams
+{: #sec:bigrams }
 
 The example of rolling two dices illustrates the dependency behavior in two random variables. It showed that the difference between the bivariate distribution and the dot product of the marginals could be used to infer independence. There was an interesting case where the difference matrix has a negative diagonal, implying dependency; however, the dependency was because the pair was unfeasible. 
 
@@ -406,7 +412,7 @@ se = np.sqrt(W * (1 - W) / N)
 wald = (W - ind) / se 
 ```
 
-The Wald statistic is seen in the following matrix; the absolute value of the elements are compared against $$z_{\frac{\alpha}{2}}$$ to accept or reject the null hypothesis. $$z_{\alpha}$$ is the inverse of the standard normal distribution (i.e., $$\mathcal N(0, 1)$$) that gives the probability $$1-\alpha$$, traditionally $$\alpha$$ is $$0.1$$ or $$0.05$$. For a $$\alpha=0.01$$ the value of $$z_{\frac{\alpha}{2}}$$ is approximately $$2.58$$. Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=5$$ and $$\mathcal C=1.$$
+The Wald statistic is seen in the following matrix; the absolute value of the elements are compared against $$z_{\frac{\alpha}{2}}$$ to accept or reject the null hypothesis. $$z_{\alpha}$$ is the inverse of the standard normal distribution (i.e., $$\mathcal N(0, 1)$$) that gives the probability $$1-\alpha$$, traditionally $$\alpha$$ is $$0.1$$ or $$0.05$$. For a $$\alpha=0.01$$ the value of $$z_{\frac{\alpha}{2}}$$ is approximately $$2.58$$. Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=4$$ and $$\mathcal C=1.$$
 
 
 $$
@@ -420,6 +426,8 @@ $$
 \end{pmatrix}
 $$
 
+The Wald test can also be applied to the [bigrams example](#sec:bigrams), as shown in the following code. The estimated bivariate distribution is found on variable `co_occurrence`; given that the matrix is sparse, the Wald statistic is only computed for those elements different than zero. 
+
 ```python
 N = sum(list(bigrams.values()))
 se = lambda x: np.sqrt(x * (1 - x) / N)
@@ -429,6 +437,8 @@ co = co_occurrence
 wald = {k: (co[i, j] - M[i] * M[j]) / se(co[i, j])
         for k, (i, j) in _}
 ```
+
+
 
 ```python
 alpha = 0.01

@@ -1,4 +1,3 @@
-from numpy.core.fromnumeric import size
 from text_models import Vocabulary
 from collections import Counter
 import numpy as np
