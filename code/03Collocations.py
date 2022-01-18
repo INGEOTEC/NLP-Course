@@ -155,3 +155,39 @@ plt.axis('off')
 plt.tight_layout()
 
 
+count = dict()
+for k, v in bigrams.items():
+    for x in k.split('~'):
+        try:
+            count[x] += v
+        except KeyError:
+            count[x] = v 
+
+N = sum(list(count.values()))
+
+def L(k, n, x):
+    f1 = k * np.log(x)
+    f2 = (n - k) * np.log(1 - x)
+    return f1 + f2
+
+
+def ratio(k):
+    a, b = k.split('~')
+    c12 = bigrams[k]
+    c1 = count[a]
+    c2 = count[b]
+    p = c2 / N
+    p1 = c12 / c1
+    p2 = (c2 - c12) / (N - c1)
+    f1 = L(c12, c1, p) + L(c2 - c12, N - c1, p)
+    f2 = L(c12, c1, p1) + L(c2 - c12, N - c1, p2)
+    return -2 * (f1 - f2)
+
+r = {k: ratio(k) for k, v in bigrams.items()}
+
+_ = {k: v for k, v in r.items() if np.isfinite(v)}
+wc = WC().generate_from_frequencies(_)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+
