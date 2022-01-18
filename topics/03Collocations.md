@@ -379,6 +379,12 @@ The following figure presents the word cloud of the difference. It can be observ
 
 # Hypothesis Testing
 
+We have been using the difference between $$\mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y)$$ to measure whether the variables are dependent or independent. For the case of rolling dices, we saw that when the variables are independent, all the absolute value of the difference is lower than $$0.009$$; however, this is by no means a formal definition.  
+
+Hypothesis testing aims to measure whether the data collected agrees with a null hypothesis or can be discarted. For example, let us believe that the exposure of a particular substance is the cause of a deadly disease, then the following experiment can be created. On the one hand, there is a group that has been exposed to the substance, and on the other hand, the group has not been exposed. These two groups allow to accept or reject the null hypothesis that the substance is not related to the disease.  
+
+In the case at hand, hypothesis testing is helpful to state the dependency or independence of the random variables. One measures whether the estimated bivariate distribution supports the null hypothesis that the variables are independent, i.e., $$\mathcal H_0: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) = 0;$$ where the alternative hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X, \mathcal Y) - \mathbb P(\mathcal X) \mathbb P(\mathcal Y) \neq 0.$$
+
 ```python
 N = len(Z)
 se = np.sqrt(W * (1 - W) / N)
