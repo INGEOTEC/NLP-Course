@@ -203,6 +203,7 @@ plt.semilogx([x for x, _ in scatter],
 plt.grid()
 plt.xlabel('Frequency')
 plt.ylabel('Wald Statistic')
+plt.tight_layout()
 plt.savefig('scatter_plot_hypw.png', dpi=300)
 
 
@@ -212,6 +213,8 @@ plt.loglog([x for x, _ in scatter],
            [y for _, y in scatter], '.')
 plt.xlabel('Frequency')
 plt.ylabel(r'$-2 \log \lambda$')
+plt.grid()
+plt.tight_layout()
 plt.savefig('scatter_plot_hypl.png', dpi=300)
 
 
