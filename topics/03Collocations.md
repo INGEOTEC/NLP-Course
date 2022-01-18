@@ -414,3 +414,6 @@ c = norm.ppf(1 - alpha / 2)
 wald = {k: v for k, v in wald.items() if v > c}
 ```
 
+![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us3.png)
+
+![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us4.png)

@@ -153,8 +153,10 @@ wc = WC().generate_from_frequencies(wald)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
+plt.savefig('wordcloud_us3.png', dpi=300)
 
 
+## Ratio
 count = dict()
 for k, v in bigrams.items():
     for x in k.split('~'):
@@ -190,4 +192,5 @@ wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
+plt.savefig('wordcloud_us4.png', dpi=300)
 
