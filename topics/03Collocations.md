@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Collocations
-nav_order:
+nav_order: 3
 ---
 
 # Collocations
@@ -19,9 +19,10 @@ nav_order:
 from text_models import Vocabulary
 from collections import Counter
 import numpy as np
-from scipy.stats import norm
+from scipy.stats import norm, chi2
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
+from collections import defaultdict
 ```
 
 ## Installing external libraries

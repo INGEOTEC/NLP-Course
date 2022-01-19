@@ -7,13 +7,32 @@ nav_order: 4
 # N-Gram Language Model
 {: .fs-10 .no_toc }
 
-The **objective** is to 
-
 ## Contents
 {: .no_toc .text-delta }
 
 1. TOC
 {:toc}
+
+## Libraries used
+{: .no_toc .text-delta }
+```python
+from text_models import Vocabulary
+from collections import Counter
+import numpy as np
+from scipy.stats import norm, chi2
+from wordcloud import WordCloud as WC
+from matplotlib import pylab as plt
+from collections import defaultdict
+```
+
+## Installing external libraries
+{: .no_toc .text-delta }
+
+```bash
+pip install microtc
+pip install evomsa
+pip install text_models
+```
 
 ---
 
