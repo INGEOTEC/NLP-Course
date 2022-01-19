@@ -65,7 +65,13 @@ $$\mathbb P(\mathcal X_\ell \mid \mathcal X_1, \ldots, \mathcal X_{\ell -1}) = \
 
 where $$\mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1}) = \sum_x \mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1}, \mathcal X_\ell = x)$$ is the marginal distribution. 
 
+# N-Gram Language Model
 
+Traditionally, the multivariate probability distributions are fixed with respect to the number of variables; however, the number of words in a sentence or a document is variable. Nonetheless, the dependency between the latest word and the first one on a long text is negligible. 
+
+Even when the number of variables is constant, that is, $$\ell$$ is kept constant in the model, which has as a consequence that it is not possible to represent a text longer than $$\ell$$ words. There is still another concern that comes from estimating the parameters of the multivariate distribution. $$\mathcal X$$ is Categorical distributed with $$d$$ possible outcomes. The minimum number of examples needed to observe the $$d$$ outcomes is $$d^1$$; in the case of two variables, i.e., $$\ell=2$$, it is needed at least $$d^2$$, and in general, for $$\ell$$ variables it is needed $$d^\ell$$ examples. 
+
+The consequence is that for a relatively small $$\ell$$ one needs a vast dataset to have enough information to estimate the multivariate distribution. 
 
 
 
