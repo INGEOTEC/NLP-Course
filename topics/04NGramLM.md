@@ -44,10 +44,23 @@ LM deals with modeling the multivariate probability $$\mathbb P(\mathcal X_1, \m
   
 # Conditional Probability
 
+The conditional probability of two random variables $$\mathcal X$$ and $$\mathcal Y$$ is defined as:
+
+$$\mathbb P(\mathcal Y \mid \mathcal X) = \frac{\mathbb P(\mathcal X, \mathcal Y)}{\mathbb P(\mathcal X)},$$
+
+if $$\mathbb P(\mathcal Y) > 0.$$
+
+The definition allows defining $$\mathbb P(\mathcal X, \mathcal Y) = \mathbb P(\mathcal Y \mid \mathcal X) \mathbb P(\mathcal X),$$ which is helpful for two words text. The general case involves $$\ell$$ words, which can be defined using the probability chain rule.
+
+$$\begin{eqnarray}
+\mathbb P(\mathcal X_1, \ldots, \mathcal X_\ell) &=& \mathbb P(\mathcal X_\ell \mid \mathcal X_1, \ldots, \mathcal X_{\ell -1}) \mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1})\\ 
+\end{eqnarray}$$
+
+
 
  
 
-
+<!--
 A language model is a model that assigns probabilities to words (tokens). That is, the aim is to estimate the probability of the next token using the history. The simplest case is $$P(w_m \mid  w_{m-1})$$ where the probability of token $$w_m$$ is only influence with the previous token $$w_{m-1}$$. However, this case can be easily extended to compute $$P(w_m \mid  w_1, w_2, \ldots, w_{m-1})$$.
 
 The essential elements of an N-Gram Language Model (LM) are the number of times the tokens and n-grams appear in a corpus; with this information, it is possible to compute the probability of a particular sentence and generate sentences using the LM. One way to start creating the model is by storing variables containing these counts accessible to all the methods in a class. Let us create a class NgramLM, that stored the counting information as well as the instance used to tokenize a text, .i.e., nlp.
@@ -173,3 +186,5 @@ Note that there is an extra parameter, markers, this is to include the start of 
 The second part is to extend the algorithm to deal with n-grams greater than 2. The starting code already receives as an argument the size of the grams; however, it can only deal with bigrams. 
 
 It is essential to note that the tokens are needed to generate the sentences, and that $$P(w_n \mid w_{n-k}, \ldots, w_{n-2}, w_{n-1})$$ is based on $$C(w_{n-k}, \ldots, w_{n-2}, w_{n-1})$$ and $$C(w_{n-k}, \ldots, w_{n-2}, w_{n-1}, w_n)$$.
+
+-->
