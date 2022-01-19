@@ -22,21 +22,22 @@ The goal of the course is to introduce the students to the field of Natural Lang
 
 # Notation
 
-|Symbol            | Meaning                                            |
-|------------------|----------------------------------------------------|
-|$$x$$             | Variable                                           |
-|$$\mathbb R$$     | The real numbers                                   |
-|$$\mathbf x$$     | Column vector $$\mathbf x \in \mathbb R^d$$        |
-|$$d$$             | Dimension                                          |
+|Symbol            | Meaning                                                  |
+|------------------|----------------------------------------------------------|
+|$$x$$             | Variable                                                 |
+|$$w$$             | Variable mostly used for words (tokens)                  |
+|$$\mathbb R$$     | The real numbers                                         |
+|$$\mathbf x$$     | Column vector $$\mathbf x \in \mathbb R^d$$              |
+|$$d$$             | Dimension                                                |
 |$$\mathbf w^\intercal \cdot \mathbf x$$ | Dot  product where $$\mathbf w$$ and $$\mathbf x \in \mathbb R^d$$ |
-|$$N$$             | Number of examples                                 | 
-|$$K$$             | Number of classes or labels                        |
-|$$\mathbb P(A)$$  | Probability of event $$A$$                         |
-|$$\mathcal X$$    | Random variable                                    |
-|$$\mathcal N$$    | Normal distribution                                |
-|$$f(\cdot)$$      | Probability distribution function (pdf)            |
-|$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true    |
-|$$\Omega$$        | Search space                                       |
+|$$N$$             | Number of examples                                       | 
+|$$K$$             | Number of classes or labels                              |
+|$$\mathbb P(A)$$  | Probability of event $$A$$                               |
+|$$\mathcal X, \mathcal Y$$    | Random variables                             |
+|$$\mathcal N$$    | Normal distribution                                      |
+|$$f_{\mathcal X}$$| $$\mathcal X$$'s probability distribution function (pdf) |
+|$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true          |
+|$$\Omega$$        | Search space                                             |
 
 #  Requirements
 

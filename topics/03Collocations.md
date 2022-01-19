@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Collocations
-nav_order: 3
+nav_order:
 ---
 
 # Collocations
@@ -242,7 +242,7 @@ W = W / W.sum()
 The next matrix presents the bivariate distribution `W`
 
 $$
-W=\mathbb P(\mathcal R, \mathcal C) = 
+W=\mathbb P(\mathcal X_r, \mathcal X_c) = 
 \begin{pmatrix}
 0.0246 & 0.0290 & 0.0288 & 0.0252 & 0.0259 & 0.0259 \\
 0.0277 & 0.0294 & 0.0291 & 0.0287 & 0.0294 & 0.0248 \\
@@ -252,23 +252,23 @@ W=\mathbb P(\mathcal R, \mathcal C) =
 0.0284 & 0.0287 & 0.0273 & 0.0290 & 0.0275 & 0.0286 \\
 \end{pmatrix}.$$
 
-The next step is to compute the marginal instributions $$\mathbb P(\mathcal R)$$ and $$\mathbb P(\mathcal C)$$ which can be done as follows
+The next step is to compute the marginal instributions $$\mathbb P(\mathcal X_r)$$ and $$\mathbb P(\mathcal X_c)$$ which can be done as follows
 
 ```python
 R_m = W.sum(axis=1)
 C_m = W.sum(axis=0)
 ```
 
-The marginal distribution and the definition of independence are used to obtain $$\mathbb P(\mathcal R) \mathbb P(\mathcal C)$$ which can be computed using the dot product, consequenly `R` and `C` need to be transform into a two dimensional
+The marginal distribution and the definition of independence are used to obtain $$\mathbb P(\mathcal X_r) \mathbb P(\mathcal X_c)$$ which can be computed using the dot product, consequenly `R` and `C` need to be transform into a two dimensional
 array using `np.atleast_2d` function. 
 
 ```python
 ind = np.dot(np.atleast_2d(R).T, np.atleast_2d(C))
 ```
 
-`W` contains the estimated bivariate distribution, and `ind` could be the bivariate distribution only if $$\mathcal R$$ and $$\mathcal C$$ are independent. The following matrix shows `W-ind`, which would be a zero matrix if the variables are independent. 
+`W` contains the estimated bivariate distribution, and `ind` could be the bivariate distribution only if $$\mathcal X_r$$ and $$\mathcal X_c$$ are independent. The following matrix shows `W-ind`, which would be a zero matrix if the variables are independent. 
 
-$$\mathbb P(\mathcal R, \mathcal C) - \mathbb P(\mathcal R)\mathbb P(\mathcal C) = 
+$$\mathbb P(\mathcal X_r, \mathcal X_c) - \mathbb P(\mathcal X_r)\mathbb P(\mathcal X_c) = 
 \begin{pmatrix}
 -0.0021 & 0.0020 & 0.0019 & -0.0016 & -0.0004 & 0.0002 \\
 -0.0006 & 0.0007 & 0.0006 & 0.0003 & 0.0015 & -0.0025 \\
@@ -285,7 +285,7 @@ It is observed from the matrix that all its elements are close to zero ($$\mid W
 Z = [[r, c] for r, c in zip(R, C) if r != c]
 ```
 
-The difference between the estimated bivariate distribution and the product of the marginal distributions is presented in the following matrix. It can be observed that the values in the diagonal are negative because $$\mathbb P(\mathcal R=x, \mathcal C=x)=0$$ these events are not possible in this experiment. Additionally, the values of the diagonal are higher than $$\mid W_{ii} \mid > 0.09.$$
+The difference between the estimated bivariate distribution and the product of the marginal distributions is presented in the following matrix. It can be observed that the values in the diagonal are negative because $$\mathbb P(\mathcal X_r=x, \mathcal X_c=x)=0$$ these events are not possible in this experiment. Additionally, the values of the diagonal are higher than $$\mid W_{ii} \mid > 0.09.$$
 
 $$ 
 \begin{pmatrix}
@@ -298,7 +298,7 @@ $$
 \end{pmatrix}
 $$
 
-The last example creates a dependency between $$\mathcal R=2$$ and $$\mathcal C=1$$, that is when $$\mathcal C=1$$ the element $$\mathcal R=2$$ with a $$0.1$$ probability; this behavior can be encoded as follows. 
+The last example creates a dependency between $$\mathcal X_r=2$$ and $$\mathcal X_c=1$$, that is when $$\mathcal X_c=1$$ the element $$\mathcal X_r=2$$ with a $$0.1$$ probability; this behavior can be encoded as follows. 
 
 ```python
 Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]
@@ -342,7 +342,7 @@ plt.tight_layout()
 ```
 </details>
 
-The bivariate matrix is symmetric; therefore, the marginal $$f_{\mathcal R}=f_{\mathcal C}$$ which can be stored in an array (variable `M`) as follows:
+The bivariate matrix is symmetric; therefore, the marginal $$f_{\mathcal X_r}=f_{\mathcal X_c}$$ which can be stored in an array (variable `M`) as follows:
 
 ```python
 M = co_occurrence.sum(axis=1)
@@ -404,9 +404,9 @@ $$W = \frac{\hat \theta - \theta_0}{\hat{\textsf{se}}}.$$
 
 The relationship between $$\hat \theta$$, $$\hat{\textsf{se}}$$ and $$\theta_0$$ with $$\mathbb P(\mathcal X, \mathcal Y)$$ and $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y)$$ is the following. $$\theta_0$$ defines the null hypothesis that in our case is that the variables are independent, i.e., $$\mathbb P(\mathcal X) \mathbb P(\mathcal Y).$$ On the other hand, $$\mathbb P(\mathcal X, \mathcal Y)$$ corresponds to $$\hat \theta$$ and $$\hat{\textsf{se}}$$ is the estimated standard error of $$\mathbb P(\mathcal X, \mathcal Y).$$ 
 
-We can estimate the values for $$\hat \theta$$ and $$\theta_0$$, the only variable missing is $$\hat{\textsf{se}}$$. The standard error is defined as $$\textsf{se} = \sqrt{V(\hat \theta)}$$, in this case $$\theta = \mathbb P(\mathcal R, \mathcal C)$$ is a bivariate distribution where the pair of random variables are drawn from a Categorical distribution with parameter $$\mathbf p$$. The variance of a Categorical distribution is $$\mathbf p_i = \mathbf p_i (1 - \mathbf p_i),$$ and the variance of $$\hat{\mathbf p_i}$$ is $$\frac{\mathbf p_i (1 - \mathbf p_i)}{N};$$ therefore, $$\hat{\textsf{se}} = \sqrt{\frac{\mathbf p_i (1 - \mathbf p_i)}{N}}.$$ 
+We can estimate the values for $$\hat \theta$$ and $$\theta_0$$, the only variable missing is $$\hat{\textsf{se}}$$. The standard error is defined as $$\textsf{se} = \sqrt{V(\hat \theta)}$$, in this case $$\theta = \mathbb P(\mathcal X_r, \mathcal X_c)$$ is a bivariate distribution where the pair of random variables are drawn from a Categorical distribution with parameter $$\mathbf p$$. The variance of a Categorical distribution is $$\mathbf p_i = \mathbf p_i (1 - \mathbf p_i),$$ and the variance of $$\hat{\mathbf p_i}$$ is $$\frac{\mathbf p_i (1 - \mathbf p_i)}{N};$$ therefore, $$\hat{\textsf{se}} = \sqrt{\frac{\mathbf p_i (1 - \mathbf p_i)}{N}}.$$ 
 
-For example, the Wald test for data collected on the [two rolling dices](#sec:rolling-two-dices) example is computed as follows. Variable `Z` contains the drawn from two dices with the characteristic that $$\mathcal R=2$$ with a probability $$0.1$$ when $$\mathcal C=1.$$ Variable $$W$$ is the estimated bivariate distribution, i.e., $$\theta$$, $$\hat{\textsf{se}}$$ is identified using `W` as shown in the second line, and, finally, the third line has the Wald statistic. 
+For example, the Wald test for data collected on the [two rolling dices](#sec:rolling-two-dices) example is computed as follows. Variable `Z` contains the drawn from two dices with the characteristic that $$\mathcal X_r=2$$ with a probability $$0.1$$ when $$\mathcal X_c=1.$$ Variable $$W$$ is the estimated bivariate distribution, i.e., $$\theta$$, $$\hat{\textsf{se}}$$ is identified using `W` as shown in the second line, and, finally, the third line has the Wald statistic. 
 
 ```python
 N = len(Z)
@@ -421,7 +421,7 @@ alpha = 0.01
 c = norm.ppf(1 - alpha / 2)
 ```
 
-Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal R=2$$ and $$\mathcal C=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal R=4$$ and $$\mathcal C=1.$$
+Comparing the absolute values of `W` against $$2.58$$, it is observed that $$\mathcal X_r=2$$ and $$\mathcal X_c=1$$ are dependent which corresponds to the designed of the experiment, the other pair that is found dependent is $$\mathcal X_r=4$$ and $$\mathcal X_c=1.$$
 
 $$
 \begin{pmatrix}
@@ -463,7 +463,7 @@ As can be seen, the most important bigrams are similar to the ones observed on t
 
 The Wald test assumes normality on the estimation, which is a fair assumption when the number of counts is high; however, for the case of bigrams, as we have seen on the [Vocabulary Laws](/topics/02Vocabulary), the majority of words appear infrequent; thus most of the bigrams are also infrequent. 
 
-The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal C=w_2 \mid \mathcal R=w_1) = p = \mathbb P(\mathcal C=w_2 \mid \mathcal R=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal C=w_2 \mid \mathcal R=w_1) = p_1 \neq p2 = \mathbb P(\mathcal C=w_2 \mid \mathcal R=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
+The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p_1 \neq p2 = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
 
 $$\log \lambda = \log \frac{\mathcal L(\mathcal H_1)}{\mathcal L(\mathcal H_2)},$$
 
