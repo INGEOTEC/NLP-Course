@@ -38,9 +38,9 @@ pip install text_models
 
 # Introduction
 
-A Language Model (LM) assigns probabilities to words (tokens), sentences, or documents. The direct usage of an LM is to estimate the probability of observing a particular text, it can also be used to generate texts, and in general, it models the dynamics of a language. It is essential to mention that most of the Natural Language Understanding (NLU) tasks rely on an LM.
+A Language Model (LM) assigns probabilities to words (tokens), sentences, or documents. The direct usage of an LM is to estimate the probability of observing a particular text, it can also be used to generate texts, and in general, it models the dynamics of a language. It is essential to mention that most of the **Natural Language Understanding** (NLU) tasks rely on an LM.
 
-LM deals with modeling the multivariate probability $$\mathbb P(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_\ell)$$ of observing $$\ell$$ words (tokens).  As expected, these $$\ell$$ random variables are dependent (see the definition of the complement concept, i.e., [independence(/NLP-Course/topics/03Collocations/#sec:independence-marginal).), and in order to work with them, it is needed to define the concept of conditional probability. 
+LM deals with modeling the multivariate probability $$\mathbb P(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_\ell)$$ of observing $$\ell$$ words (tokens).  As expected, these $$\ell$$ random variables are dependent (see the definition of the complement concept, i.e., [independence](/NLP-Course/topics/03Collocations/#sec:independence-marginal).), and in order to work with them, it is needed to define the concept of conditional probability. 
   
 # Conditional Probability
 
