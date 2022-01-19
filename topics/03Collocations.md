@@ -540,6 +540,8 @@ The following figure presents the scatter plot between frequency and Wald statis
 
 Conversely, the behavior of the Likelihood ratio does not present an increased value when the frequency is increased, as can be seen in the following figure; nonetheless, the word cloud is not as informative as one wishes to be. 
 
+![Likelihood Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypl.png)
+
 So far, we have used the information of January 10, 2022; in this section, we will be working with January 17, 2022, to complement our analysis of finding collocations through hypothesis testing. The following figure presents the word cloud using the Likelihood test -- it is essential to mention that it presents another limitation: it only contains 200 words corresponding to the words with higher values.
 
 ![Word Cloud (2021/01/17) using Likelihood Test](/NLP-Course/assets/images/wordcloud_us5.png)
