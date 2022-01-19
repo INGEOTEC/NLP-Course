@@ -516,7 +516,7 @@ r = {k: v for k, v in r.items() if np.isfinite(v) and v > c}
 
 The following figure presents the word cloud obtained using the Likelihood method, and please take a minute to compare the three different word clouds produced so far. 
 
-![Word Cloud using Wald Test](/NLP-Course/assets/images/wordcloud_us4.png)
+![Word Cloud using Likelihood Test](/NLP-Course/assets/images/wordcloud_us4.png)
 <details markdown="block">
   <summary>
     Code of the Likelihood ratios word cloud
@@ -540,5 +540,15 @@ The following figure presents the scatter plot between frequency and Wald statis
 
 Conversely, the behavior of the Likelihood ratio does not present an increased value when the frequency is increased, as can be seen in the following figure; nonetheless, the word cloud is not as informative as one wishes to be. 
 
-![Likelihood Ratio Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypl.png)
+So far, we have used the information of January 10, 2022; in this section, we will be working with January 17, 2022, to complement our analysis of finding collocations through hypothesis testing. The following figure presents the word cloud using the Likelihood test -- it is essential to mention that it presents another limitation: it only contains 200 words corresponding to the words with higher values.
+
+![Word Cloud (2021/01/17) using Likelihood Test](/NLP-Course/assets/images/wordcloud_us5.png)
+ 
+There are some similarities with the word cloud from the other day; however, there are significant differences. For example, it can be inferred that there was snow on that day and Martin Luther King memorial day. The word cloud of the following 200 words is shown below; it can be observed that the recurrent term is snow. 
+
+![Word Cloud (2021/01/17 - next 200 bigrams) using Likelihood Test](/NLP-Course/assets/images/wordcloud_us6.png)
+
+
+
+
 

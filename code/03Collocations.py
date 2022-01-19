@@ -230,26 +230,4 @@ wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
-
-
-freq = defaultdict(list)
-for k, v in wald.items():
-    c = bigrams[k]
-    freq[c].append(v)
-
-
-x = list(freq.keys())
-x.sort()
-points_max = [[x[0], np.max(freq[x[0]])]]
-for i in x:
-    v = np.max(freq[i])
-    if points_max[-1][1] < v:
-        points_max.append([i, v])
-    v = np.min(freq[i])
-
-plt.semilogx([i for i, _ in points_max],
-             [y for _, y in points_max])
-
-
-plt.semilogx(x, [np.mean(freq[i]) for i in x], '.')
-plt.grid()
+plt.savefig('wordcloud_us6.png', dpi=300)
