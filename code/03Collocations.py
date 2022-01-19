@@ -218,6 +218,19 @@ plt.tight_layout()
 plt.savefig('scatter_plot_hypl.png', dpi=300)
 
 
+date = dict(year=2022, month=1, day=17)
+voc = Vocabulary(date, lang='En', country="US")
+bigrams = Counter({k: v for k, v in voc.voc.items() if k.count("~")})
+
+d = [(k, v) for k, v in r.items()]
+d.sort(key=lambda x: x[1], reverse=True)
+
+_ = {k: v for k, v in d[200:400]}
+wc = WC().generate_from_frequencies(_)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+
 
 freq = defaultdict(list)
 for k, v in wald.items():

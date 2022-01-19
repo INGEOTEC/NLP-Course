@@ -532,6 +532,13 @@ plt.tight_layout()
 
 # Activities
 
+As seen in the figures, the bigrams do not clearly indicate the events that occurred on the day, and few bigrams can be considered as a collocation. This behavior is normal; however, we can further analyze the test data to understand their behavior better. 
+
+The following figure presents the scatter plot between frequency and Wald statistic. It can be observed that the Wald statistic increases when the frequency increases. This behavior is reflected in the word cloud; the result is that the bigrams appearing are the ones with higher frequency. 
+
 ![Wald Test Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypw.png)
 
+Conversely, the behavior of the Likelihood ratio does not present an increased value when the frequency is increased, as can be seen in the following figure; nonetheless, the word cloud is not as informative as one wishes to be. 
+
 ![Likelihood Ratio Scatter Plot](/NLP-Course/assets/images/scatter_plot_hypl.png)
+
