@@ -38,7 +38,17 @@ pip install text_models
 
 # Introduction
 
-A language model is a model that assigns probabilities to the tokens. That is, the aim is to estimate the probability of the next token using the history. The simplest case is $$P(w_m \mid  w_{m-1})$$ where the probability of token $$w_m$$ is only influence with the previous token $$w_{m-1}$$. However, this case can be easily extended to compute $$P(w_m \mid  w_1, w_2, \ldots, w_{m-1})$$.
+A Language Model (LM) assigns probabilities to words (tokens), sentences, or documents. The direct usage of an LM is to estimate the probability of observing a particular text, it can also be used to generate texts, and in general, it models the dynamics of a language. It is essential to mention that most of the Natural Language Understanding (NLU) tasks rely on an LM.
+
+LM deals with modeling the multivariate probability $$\mathbb P(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_\ell)$$ of observing $$\ell$$ words (tokens).  As expected, these $$\ell$$ random variables are dependent (see the definition of the complement concept, i.e., [independence(/NLP-Course/topics/03Collocations/#sec:independence-marginal).), and in order to work with them, it is needed to define the concept of conditional probability. 
+  
+# Conditional Probability
+
+
+ 
+
+
+A language model is a model that assigns probabilities to words (tokens). That is, the aim is to estimate the probability of the next token using the history. The simplest case is $$P(w_m \mid  w_{m-1})$$ where the probability of token $$w_m$$ is only influence with the previous token $$w_{m-1}$$. However, this case can be easily extended to compute $$P(w_m \mid  w_1, w_2, \ldots, w_{m-1})$$.
 
 The essential elements of an N-Gram Language Model (LM) are the number of times the tokens and n-grams appear in a corpus; with this information, it is possible to compute the probability of a particular sentence and generate sentences using the LM. One way to start creating the model is by storing variables containing these counts accessible to all the methods in a class. Let us create a class NgramLM, that stored the counting information as well as the instance used to tokenize a text, .i.e., nlp.
 
