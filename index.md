@@ -48,6 +48,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 - [spacy](https://spacy.io)
 - [$$\mu$$TC](https://microtc.readthedocs.io/en/latest/)
 - [EvoMSA](https://evomsa.readthedocs.io/en/latest/)
+- [text_models](https://text-models.readthedocs.io/en/latest/)
 
 # Bibliography
 
