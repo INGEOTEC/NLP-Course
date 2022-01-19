@@ -71,7 +71,7 @@ Traditionally, the multivariate probability distributions are fixed with respect
 
 Even when the number of variables is constant, that is, $$\ell$$ is kept constant in the model, which has as a consequence that it is not possible to represent a text longer than $$\ell$$ words. There is still another concern that comes from estimating the parameters of the multivariate distribution. $$\mathcal X$$ is Categorical distributed with $$d$$ possible outcomes. The minimum number of examples needed to observe the $$d$$ outcomes is $$d^1$$; in the case of two variables, i.e., $$\ell=2$$, it is needed at least $$d^2$$, and in general, for $$\ell$$ variables it is needed $$d^\ell$$ examples. 
 
-The consequence is that for a relatively small $$\ell$$ one needs a vast dataset to have enough information to estimate the multivariate distribution. 
+The consequence is that for a relatively small $$\ell$$, one needs a vast dataset to have enough information to estimate the multivariate distribution. We have seen this behavior in the co-occurrence matrix where most matrix elements are zero; only $$0.021$$% of the matrix is different from zero. 
 
 
 
