@@ -40,7 +40,7 @@ pip install text_models
 
 A collocation is an expression with the characteristic that its meaning cannot be inferred by simply adding the definition of each of its words, e.g., kick the bucket.
 
-As can be expected, finding a collocation is a challenging task; one needs to know the meaning of the words and then realize that the combination of these words produces an utterance that its components cannot explain. However, the approach taken here is more limited; instead of looking for a sentence of any length, we will analyze bi-grams and describe algorithms that can retrieve bi-grams that could be considered collocations. 
+As can be expected, finding a collocation is a challenging task; one needs to know the meaning of the words and then realize that the combination of these words produces an utterance that its components cannot explain. However, the approach taken here is more limited; instead of looking for a sentence of any length, we will analyze bigrams and describe algorithms that can retrieve bigrams that could be considered collocations. 
 
 The frequency of the bigrams can be represented in a co-occurrence matrix as the one shown in the following table. 
 
@@ -153,14 +153,16 @@ The maximum likelihood estimator can be obtained by maximizing the log-likelihoo
 
 $$l_{f_\mathcal X}(\mathbf p_j) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$ 
 
-subject to the constraint $$\sum_i^d \mathbf p_i=1$$. An optimization problem with a equality constraint can be solved using Langrage multipliers which requieres setting the constraint in the original formulation and making a derivative on a introduce variable $$\lambda$$. Using Langrage multiplier the system of equations that need to be solved is the following: 
+subject to the constraint $$\sum_i^d \mathbf p_i=1$$. 
+
+An optimization problem with a equality constraint can be solved using Langrage multipliers which requieres setting the constraint in the original formulation and making a derivative on a introduce variable $$\lambda$$. Using Langrage multiplier the system of equations that need to be solved is the following: 
 
 $$\begin{eqnarray}
 \frac{\partial}{\partial \mathbf p_j} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
 \frac{\partial}{\partial \lambda} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
 \end{eqnarray},$$
 
-where the term $$\lambda (\sum_i^d \mathbf p_i -1)$$
+where the term $$\lambda (\sum_i^d \mathbf p_i -1)$$ corresponds to the equality constraint.
 
 For example, one of the most known processes that involve a Categorical distribution is rolling a dice. The following is a procedure to simulate dice rolling using a Multinomial distribution. 
 
@@ -462,7 +464,7 @@ As can be seen, the most important bigrams are similar to the ones observed on t
 ## Likelihood ratios
 {: #sec:likelihood-ratios }
 
-The Wald test assumes normality on the estimation, which is a fair assumption when the number of counts is high; however, for the case of bigrams, as we have seen on the [Vocabulary Laws](/topics/02Vocabulary), the majority of words appear infrequent; thus most of the bigrams are also infrequent. 
+The Wald test assumes normality on the estimation, which is a fair assumption when the number of counts is high; however, for the case of bigrams, as we have seen on the [Vocabulary Laws](/NLP-Course/topics/02Vocabulary), the majority of words appear infrequent; thus most of the bigrams are also infrequent. 
 
 The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p_1 \neq p2 = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
 
