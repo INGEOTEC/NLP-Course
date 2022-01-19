@@ -472,7 +472,7 @@ $$\log \lambda = \log \frac{\mathcal L(\mathcal H_1)}{\mathcal L(\mathcal H_2)},
 
 where $$\mathcal L(\mathcal H_1)$$ is the likelihood of observing the counts for words $$w_1$$ and $$w_2$$ and the bigram $$(w_1, w_2)$$ that corresponds to the hypothesis $$\mathcal H_1.$$ Equivalent, $$\mathcal L(\mathcal H_2)$$ corresponds to the likelihood of observing the counts for the second hypothesis.
 
-Using $$c_1$$, $$c_2$$, and $$c_{12}$$ for the count of the words $w_1$ and $w_2$ and the bigram $(w_1, w_2)$ the likelihood of the hypothesis are $$\mathcal L(\mathcal H_1)=L(c_{12}, c_1, p)L(c_2-c_{12}, N-c_1, p)$$ and $$\mathcal L(\mathcal H_2)=L(c_{12}, c_1, p_1)L(c_2-c_{12}, N-c_1, p_2),$$ where $$L(k, n, x) = x^k(1-x)^{n-k}.$$
+Using $$c_1$$, $$c_2$$, and $$c_{12}$$ for the count of the words $$w_1$$ and $$w_2$$ and the bigram $$(w_1, w_2)$$ the likelihood of the hypothesis are $$\mathcal L(\mathcal H_1)=L(c_{12}, c_1, p)L(c_2-c_{12}, N-c_1, p)$$ and $$\mathcal L(\mathcal H_2)=L(c_{12}, c_1, p_1)L(c_2-c_{12}, N-c_1, p_2),$$ where $$L(k, n, x) = x^k(1-x)^{n-k}.$$
 
 The first step is to store the counts $$c_1$$ and $$c_2$$ on the variable `count`.
 
