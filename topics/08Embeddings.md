@@ -7,8 +7,6 @@ nav_order: 8
 # Embeddings
 {: .fs-10 .no_toc }
 
-The **objective** is to 
-
 ## Contents
 {: .no_toc .text-delta }
 

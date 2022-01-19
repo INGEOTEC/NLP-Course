@@ -7,8 +7,6 @@ nav_order: 10
 # Question Answering
 {: .fs-10 .no_toc }
 
-The **objective** is to 
-
 ## Contents
 {: .no_toc .text-delta }
 

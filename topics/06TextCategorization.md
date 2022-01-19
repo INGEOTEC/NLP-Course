@@ -7,8 +7,6 @@ nav_order: 6
 # Text Categorization
 {: .fs-10 .no_toc }
 
-The **objective** is to 
-
 ## Contents
 {: .no_toc .text-delta }
 
