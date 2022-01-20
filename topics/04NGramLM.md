@@ -84,8 +84,9 @@ The n-gram LM for $$n-2$$ is known as bigram, and its formulation is $$\mathbb P
 
 The bigram model is defined as:
 
-$$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}) = \frac{\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)}{\mathbb P(\mathcal X_{\ell - 1})},$$
+$$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}) = \frac{\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)}{\mathbb P(\mathcal X_{\ell - 1})}.$$
 
+The procedure to estimate the values of $$\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)$$ and $$\mathbb P(\mathcal X_{\ell - 1})$$ have been described [previously](/NLP-Course/topics/03Collocations/#sec:bivariate-distribution)
 
 
  

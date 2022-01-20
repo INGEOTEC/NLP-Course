@@ -180,6 +180,7 @@ p = counts / N
 ```
 
 # Bivariate distribution
+{: #sec:bivariate-distribution }
 
 We have all the elements to realize that the co-occurrence matrix is the realization of two random variables (each one can have $$d$$ outcomes); it keeps track of the number of times a bigram appear in a corpus. So far, we have not worked with two random variables; however, the good news is that the co-occurrence matrix contains all the information needed to define a bivariate distribution for this process.
 
