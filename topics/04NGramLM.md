@@ -80,9 +80,11 @@ $$\mathbb P(\mathcal X_\ell \mid \mathcal X_1, \ldots, \mathcal X_{\ell -1}) \ap
 
 # Bigrams 
 
-The n-gram LM for $$n-2$$ is known as bigram, and its formulation is $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell-1}).$$ We have been working extensively with bigrams, albeit in a different direction: finding collocations. In addition, the dataset obtained from the library `text_models` does not follow the definition of LM bigrams; an LM bigram uses as input two words (tokens) that are consecutive. Conversely, the two words in `text_models` models did not have an order and were the composition of all the pairs in each tweet. 
+The n-gram LM for $$n-2$$ is known as bigram, and its formulation is $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell-1}).$$ We have been working extensively with bigrams, albeit in a different direction: [finding collocations](/NLP-Course/topics/03Collocations.md). In addition, the dataset obtained from the library `text_models` does not follow the definition of LM bigrams; an LM bigram uses as input two words (tokens) that are consecutive. Conversely, the two words in `text_models` models did not have an order and were the composition of all the pairs in each tweet. 
 
+The bigram model is defined as:
 
+$$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}) = \frac{\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)}{\mathbb P(\mathcal X_{\ell - 1})},$$
 
 
 
