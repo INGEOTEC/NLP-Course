@@ -54,7 +54,7 @@ The definition allows defining $$\mathbb P(\mathcal X, \mathcal Y) = \mathbb P(\
 
 $$\begin{eqnarray}
 \mathbb P(\mathcal X_1, \ldots, \mathcal X_\ell) &=& \mathbb P(\mathcal X_\ell \mid \mathcal X_1, \ldots, \mathcal X_{\ell -1}) \mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1})\\ 
-\mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1}) &=& \mathbb P(\mathcal X_{\ell - 1} \mid \mathcal X_1, \ldots, \mathcal X_{\ell - 2}) \\
+\mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 1}) &=& \mathbb P(\mathcal X_{\ell - 1} \mid \mathcal X_1, \ldots, \mathcal X_{\ell - 2}) \mathbb P(\mathcal X_1, \ldots, \mathcal X_{\ell - 2}) \\
 &\vdots& \\
 \mathbb P(\mathcal X_1, \mathcal X_2) &=& \mathbb P(\mathcal X_2 \mid \mathcal X_1) \mathbb P(\mathcal X_1)
 \end{eqnarray}.$$
