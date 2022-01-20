@@ -303,7 +303,7 @@ $$
 \end{pmatrix}
 $$
 
-The last example creates a dependency between $$\mathcal X_r=2$$ and $$\mathcal X_c=1$$, that is when $$\mathcal X_c=1$$ the element $$\mathcal X_r=2$$ with a $$0.1$$ probability; this behavior can be encoded as follows. 
+The last example creates a dependency between $$\mathcal X_r=2$$ and $$\mathcal X_c=1$$; this dependency is encoded in the following code, it relies on a parameter set to $$0.1.$$
 
 ```python
 Z = [[2 if c == 1 and np.random.rand() < 0.1 else r, c] for r, c in zip(R, C)]

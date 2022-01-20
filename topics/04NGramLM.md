@@ -86,10 +86,32 @@ The bigram model is defined as:
 
 $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}) = \frac{\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)}{\mathbb P(\mathcal X_{\ell - 1})}.$$
 
-The procedure to estimate the values of $$\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)$$ and $$\mathbb P(\mathcal X_{\ell - 1})$$ have been described [previously.](/NLP-Course/topics/03Collocations/#sec:bivariate-distribution) 
+The procedure to estimate the values of $$\mathbb P(\mathcal X_{\ell -1}, \mathcal X_\ell)$$ and $$\mathbb P(\mathcal X_{\ell - 1})$$ have been described [previously.](/NLP-Course/topics/03Collocations/#sec:bivariate-distribution) The example seen was a pair of dices where a dependency between $$\mathcal X_r=2$$ and $$\mathcal X_c=1$$ is wired. This example can be modified to link it closely to a bigram LM by assuming that there is a language with only four words, represented by $$\{0, 1, 2, 3\}$$. These words are used to compose bigrams following a Categorical distribution, where the process generating this bivariate distribution is the following.
+
+```python
+d = 4
+R = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+C = np.random.multinomial(1, [1/d] * d, size=10000).argmax(axis=1)
+rand = np.random.rand
+Z = [[r, 2 if r == 1 and rand() < 0.1 else c]
+      for r, c in zip(R, C)
+     if r != c or (r == c and rand() < 0.2)]
+```
+
+It can be observed that the starting point are variables $$\mathcal X_r$$ (i.e., $$\mathcal X_{\ell - 1}$$) and $$\mathcal X_c$$ (i.e., $$\mathcal X_\ell$$) following a categorical distribution with $$\mathbf p_i = \frac{1}{d}$$ where $$d=4$$. Then the bivariate distribution is sampled on variable `Z` where 80% of the examples where $$\mathcal X_r=\mathcal X_c$$ are droped and it is induced a dependency for $$\mathcal X_r=1$$ and $$\mathcal X_c=2$$.   
+
+The estimated $$\mathcal P(\mathcal X_r, \mathcal X_c)$$ is 
+
+$$
+\begin{pmatrix}
+0.0138 & 0.0751 & 0.0748 & 0.0792 \\
+0.0727 & 0.0120 & 0.0945 & 0.0732 \\
+0.0754 & 0.0813 & 0.0175 & 0.0747 \\
+0.0854 & 0.0769 & 0.0749 & 0.0185 \\
+\end{pmatrix}.
+$$
 
 
- 
 
 <!--
 A language model is a model that assigns probabilities to words (tokens). That is, the aim is to estimate the probability of the next token using the history. The simplest case is $$P(w_m \mid  w_{m-1})$$ where the probability of token $$w_m$$ is only influence with the previous token $$w_{m-1}$$. However, this case can be easily extended to compute $$P(w_m \mid  w_1, w_2, \ldots, w_{m-1})$$.
