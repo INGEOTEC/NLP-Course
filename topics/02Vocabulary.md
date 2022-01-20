@@ -405,7 +405,7 @@ words = [get_words(d) for d in dates]
 ww = [[w[index] for w in words] for index in range(len(COUNTRIES))]
 ```
 
-The information stored in variable `ww` contains, for each country, the information needed to create $$n$$ and $$\mid v \mid$$. Function `voc_tokens` computes $$n$$ and $$\mid v$$ for the dataset given, i.e., an element of `ww`. It uses the variable `cnt` as an accumulator; it is observed that the pattern of line 3 is used every time `cnt` is updated. 
+The information stored in variable `ww` contains, for each country, the information needed to create $$n$$ and $$\mid v \mid$$. Function `voc_tokens` computes $$n$$ and $$\mid v \mid$$ for the dataset given, i.e., an element of `ww`. It uses the variable `cnt` as an accumulator; it is observed that the pattern of line 3 is used every time `cnt` is updated. 
 
 ```python
 def voc_tokens(data):
@@ -425,7 +425,7 @@ For example, `voc_tokens` can be used to create $$n$$ and $$\mid v \mid$$ of Mex
 n_mx, v_mx = voc_tokens(ww[0])
 ```
 
-Having described how to obtain $$n$$ and $$\mid v$$ for each country, it is time to use the procedure to estimate the country's $$k$$ and $$\beta$$ coefficients. The following table shows the values of these coefficients for each country; it also includes the maximum number of words ($$\max n$$) in the last column.  
+Having described how to obtain $$n$$ and $$\mid v \mid$$ for each country, it is time to use the procedure to estimate the country's $$k$$ and $$\beta$$ coefficients. The following table shows the values of these coefficients for each country; it also includes the maximum number of words ($$\max n$$) in the last column.  
 
 | Country | $$k$$ | $$\beta$$ | $$\max n$$ |
 |---------|-------|------------|-------|
