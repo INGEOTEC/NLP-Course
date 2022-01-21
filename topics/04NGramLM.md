@@ -144,7 +144,7 @@ w1 = cat(M_r)
 ```
 
 ```python
-l = 10
+l = 20
 text = [cat(M_r)]
 while len(text) < l:
     next = cat(p_l[text[-1]])

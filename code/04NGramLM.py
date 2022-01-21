@@ -42,7 +42,7 @@ cat = lambda x: np.random.multinomial(1, x, 1).argmax()
 id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
 w1 = cat(M_r)
 
-l = 10
+l = 20
 text = [cat(M_r)]
 while len(text) < l:
     next = cat(p_l[text[-1]])
