@@ -111,6 +111,31 @@ $$
 \end{pmatrix}.
 $$
 
+The marginal distribution $$\mathbb P(\mathcal X_r) = (0.2428, 0.2523, 0.2490, 0.2558)$$ which can be obtained as follows:
+
+```python
+M_r = W.sum(axis=1)
+```
+
+where `W` contains the estimated bivariate distribution. It is not necessary to obtain the marginal $$\mathbb P(\mathcal X_c) = (0.2473, 0.2453, 0.2617, 0.2456)$$; however, it is observed that the dependency induce impacts this marginal and not the former.
+
+The conditional $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ can be estimated as  
+
+```python
+p_l = (W / np.atleast_2d(M_r).T)
+```
+
+and the result is shown in the following matrix
+
+$$
+\begin{pmatrix}
+0.0567 & 0.3091 & 0.3081 & 0.3261 \\
+0.2881 & 0.0476 & 0.3743 & 0.2900 \\
+0.3030 & 0.3266 & 0.0704 & 0.3000 \\
+0.3340 & 0.3007 & 0.2929 & 0.0724 \\
+\end{pmatrix}.
+$$
+
 
 
 <!--
