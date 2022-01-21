@@ -104,20 +104,20 @@ The estimated $$\mathcal P(\mathcal X_r, \mathcal X_c)$$ is
 
 $$
 \begin{pmatrix}
-0.0138 & 0.0751 & 0.0748 & 0.0792 \\
-0.0727 & 0.0120 & 0.0945 & 0.0732 \\
-0.0754 & 0.0813 & 0.0175 & 0.0747 \\
-0.0854 & 0.0769 & 0.0749 & 0.0185 \\
+0.0149 & 0.0771 & 0.0791 & 0.0782 \\
+0.0663 & 0.0131 & 0.0939 & 0.0730 \\
+0.0810 & 0.0799 & 0.0146 & 0.0796 \\
+0.0797 & 0.0742 & 0.0780 & 0.0172 \\
 \end{pmatrix}.
 $$
 
-The marginal distribution $$\mathbb P(\mathcal X_r) = (0.2428, 0.2523, 0.2490, 0.2558)$$ which can be obtained as follows:
+The marginal distribution $$\mathbb P(\mathcal X_r) = (0.249374, 0.246370, 0.255133, 0.249124)$$ which can be obtained as follows:
 
 ```python
 M_r = W.sum(axis=1)
 ```
 
-where `W` contains the estimated bivariate distribution. It is not necessary to obtain the marginal $$\mathbb P(\mathcal X_c) = (0.2473, 0.2453, 0.2617, 0.2456)$$; however, it is observed that the dependency induce impacts this marginal and not the former.
+where `W` contains the estimated bivariate distribution. It is not necessary to obtain the marginal $$\mathbb P(\mathcal X_c) = (0.241988, 0.244367, 0.265648, 0.247997)$$; however, it is observed that the dependency induce impacts this marginal and not the former.
 
 The conditional $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ can be estimated as  
 
@@ -129,10 +129,10 @@ and the result is shown in the following matrix
 
 $$
 \begin{pmatrix}
-0.0567 & 0.3091 & 0.3081 & 0.3261 \\
-0.2881 & 0.0476 & 0.3743 & 0.2900 \\
-0.3030 & 0.3266 & 0.0704 & 0.3000 \\
-0.3340 & 0.3007 & 0.2929 & 0.0724 \\
+0.0597 & 0.3092 & 0.3173 & 0.3138 \\
+0.2693 & 0.0534 & 0.3811 & 0.2962 \\
+0.3175 & 0.3131 & 0.0574 & 0.3121 \\
+0.3201 & 0.2980 & 0.3131 & 0.0688 \\
 \end{pmatrix}.
 $$
 
@@ -152,11 +152,38 @@ while len(text) < l:
 text = " ".join(map(lambda x: id2word[x], text))
 ```
 
-|Text                                   |
-|---------------------------------------|
-|c d c a a d a b d b d c a b b a d c d a|
-|a d a c b a c c b a b a b a d a c b b a|
-|d c d b d a c a c c b d a b c b d b d a|
+|Text                                             |
+|-------------------------------------------------|
+|d a d c b d c d c d a b a b c d a d b d a d b c b|
+|c a b a c a c d b d d a d c d b d b d b a b a b c|
+|b a c b a b a c b d a d c b c d b c d c a c b d c|
+
+
+```python
+w2id = {v: k for k, v in id2word.items()}
+lst = [w2id[x] for x in text.split()]
+Z = [[a, b] for a, b in zip(lst, lst[1:])]
+
+d = len(w2id)
+W = np.zeros((d, d))
+for r, c in Z:
+    W[r, c] += 1
+W = W / W.sum()
+```
+
+$$
+\begin{pmatrix}
+0.0150 & 0.0750 & 0.0790 & 0.0781 \\
+0.0655 & 0.0113 & 0.0930 & 0.0715 \\
+0.0869 & 0.0808 & 0.0156 & 0.0810 \\
+0.0797 & 0.0743 & 0.0767 & 0.0165 \\
+\end{pmatrix}.
+$$
+
+$$\mathbb P('a d b c') =  0.008885$$
+$$\mathbb P('a d b d') =  0.006907$$
+
+
 
 
 

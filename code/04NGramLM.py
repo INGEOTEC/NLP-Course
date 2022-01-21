@@ -31,6 +31,8 @@ for w in W:
     print(r"{} \\".format(_))
 
 M_r = W.sum(axis=1)
+_ = map(lambda x: "{:4f}".format(x), W.sum(axis=0))
+print(", ".join(_))
 p_l = (W / np.atleast_2d(M_r).T)
 
 for w in p_l:
@@ -42,10 +44,33 @@ cat = lambda x: np.random.multinomial(1, x, 1).argmax()
 id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
 w1 = cat(M_r)
 
-l = 20
 text = [cat(M_r)]
+l = 25
+l = 10000
 while len(text) < l:
     next = cat(p_l[text[-1]])
     text.append(next)
 text = " ".join(map(lambda x: id2word[x], text))
 text
+
+w2id = {v: k for k, v in id2word.items()}
+lst = [w2id[x] for x in text.split()]
+Z = [[a, b] for a, b in zip(lst, lst[1:])]
+
+d = len(w2id)
+W = np.zeros((d, d))
+for r, c in Z:
+    W[r, c] += 1
+W = W / W.sum()
+
+for w in W:
+    _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
+    print(r"{} \\".format(_))
+
+
+txt = 'a d b d'
+lst = [w2id[x] for x in txt.split()]
+p = M_r[lst[0]]
+for a, b in zip(lst, lst[1:]):
+    p *= p_l[a, b]
+print("{:4f}".format(p))
