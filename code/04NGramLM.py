@@ -36,3 +36,16 @@ p_l = (W / np.atleast_2d(M_r).T)
 for w in p_l:
     _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
     print(r"{} \\".format(_))
+
+
+cat = lambda x: np.random.multinomial(1, x, 1).argmax()
+id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
+w1 = cat(M_r)
+
+l = 10
+text = [cat(M_r)]
+while len(text) < l:
+    next = cat(p_l[text[-1]])
+    text.append(next)
+text = " ".join(map(lambda x: id2word[x], text))
+text
