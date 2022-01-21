@@ -68,9 +68,8 @@ for w in W:
     print(r"{} \\".format(_))
 
 
-txt = 'a d b d'
-lst = [w2id[x] for x in txt.split()]
+text = 'a d b c'
+lst = [w2id[x] for x in text.split()]
 p = M_r[lst[0]]
 for a, b in zip(lst, lst[1:]):
     p *= p_l[a, b]
-print("{:4f}".format(p))
