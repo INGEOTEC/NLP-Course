@@ -195,7 +195,7 @@ $$\sum_{x,y} \mathbb P(\mathcal X_{\ell-1}=x, \mathcal X_\ell=y)=1$$
 
 $$
 \begin{eqnarray}
-\sum_{x,y} \mathbb P(\mathcal X_{\ell-1}=x, \mathcal X_\ell=y) &=& \sum_{x, y}\mathbb P(\mathcal X_\ell=y \mid \mathcal X_{\ell -1}=x)
+\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) &=& \sum_{x, y, z}\mathbb P(z)
 \end{eqnarray}
 $$
 
