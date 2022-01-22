@@ -191,6 +191,11 @@ for a, b in zip(lst, lst[1:]):
     p *= p_l[a, b]
 ```
 
+$$
+\begin{eqnarray}
+\sum_{x,y} \mathbb P(\mathcal X_{\ell-1}=x, \mathcal X_\ell=y) &=& \sum_{x, y}\mathbb P(\mathcal X_\ell=y \mid \mathcal X_{\ell -1}=x)
+\end{eqnarray}
+$$
 
 
 
