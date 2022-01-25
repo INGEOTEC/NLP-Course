@@ -130,4 +130,4 @@ dmypy.json
 _site/
 .vscode/
 Gemfile.lock
-assets/.DS_Store
+*.DS_Store
