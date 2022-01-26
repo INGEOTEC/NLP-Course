@@ -101,6 +101,7 @@ Z = [[r, 2 if r == 1 and rand() < 0.1 else c]
 It can be observed that the starting point are variables $$\mathcal X_r$$ (i.e., $$\mathcal X_{\ell - 1}$$) and $$\mathcal X_c$$ (i.e., $$\mathcal X_\ell$$) following a categorical distribution with $$\mathbf p_i = \frac{1}{d}$$ where $$d=4$$. Then the bivariate distribution is sampled on variable `Z` where 80% of the examples where $$\mathcal X_r=\mathcal X_c$$ are droped and it is induced a dependency for $$\mathcal X_r=1$$ and $$\mathcal X_c=2$$.   
 
 The estimated $$\mathcal P(\mathcal X_r, \mathcal X_c)$$ is 
+{: #bivarite-distribution-bigrams }
 
 $$
 \begin{pmatrix}
@@ -178,19 +179,27 @@ The previous code (including the marginal distribution) is executed three times,
 
 ## Using a sequence to estimate $$\mathbb P(\mathcal X_r, \mathcal X_c)$$
 
+NLP aims to find and estimate the model that can be used to generate text; therefore, it is unrealistic to have $$\mathbb P(\mathcal X_{1}, \mathcal X_{2}, \ldots, \mathcal X_\ell)$$; however, we can estimate it using examples. Considering that we have a method to generate text, we can generate a long sequence and estimate the bivariate distribution parameters from it.
 
+The first step is to have a mapping from words to numbers. The second step is to retrieve the words, and the third step is to create the bigrams. These can be observed in the following code.  
 
 ```python
 w2id = {v: k for k, v in id2word.items()}
 lst = [w2id[x] for x in text.split()]
 Z = [[a, b] for a, b in zip(lst, lst[1:])]
+```
 
+The rest of the code we have seen previously; however, it is next to facilitate the reading. 
+
+```python
 d = len(w2id)
 W = np.zeros((d, d))
 for r, c in Z:
     W[r, c] += 1
 W = W / W.sum()
 ```
+
+The bivariate distribution estimated from the sequence is presented in the following matrix. It can be observed that the values of this matrix are similar to the [matrix](/NLP-Course/topics/04NGramLM/#bivarite-distribution-bigrams) used to generate the sequence.
 
 $$
 \begin{pmatrix}
