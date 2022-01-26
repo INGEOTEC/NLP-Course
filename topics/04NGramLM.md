@@ -136,15 +136,30 @@ $$
 \end{pmatrix}.
 $$
 
+## Generating sequences
+
+The conditional probability $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ (variable `p_l`) and the marginal probability $$\mathbb P(\mathcal X_r)$$ (variable `M_r`) can be used to generate a text. The example would be more realistic if we used letters instead of indices; this can be done with a mapping between the index and string, as can be seen below.
+
+```python
+id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
+```
+
+It is helpful to define a function (`cat`) that behaves like a Categorical distribution; this can be done using a Multinomial distribution using the parameters shown in the following code.
 
 ```python
 cat = lambda x: np.random.multinomial(1, x, 1).argmax()
-id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
+```
+
+The requirement to use the conditional probability is that a starting word is needed; the conditional probability $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ once the value is known of $$\mathcal X_r$$. We can assume that the first word can be simulated using the marginal $$\mathbb P(\mathcal X_r)$$ as can be seen as follows.
+
+```python
 w1 = cat(M_r)
 ```
 
+Once the starting word is obtained, it is needed to iterate as many times as one wants using the conditional probability to generate the next token; this can be observed in the following code.  
+
 ```python
-l = 20
+l = 25
 text = [cat(M_r)]
 while len(text) < l:
     next = cat(p_l[text[-1]])
@@ -152,11 +167,17 @@ while len(text) < l:
 text = " ".join(map(lambda x: id2word[x], text))
 ```
 
+The previous code (including the marginal distribution) is executed three times, and the result can be observed in the following table. 
+
 |Text                                             |
 |-------------------------------------------------|
 |d a d c b d c d c d a b a b c d a d b d a d b c b|
 |c a b a c a c d b d d a d c d b d b d b a b a b c|
 |b a c b a b a c b d a d c b c d b c d c a c b d c|
+
+
+## Using a sequence to estimate $$\mathbb P(\mathcal X_r, \mathcal X_c)$$
+
 
 
 ```python
@@ -191,13 +212,9 @@ for a, b in zip(lst, lst[1:]):
     p *= p_l[a, b]
 ```
 
-$$\sum_{x,y} \mathbb P(\mathcal X_{\ell-1}=x, \mathcal X_\ell=y)=1$$
 
-$$
-\begin{eqnarray}
-\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) &=& \sum_{x, y, z}\mathbb P(z)
-\end{eqnarray}
-$$
+
+$$\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) = 1$$
 
 
 

@@ -39,6 +39,7 @@ for w in p_l:
     _ = " & ".join(map(lambda x: "{:0.4f}".format(x), w))
     print(r"{} \\".format(_))
 
+## Generating sequences
 
 cat = lambda x: np.random.multinomial(1, x, 1).argmax()
 id2word = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
@@ -46,12 +47,12 @@ w1 = cat(M_r)
 
 text = [cat(M_r)]
 l = 25
-l = 10000
 while len(text) < l:
     next = cat(p_l[text[-1]])
     text.append(next)
 text = " ".join(map(lambda x: id2word[x], text))
 text
+
 
 w2id = {v: k for k, v in id2word.items()}
 lst = [w2id[x] for x in text.split()]
