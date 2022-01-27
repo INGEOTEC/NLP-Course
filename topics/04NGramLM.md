@@ -255,7 +255,7 @@ The accumulated probability of all the possibilities for a three-word sentence w
 $$
 \begin{eqnarray}
 &&\sum_{x, y, z} \mathbb P(\mathcal X_1=\epsilon_s, \mathcal X_2=x, \mathcal X_3=y, \mathcal X_4=z, \mathcal X_5=\epsilon_e) \approx \\
-&&\mathbb P(\mathcal X_1=\epsilon_s) \sum_{x, y, z} \mathbb P(\mathcal X_5=\epsilon_e \mid \mathcal X_4=z) P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon)  =\\
+&&\mathbb P(\mathcal X_1=\epsilon_s) \sum_{x, y, z} \mathbb P(\mathcal X_5=\epsilon_e \mid \mathcal X_4=z) P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon)
 \end{eqnarray}
 $$
 
