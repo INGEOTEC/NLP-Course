@@ -210,8 +210,7 @@ $$
 \end{pmatrix}.
 $$
 
-$$\mathbb P(\text{"a d b c"}) = 0.008885$$
-$$\mathbb P(\text{"a d b d"}) = 0.006907$$
+We have all the elements to compute the likelihood of a particular sequence, for example the probability of observing the sequence *a d b c* is $$\mathbb P(\text{"a d b c"}) = 0.008885$$; this is a simplified notation the complete notation would be $$\mathbb P(\mathcal X_1=a, \mathcal X_2=d, \mathcal X_3=b, \mathcal X_4=c).$$ The following code uses the probability chain rule to estimate the likelihood.
 
 ```python
 text = 'a d b c'
@@ -221,9 +220,22 @@ for a, b in zip(lst, lst[1:]):
     p *= p_l[a, b]
 ```
 
+The previous example is complemented with a sequence that, by definition, it is known that has a lower probability, the sequence differs only in the last word, and its probability is $$\mathbb P(\text{"a d b d"}) = 0.006907.$$
 
+The procedure described presents the process of modeling a language from the beginning; it starts by assuming that the language is generated from a particular algorithm, then the algorithm is used to estimate a bivariate distribution, which is used to produce a sequence. The sequence is an analogy of a text written in natural language, then the sequence is used to estimate a bivariate distribution, and we can compare both distributions to illustrate that even in a simple process, it is unfeasible to obtain two matrices with the same values. 
 
-$$\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) = 1$$
+However, some components of the previous formulation are unrealistic for modeling a language. The first one is the addition of the possible sequences of a particular length sum to one, e.g., $$\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) = 1$$. The implication is that there is a probability distribution for every length, which is not a desirable feature for a language model because the length of a sentence is variable. 
+
+The second one is that the first word cannot be estimated using the marginal $$\mathbb P(\mathcal X_r)$$; this distribution does not consider that some words are more frequently used to start a sentence. This effect can be incorporated in the model with a starting symbol, e.g., the sequence *a b d* would be *$$\epsilon$$ a b d*. 
+
+$$
+\begin{eqnarray}
+    &&\sum_{x, y, z} \mathbb P(\mathcal X_1=\epsilon, \mathcal X_2=x, \mathcal X_3=y, \mathcal X_4=z) = \\
+    &&\sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=z) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) \mathbb P(\mathcal X_1=\epsilon) =\\
+    &&\mathbb P(\mathcal X_1=\epsilon) \sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=z) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) =\\    
+\end{eqnarray}
+$$
+
 
 
 
