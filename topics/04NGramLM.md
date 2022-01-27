@@ -137,7 +137,7 @@ $$
 \end{pmatrix}.
 $$
 
-## Generating sequences
+## Generating Sequences
 
 The conditional probability $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ (variable `p_l`) and the marginal probability $$\mathbb P(\mathcal X_r)$$ (variable `M_r`) can be used to generate a text. The example would be more realistic if we used letters instead of indices; this can be done with a mapping between the index and string, as can be seen below.
 
@@ -177,7 +177,7 @@ The previous code (including the marginal distribution) is executed three times,
 |b a c b a b a c b d a d c b c d b c d c a c b d c|
 
 
-## Using a sequence to estimate $$\mathbb P(\mathcal X_r, \mathcal X_c)$$
+## Using a Sequence to Estimate $$\mathbb P(\mathcal X_r, \mathcal X_c)$$
 
 NLP aims to find and estimate the model that can be used to generate text; therefore, it is unrealistic to have $$\mathbb P(\mathcal X_{1}, \mathcal X_{2}, \ldots, \mathcal X_\ell)$$; however, we can estimate it using examples. Considering that we have a method to generate text, we can generate a long sequence and estimate the bivariate distribution parameters from it.
 
@@ -210,6 +210,8 @@ $$
 \end{pmatrix}.
 $$
 
+## Likelihood of a Sequence
+
 We have all the elements to compute the likelihood of a particular sequence, for example the probability of observing the sequence *a d b c* is $$\mathbb P(\text{"a d b c"}) = 0.008885$$; this is a simplified notation the complete notation would be $$\mathbb P(\mathcal X_1=a, \mathcal X_2=d, \mathcal X_3=b, \mathcal X_4=c).$$ The following code uses the probability chain rule to estimate the likelihood.
 
 ```python
@@ -224,19 +226,26 @@ The previous example is complemented with a sequence that, by definition, it is 
 
 The procedure described presents the process of modeling a language from the beginning; it starts by assuming that the language is generated from a particular algorithm, then the algorithm is used to estimate a bivariate distribution, which is used to produce a sequence. The sequence is an analogy of a text written in natural language, then the sequence is used to estimate a bivariate distribution, and we can compare both distributions to illustrate that even in a simple process, it is unfeasible to obtain two matrices with the same values. 
 
+## Limitations
+
 However, some components of the previous formulation are unrealistic for modeling a language. The first one is the addition of the possible sequences of a particular length sum to one, e.g., $$\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) = 1$$. The implication is that there is a probability distribution for every length, which is not a desirable feature for a language model because the length of a sentence is variable. 
 
 The second one is that the first word cannot be estimated using the marginal $$\mathbb P(\mathcal X_r)$$; this distribution does not consider that some words are more frequently used to start a sentence. This effect can be incorporated in the model with a starting symbol, e.g., the sequence *a b d* would be *$$\epsilon$$ a b d*. 
 
+The sum of the probabilities of all possible sentences with three words and a starting symbol can be seen in the following equation. 
+
 $$
 \begin{eqnarray}
-    &&\sum_{x, y, z} \mathbb P(\mathcal X_1=\epsilon, \mathcal X_2=x, \mathcal X_3=y, \mathcal X_4=z) = \\
-    &&\sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=z) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) \mathbb P(\mathcal X_1=\epsilon) =\\
-    &&\mathbb P(\mathcal X_1=\epsilon) \sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=z) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) =\\    
+&&\sum_{x, y, z} \mathbb P(\mathcal X_1=\epsilon, \mathcal X_2=x, \mathcal X_3=y, \mathcal X_4=z) \approx \\
+&&\sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) \mathbb P(\mathcal X_1=\epsilon) =\\
+&&\mathbb P(\mathcal X_1=\epsilon) \sum_{x, y, z} \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) =\\
+&&\mathbb P(\mathcal X_1=\epsilon) \sum_{x, y}  \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x) \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon)\sum_z \mathbb P(\mathcal X_4=z \mid \mathcal X_3=y) =\\
+&&\mathbb P(\mathcal X_1=\epsilon) \sum_{x}  \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) \sum_y  \mathbb P(\mathcal X_3=y \mid \mathcal X_2=x)=\\
+&&\mathbb P(\mathcal X_1=\epsilon) \sum_{x}  \mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon) = \mathbb P(\mathcal X_1=\epsilon) = 1
 \end{eqnarray}
 $$
 
-
+It can be observed that the inclusion of a starting symbol does not solve the problem that there is a probability distribution for every length.
 
 
 <!--
