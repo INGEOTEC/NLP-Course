@@ -226,7 +226,7 @@ The previous example is complemented with a sequence that, by definition, it is 
 
 The procedure described presents the process of modeling a language from the beginning; it starts by assuming that the language is generated from a particular algorithm, then the algorithm is used to estimate a bivariate distribution, which is used to produce a sequence. The sequence is an analogy of a text written in natural language, then the sequence is used to estimate a bivariate distribution, and we can compare both distributions to illustrate that even in a simple process, it is unfeasible to obtain two matrices with the same values. 
 
-## Limitations
+## Overcoming Assumptions
 
 However, some components of the previous formulation are unrealistic for modeling a language. The first one is the addition of the possible sequences of a particular length sum to one, e.g., $$\sum_{x,y,z} \mathbb P(\mathcal X_{\ell-2}=x, \mathcal X_{\ell-1}=y, \mathcal X_\ell=z) = 1$$. The implication is that there is a probability distribution for every length, which is not a desirable feature for a language model because the length of a sentence is variable. 
 
@@ -247,6 +247,7 @@ $$
 
 It can be observed that the inclusion of a starting symbol does not solve the problem that there is a probability distribution for every length.
 
+The third problem detected is that the length of the sentence is a parameter controlled by the person generating the sequence; however, the length of the sentence depends on the content of the sentence, so it is also a random variable. 
 
 <!--
 A language model is a model that assigns probabilities to words (tokens). That is, the aim is to estimate the probability of the next token using the history. The simplest case is $$P(w_m \mid  w_{m-1})$$ where the probability of token $$w_m$$ is only influence with the previous token $$w_{m-1}$$. However, this case can be easily extended to compute $$P(w_m \mid  w_1, w_2, \ldots, w_{m-1})$$.
