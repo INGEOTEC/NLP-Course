@@ -275,6 +275,71 @@ As can be seen, the overall probability does not sum to $$1$$; it depends on the
 
 # Bigram LM from Tweets
 
+The simplest model we can create is a bigram LM; the starting point is to have a corpus. -The corpus used in this example is a set of 50,000 tweets written in English.- Once the corpus is obtained, we can use it to estimate the bivariate distribution $$\mathbb P(\mathcal X_{\ell-1}, \mathcal X_\ell)$$ and use the conditional probability to obtain $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}).$$
+
+There are different paths to compute $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1})$$ one of them is using the raw frequency of the words as follows:
+
+$$\begin{eqnarray}
+\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) &=& \frac{\mathbb P(\mathcal X_{\ell-1}, \mathcal X_\ell)}{ \mathbb P(\mathcal X_{\ell-1})}\\
+&=& \frac{\mathbb P(\mathcal X_{\ell-1}, \mathcal X_\ell)}{\sum_i \mathbb P(\mathcal X_{\ell-1}, \mathcal X_i)}\\
+&=& \frac{\frac{C(\mathcal X_{\ell-1}, \mathcal X_\ell)}{N}}{\frac{\sum_i C(\mathcal X_{\ell-1}, \mathcal X_i)}{N}} \\
+&=& \frac{C(\mathcal X_{\ell-1}, \mathcal X_\ell)}{\sum_i C(\mathcal X_{\ell-1}, \mathcal X_i)}\\
+\end{eqnarray},$$
+
+$$C$$ is the co-occurrence matrix. 
+
+The co-occurrence matrix (variable `bigrams`) is created with the following code; as can be observed for every tweet, it is included a starting and ending symbol. 
+
+```python
+fname = join('dataset', 'tweets-2022-01-17.json.gz')
+bigrams = Counter()
+for text in tweet_iterator(fname):
+    text = text['text']
+    words = text.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
+    _ = [(a, b) for a, b in zip(words, words[1:])]
+    bigrams.update(_)
+```
+
+The term $$\sum_i C(\mathcal X_{\ell-1}, \mathcal X_i)$$ is the frequency of word $$\mathcal X_{\ell-1}$$, i.e., $$C(\mathcal X_{\ell-1}) = \sum_i C(\mathcal X_{\ell-1}, \mathcal X_i)$$ which corresponds to variable `prev` in the following code
+
+```python
+prev = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev[a] += v
+    except KeyError:
+        prev[a] = v
+```
+
+We can store $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1})$$ on a nested dictionary which is the variable `P` in the following code.
+
+```python
+P = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P[a]
+    next[b] = v / prev[a]
+```
+
+The conditional probability $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1})$$ can be used to illustrate which is the most probable word at the starting of a sentence, as seen in the next figure. 
+
+![Word cloud probability given starting symbol](/NLP-Course/assets/images/wordcloud_prob_start.png)
+<details markdown="block">
+  <summary>
+    Word cloud code
+  </summary>
+
+```python
+wc = WC().generate_from_frequencies(P['<s>'])
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+```
+</details>
+
+
+
 # Performance
 
 # Activities
