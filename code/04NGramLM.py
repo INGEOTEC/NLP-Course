@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pylab as plt
 from microtc.utils import tweet_iterator
 from os.path import join
+from collections import Counter
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -81,4 +82,11 @@ for a, b in zip(lst, lst[1:]):
 # Bigram LM from Tweets    
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
-texts = list(tweet_iterator('datasets'))
+texts = list(tweet_iterator(fname))
+bigrams = Counter()
+for text in texts:
+    text = text['text']
+    words = text.split()
+    _ = [(a, b) for a, b in zip(words, words[1:])]
+    bigrams.update(_)
+
