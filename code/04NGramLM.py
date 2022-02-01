@@ -1,5 +1,7 @@
 import numpy as np
 from matplotlib import pylab as plt
+from microtc.utils import tweet_iterator
+from os.path import join
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -74,3 +76,9 @@ lst = [w2id[x] for x in text.split()]
 p = M_r[lst[0]]
 for a, b in zip(lst, lst[1:]):
     p *= p_l[a, b]
+
+
+# Bigram LM from Tweets    
+
+fname = join('dataset', 'tweets-2022-01-17.json.gz')
+texts = list(tweet_iterator('datasets'))
