@@ -2,7 +2,8 @@ import numpy as np
 from matplotlib import pylab as plt
 from microtc.utils import tweet_iterator
 from os.path import join
-from collections import Counter
+from collections import Counter, defaultdict
+from wordcloud import WordCloud as WC
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -82,11 +83,37 @@ for a, b in zip(lst, lst[1:]):
 # Bigram LM from Tweets    
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
-texts = list(tweet_iterator(fname))
 bigrams = Counter()
-for text in texts:
+for text in tweet_iterator(fname):
     text = text['text']
     words = text.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
     _ = [(a, b) for a, b in zip(words, words[1:])]
     bigrams.update(_)
 
+words = set([a for a, b in bigrams])
+words2 = set([b for a, b in bigrams])
+
+prev = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev[a] += v
+    except KeyError:
+        prev[a] = v
+
+wc = WC().generate_from_frequencies(prev)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+
+P = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P[a]
+    next[b] = v / prev[a]
+
+wc = WC().generate_from_frequencies(P['<s>'])
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('wordcloud_prob_start.png', dpi=300)
