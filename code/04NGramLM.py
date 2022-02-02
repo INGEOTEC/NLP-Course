@@ -138,6 +138,7 @@ while sentence[-1] != '</s>':
     pos = var.most_common(20)
     index = np.random.randint(len(pos))
     sentence.append(pos[index][0])
+len(sentence)
 
 sentence = ['<s>']
 for _ in range(20):

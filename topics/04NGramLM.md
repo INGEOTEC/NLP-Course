@@ -339,7 +339,6 @@ plt.tight_layout()
 </details>
 
 ```python
-
 def joint_prob(sentence):
     words = sentence.split()
     words.insert(0, '<s>')
@@ -350,6 +349,7 @@ def joint_prob(sentence):
     return tot
 
 joint_prob('I like to play football')
+8.491041580185946e-12
 ```
 
 
@@ -361,6 +361,7 @@ while sentence[-1] != '</s>':
     index = np.random.randint(len(pos))
     sentence.append(pos[index][0])
 ```
+*$$\epsilon_s$$ What happened before the one idiot or a few things to me up $$\epsilon_e$$*
 
 # Performance
 
