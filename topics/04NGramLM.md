@@ -138,6 +138,7 @@ $$
 $$
 
 ## Generating Sequences
+{: #sec:generating-sequences }
 
 The conditional probability $$\mathbb P(\mathcal X_c \mid \mathcal X_r)$$ (variable `p_l`) and the marginal probability $$\mathbb P(\mathcal X_r)$$ (variable `M_r`) can be used to generate a text. The example would be more realistic if we used letters instead of indices; this can be done with a mapping between the index and string, as can be seen below.
 
@@ -338,6 +339,21 @@ plt.tight_layout()
 ```
 </details>
 
+[Generating Sequences Section](#sec:generating-sequences) presented an algorithm to generate a sentence given a $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1})$$; that algorithm can be extended to generate a sentence by considering the starting and ending symbols as can be seen in the following code.
+
+```python
+sentence = ['<s>']
+while sentence[-1] != '</s>':
+    var = P[sentence[-1]]
+    pos = var.most_common(20)
+    index = np.random.randint(len(pos))
+    sentence.append(pos[index][0])
+```
+
+The following is an example of a sentence generated with the previous procedure: *$$\epsilon_s$$ What happened before the one idiot or a few things to me up $$\epsilon_e$$*. 
+
+As we described previously, the probability chained rule can be used to estimate the probability of a sentence. For example, the following code defines a function to compute the joint probability, i.e., the probability of a sentence; the difference between the following implementation and the previous one is the inclusion of the starting and ending symbol. 
+
 ```python
 def joint_prob(sentence):
     words = sentence.split()
@@ -352,17 +368,15 @@ joint_prob('I like to play football')
 8.491041580185946e-12
 ```
 
-
-```python
-sentence = ['<s>']
-while sentence[-1] != '</s>':
-    var = P[sentence[-1]]
-    pos = var.most_common(20)
-    index = np.random.randint(len(pos))
-    sentence.append(pos[index][0])
-```
-*$$\epsilon_s$$ What happened before the one idiot or a few things to me up $$\epsilon_e$$*
-
 # Performance
+
+This section has been devoted to describing LM and a particular procedure to develop it. The approach has a solid mathematical foundation; however, at the same time, in order to make it feasible, some assumptions have been made. Consequently, one wonders whether those decisions impact the quality of the LM and if they have to what degree. The best way to measure the impact of those decisions is to test the LM on the final application where it is being used; that is used, the metrics developed to test the application, and indirectly measure the impact that has a complex LM in that scenario. 
+
+It is not always possible to embed different LM in the final application and test which one is better; another approach is to use a particular performance metric to test the developed LM. The direct approach would be to compute the joint probability in another set and use that measure to compare different LM. However, in practice, the joint probability is not used; instead, it is used **Perplexity** defined as:
+
+$$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1, \ldots, \mathcal X_N)}}.$$
+
+The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1=\epsilon_s) \prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}} = \sqrt[N]{\frac{1}{\prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}}.$$ For a moment, let us assume that $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) = c$$ is constant for all the bigrams. Under this assumption, the Perprexity is $$\sqrt[N]{\frac{1}{c^{N-1}}}$$; however, if $$N$$ does not consider the starting symbol which has a probability of $$1$$, the Perplexity would be $$\sqrt[N-1]{\frac{1}{c^{N-1}}}=c$$ which can be seen as the branching factor of the language. 
+
 
 # Activities
