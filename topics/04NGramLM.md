@@ -338,7 +338,29 @@ plt.tight_layout()
 ```
 </details>
 
+```python
 
+def joint_prob(sentence):
+    words = sentence.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
+    tot = 1
+    for a, b in zip(words, words[1:]):
+        tot *= P[a][b]
+    return tot
+
+joint_prob('I like to play football')
+```
+
+
+```python
+sentence = ['<s>']
+while sentence[-1] != '</s>':
+    var = P[sentence[-1]]
+    pos = var.most_common(20)
+    index = np.random.randint(len(pos))
+    sentence.append(pos[index][0])
+```
 
 # Performance
 

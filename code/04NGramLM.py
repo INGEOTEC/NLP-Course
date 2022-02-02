@@ -117,3 +117,30 @@ plt.imshow(wc)
 plt.axis('off')
 plt.tight_layout()
 plt.savefig('wordcloud_prob_start.png', dpi=300)
+
+
+def joint_prob(sentence):
+    words = sentence.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
+    tot = 1
+    for a, b in zip(words, words[1:]):
+        tot *= P[a][b]
+    return tot
+
+joint_prob('I like to play football')
+joint_prob('I like to dance')
+
+
+sentence = ['<s>']
+while sentence[-1] != '</s>':
+    var = P[sentence[-1]]
+    pos = var.most_common(20)
+    index = np.random.randint(len(pos))
+    sentence.append(pos[index][0])
+
+sentence = ['<s>']
+for _ in range(20):
+    var = P[sentence[-1]]
+    pos = var.most_common(1)
+    sentence.append(pos[0][0])
