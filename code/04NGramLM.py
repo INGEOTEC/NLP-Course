@@ -4,6 +4,7 @@ from microtc.utils import tweet_iterator
 from os.path import join
 from collections import Counter, defaultdict
 from wordcloud import WordCloud as WC
+from EvoMSA.utils import bootstrap_confidence_interval
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -145,3 +146,25 @@ for _ in range(20):
     var = P[sentence[-1]]
     pos = var.most_common(1)
     sentence.append(pos[0][0])
+
+# Performance
+
+
+def PP(sentence):
+    words = sentence.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
+    tot = 1
+    for a, b in zip(words, words[1:]):
+        tot *= 1 / P[a][b]
+    return np.power(tot, 1 / (len(words) - 1))
+
+
+text = 'I like to play football'
+p = PP(text)
+
+acc = []
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+for text in tweet_iterator(fname2):
+    text = text['text']
+    acc.append(p = PP(text))
