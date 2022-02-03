@@ -164,7 +164,7 @@ text = 'I like to play football'
 p = PP(text)
 
 acc = []
-fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 for text in tweet_iterator(fname2):
     text = text['text']
-    acc.append(p = PP(text))
+    acc.append(PP(text))
