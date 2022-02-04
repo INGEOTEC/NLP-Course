@@ -154,17 +154,31 @@ def PP(sentence):
     words = sentence.split()
     words.insert(0, '<s>')
     words.append('</s>')
-    tot = 1
+    tot = 0
     for a, b in zip(words, words[1:]):
-        tot *= 1 / P[a][b]
-    return np.power(tot, 1 / (len(words) - 1))
+        tot += np.log(1 / P[a][b])
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
+
+
+def PP(sentences):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+    tot, N = 0, 0
+    for sentence in sentences:
+        words = sentence.split()
+        words.insert(0, '<s>')
+        words.append('</s>')
+        tot = 0
+        for a, b in zip(words, words[1:]):
+            tot += np.log(1 / P[a][b])
+        N += (len(words) - 1)
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
 
 
 text = 'I like to play football'
-p = PP(text)
+PP(text)
 
-acc = []
 fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
-for text in tweet_iterator(fname2):
-    text = text['text']
-    acc.append(PP(text))
+PP([x['text'] for x in tweet_iterator(fname2)])

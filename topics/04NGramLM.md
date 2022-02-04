@@ -378,16 +378,46 @@ $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal 
 
 The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1=\epsilon_s) \prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}} = \sqrt[N]{\frac{1}{\prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}}.$$ For a moment, let us assume that $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) = c$$ is constant for all the bigrams. Under this assumption, the Perprexity is $$\sqrt[N]{\frac{1}{c^{N-1}}}$$; however, if $$N$$ does not consider the starting symbol which has a probability of $$1$$, the Perplexity would be $$\sqrt[N-1]{\frac{1}{c^{N-1}}}=c$$ which is more interpretable than the previous equation, and it is related to the branching factor of the language. Consequently, we the starting symbol will not contribute to the value of $$N$$ in the computation of Perplexity. 
 
+The following function computes the Perplexity assuming a sentence or a list of sentences as inputs. The product $$\prod \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell-1})$$ is transformed into a sum using the logarithm, and the rest of the operations continue on log space. The last step is to change the result using the exponent. 
+
 ```python
-def PP(sentence):
-    words = sentence.split()
-    words.insert(0, '<s>')
-    words.append('</s>')
-    tot = 1
-    for a, b in zip(words, words[1:]):
-        tot *= 1 / P[a][b]
-    return np.power(tot, 1 / (len(words) - 1))
+def PP(sentences):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+    tot, N = 0, 0
+    for sentence in sentences:
+        words = sentence.split()
+        words.insert(0, '<s>')
+        words.append('</s>')
+        tot = 0
+        for a, b in zip(words, words[1:]):
+            tot += np.log(1 / P[a][b])
+        N += (len(words) - 1)
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
 ```
+
+For example, the Perplexity of the sentence *I like to play football* is:
+
+```python
+text = 'I like to play football'
+PP(text)
+70.01211090353188
+```
+
+The Perplexity of the corpus used to train the LM is:
+
+```python
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)])
+76.94789152533505
+```
+
+
+
+
+# Out of Vocabulary
+
 
 
 # Activities
