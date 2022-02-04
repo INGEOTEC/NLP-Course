@@ -413,11 +413,16 @@ PP([x['text'] for x in tweet_iterator(fname2)])
 76.94789152533505
 ```
 
+Another example could be *I like to play soccer* which is computed as follows.
 
+```python
+PP('I like to play soccer')
+```
 
+This example produces a division by zero error; the problem is that the bigram *play soccer* has not been seen in the training set. However, one would still like to compute the Perplexity of that sentence and, more critically, an LM must model any sentence even though it has not been seen on the training corpus. 
 
 # Out of Vocabulary
 
-
+The problem shown on
 
 # Activities
