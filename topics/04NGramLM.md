@@ -381,7 +381,8 @@ The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\fr
 The following function computes the Perplexity assuming a sentence or a list of sentences as inputs. The product $$\prod \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell-1})$$ is transformed into a sum using the logarithm, and the rest of the operations continue on log space. The last step is to change the result using the exponent. 
 
 ```python
-def PP(sentences, prob=P):
+def PP(sentences,
+       prob=lambda a, b: P[a][b]):
     if isinstance(sentences, str):
         sentences = [sentences]
     tot, N = 0, 0
@@ -391,11 +392,10 @@ def PP(sentences, prob=P):
         words.append('</s>')
         tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / prob[a][b])
+            tot += np.log(1 / prob(a, b))
         N += (len(words) - 1)
     _ = tot / (len(words) - 1)
     return np.exp(_)
-
 ```
 
 For example, the Perplexity of the sentence *I like to play football* is:
@@ -457,5 +457,32 @@ The following table compares the four words more probable given the starting sym
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
 
+```python
+def laplace(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return 1 / prev_l[a]
+    return 1 / len(prev_l)
+```
+
+
+```python
+PP('I like to play football', prob=laplace)
+94.3524062684732
+```
+
+higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 96.81.
+
+The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets recollected on January 10, 2022, is 
+
+```python
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)],
+    prob=laplace)
+257.87154556315807
+```
 
 # Activities

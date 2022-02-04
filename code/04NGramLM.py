@@ -161,7 +161,8 @@ def PP(sentence):
     return np.exp(_)
 
 
-def PP(sentences, prob=P):
+def PP(sentences,
+       prob=lambda a, b: P[a][b]):
     if isinstance(sentences, str):
         sentences = [sentences]
     tot, N = 0, 0
@@ -171,7 +172,7 @@ def PP(sentences, prob=P):
         words.append('</s>')
         tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / prob[a][b])
+            tot += np.log(1 / prob(a, b))
         N += (len(words) - 1)
     _ = tot / (len(words) - 1)
     return np.exp(_)
@@ -202,3 +203,16 @@ for (w, a), (_, b) in zip(P['<s>'].most_common(4),
     print("|{}|{:4f}|{:4f}|".format(w, a, b))
 
 
+def laplace(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return 1 / prev_l[a]
+    return 1 / len(prev_l)
+
+
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)],
+    prob=laplace)
