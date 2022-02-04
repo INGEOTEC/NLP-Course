@@ -182,3 +182,23 @@ PP(text)
 
 fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)])
+
+## Laplace Smoothing
+
+prev_l = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev_l[a] += v + 1
+    except KeyError:
+        prev_l[a] = v + 1
+
+P_l = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P_l[a]
+    next[b] = v / prev_l[a]
+
+for (w, a), (_, b) in zip(P['<s>'].most_common(4),
+                          P_l['<s>'].most_common(4)):
+    print("|{}|{:4f}|{:4f}|".format(w, a, b))
+
+

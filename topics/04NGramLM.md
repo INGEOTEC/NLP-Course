@@ -425,4 +425,32 @@ This example produces a division by zero error; the problem is that the bigram *
 
 The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are unfrequent, which requires training the model on a massive corpus to collect as many unfrequent words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with one a corpus with that magnitude. Consequently, the OOV problem must be handled differently. 
 
+Traditionally, the approach followed is to reduce the mass given to those words retrieved on the training set and then use that mass in the OOV words. It is mentioned mass because the probability of all events must sum to one, so in the process, we had followed the sum of all words probabilities sum to one. That sum cannot be one because there are words that have not been seen. 
+
+## Laplace Smoothing
+
+```python
+prev_l = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev_l[a] += v + 1
+    except KeyError:
+        prev_l[a] = v + 1
+
+P_l = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P_l[a]
+    next[b] = v / prev_l[a] 
+```
+
+|Word|Baseline|Laplace |
+|----|--------|--------|
+|I   |0.028640|0.018085|
+|The |0.020600|0.013008|
+|This|0.009020|0.005696|
+|A   |0.006780|0.004281|
+
+
+$$\sum \mathbb P( \mid \mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.63 $$ 
+
 # Activities
