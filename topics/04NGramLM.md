@@ -455,8 +455,7 @@ The following table compares the four words more probable given the starting sym
 |This|0.009020|0.005696|
 |A   |0.006780|0.004281|
 
+It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
 
-
-$$\sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.63 $$ 
 
 # Activities
