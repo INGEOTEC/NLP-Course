@@ -446,7 +446,7 @@ for (a, b), v in bigrams.items():
     next[b] = v / prev_l[a] 
 ```
 
-
+The following table compares the four words more probable given the starting symbol using the approach that does not handle the OOV and using the Laplace smoothing. 
 
 |Word|Baseline|Laplace |
 |----|--------|--------|
@@ -454,6 +454,7 @@ for (a, b), v in bigrams.items():
 |The |0.020600|0.013008|
 |This|0.009020|0.005696|
 |A   |0.006780|0.004281|
+
 
 
 $$\sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.63 $$ 
