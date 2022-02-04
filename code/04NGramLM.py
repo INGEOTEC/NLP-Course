@@ -161,7 +161,7 @@ def PP(sentence):
     return np.exp(_)
 
 
-def PP(sentences):
+def PP(sentences, prob=P):
     if isinstance(sentences, str):
         sentences = [sentences]
     tot, N = 0, 0
@@ -171,7 +171,7 @@ def PP(sentences):
         words.append('</s>')
         tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / P[a][b])
+            tot += np.log(1 / prob[a][b])
         N += (len(words) - 1)
     _ = tot / (len(words) - 1)
     return np.exp(_)

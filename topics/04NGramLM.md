@@ -381,7 +381,7 @@ The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\fr
 The following function computes the Perplexity assuming a sentence or a list of sentences as inputs. The product $$\prod \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell-1})$$ is transformed into a sum using the logarithm, and the rest of the operations continue on log space. The last step is to change the result using the exponent. 
 
 ```python
-def PP(sentences):
+def PP(sentences, prob=P):
     if isinstance(sentences, str):
         sentences = [sentences]
     tot, N = 0, 0
@@ -391,10 +391,11 @@ def PP(sentences):
         words.append('</s>')
         tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / P[a][b])
+            tot += np.log(1 / prob[a][b])
         N += (len(words) - 1)
     _ = tot / (len(words) - 1)
     return np.exp(_)
+
 ```
 
 For example, the Perplexity of the sentence *I like to play football* is:
@@ -423,11 +424,13 @@ This example produces a division by zero error; the problem is that the bigram *
 
 # Out of Vocabulary
 
-The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are unfrequent, which requires training the model on a massive corpus to collect as many unfrequent words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with one a corpus with that magnitude. Consequently, the OOV problem must be handled differently. 
+The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are infrequent, which requires training the model on a massive corpus to collect as many words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with a corpus with that magnitude. Consequently, the OOV problem must be handled differently. 
 
-Traditionally, the approach followed is to reduce the mass given to those words retrieved on the training set and then use that mass in the OOV words. It is mentioned mass because the probability of all events must sum to one, so in the process, we had followed the sum of all words probabilities sum to one. That sum cannot be one because there are words that have not been seen. 
+Traditionally, the approach followed is to reduce the mass given to those words retrieved on the training set and then use that mass in the OOV words. It is mentioned mass because the probability of all events must sum to one, so in the process, we had followed the sum of all words' probabilities sum to one. That sum cannot be one because there are words that have not been seen. 
 
 ## Laplace Smoothing
+
+One approach is to increase the frequency of all the words in the training corpus by one. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
 
 ```python
 prev_l = dict()
@@ -443,6 +446,8 @@ for (a, b), v in bigrams.items():
     next[b] = v / prev_l[a] 
 ```
 
+
+
 |Word|Baseline|Laplace |
 |----|--------|--------|
 |I   |0.028640|0.018085|
@@ -451,6 +456,6 @@ for (a, b), v in bigrams.items():
 |A   |0.006780|0.004281|
 
 
-$$\sum \mathbb P( \mid \mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.63 $$ 
+$$\sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.63 $$ 
 
 # Activities
