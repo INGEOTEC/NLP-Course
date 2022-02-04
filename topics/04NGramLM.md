@@ -423,6 +423,6 @@ This example produces a division by zero error; the problem is that the bigram *
 
 # Out of Vocabulary
 
-The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are unfrequent, which requires training the model on a massive corpus to collect as many unfrequent words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with one a corpus with that magnitude. 
+The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are unfrequent, which requires training the model on a massive corpus to collect as many unfrequent words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with one a corpus with that magnitude. Consequently, the OOV problem must be handled differently. 
 
 # Activities
