@@ -489,4 +489,4 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
 
-A trigram LM models $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 2}, \mathcal X_{\ell -1})$$ where the 
+A trigram LM models $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 2}, \mathcal X_{\ell -1})$$; the first step is to estimate these values from a corpus. The procedure is equivalent to the bigrams being the only difference is that it is needed to add another starting symbol.  
