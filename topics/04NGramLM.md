@@ -378,5 +378,115 @@ $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal 
 
 The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1=\epsilon_s) \prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}} = \sqrt[N]{\frac{1}{\prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}}.$$ For a moment, let us assume that $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) = c$$ is constant for all the bigrams. Under this assumption, the Perprexity is $$\sqrt[N]{\frac{1}{c^{N-1}}}$$; however, if $$N$$ does not consider the starting symbol which has a probability of $$1$$, the Perplexity would be $$\sqrt[N-1]{\frac{1}{c^{N-1}}}=c$$ which is more interpretable than the previous equation, and it is related to the branching factor of the language. Consequently, we the starting symbol will not contribute to the value of $$N$$ in the computation of Perplexity. 
 
+The following function computes the Perplexity assuming a sentence or a list of sentences as inputs. The product $$\prod \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell-1})$$ is transformed into a sum using the logarithm, and the rest of the operations continue on log space. The last step is to change the result using the exponent. 
+
+```python
+def PP(sentences,
+       prob=lambda a, b: P[a][b]):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+    tot, N = 0, 0
+    for sentence in sentences:
+        words = sentence.split()
+        words.insert(0, '<s>')
+        words.append('</s>')
+        tot = 0
+        for a, b in zip(words, words[1:]):
+            tot += np.log(1 / prob(a, b))
+        N += (len(words) - 1)
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
+```
+
+For example, the Perplexity of the sentence *I like to play football* is:
+
+```python
+text = 'I like to play football'
+PP(text)
+70.01211090353188
+```
+
+The Perplexity of the corpus used to train the LM is:
+
+```python
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)])
+76.94789152533505
+```
+
+Another example could be *I like to play soccer* which is computed as follows.
+
+```python
+PP('I like to play soccer')
+```
+
+This example produces a division by zero error; the problem is that the bigram *play soccer* has not been seen in the training set. However, one would still like to compute the Perplexity of that sentence and, more critically, an LM must model any sentence even though it has not been seen on the training corpus. 
+
+# Out of Vocabulary
+
+The problem shown in the previous example is known as **out of vocabulary**. As we know, most of the words are infrequent, which requires training the model on a massive corpus to collect as many words as possible; however, there will not be a sufficiently large dataset for all the cases given that the language evolves and the physical constraints of computing an LM with a corpus with that magnitude. Consequently, the OOV problem must be handled differently. 
+
+Traditionally, the approach followed is to reduce the mass given to those words retrieved on the training set and then use that mass in the OOV words. It is mentioned mass because the probability of all events must sum to one, so in the process, we had followed the sum of all words' probabilities sum to one. That sum cannot be one because there are words that have not been seen. 
+
+## Laplace Smoothing
+
+One approach is to increase the frequency of all the words in the training corpus by one. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
+
+```python
+prev_l = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev_l[a] += v + 1
+    except KeyError:
+        prev_l[a] = v + 1
+
+P_l = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P_l[a]
+    next[b] = v / prev_l[a] 
+```
+
+The following table compares the four words more probable given the starting symbol using the approach that does not handle the OOV and using the Laplace smoothing. 
+
+|Word|Baseline|Laplace |
+|----|--------|--------|
+|I   |0.028640|0.018085|
+|The |0.020600|0.013008|
+|This|0.009020|0.005696|
+|A   |0.006780|0.004281|
+
+It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
+
+```python
+def laplace(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return 1 / prev_l[a]
+    return 1 / len(prev_l)
+```
+
+
+```python
+PP('I like to play football', prob=laplace)
+94.3524062684732
+```
+
+higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 96.81.
+
+The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
+
+```python
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)],
+    prob=laplace)
+257.87154556315807
+```
 
 # Activities
+
+As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
+
+A trigram LM models $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 2}, \mathcal X_{\ell -1})$$; the first step is to estimate these values from a corpus. The procedure is equivalent to the bigrams being the only difference is that it is needed to add another starting symbol.  

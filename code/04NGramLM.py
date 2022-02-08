@@ -4,6 +4,7 @@ from microtc.utils import tweet_iterator
 from os.path import join
 from collections import Counter, defaultdict
 from wordcloud import WordCloud as WC
+from EvoMSA.utils import bootstrap_confidence_interval
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -145,3 +146,73 @@ for _ in range(20):
     var = P[sentence[-1]]
     pos = var.most_common(1)
     sentence.append(pos[0][0])
+
+# Performance
+
+
+def PP(sentence):
+    words = sentence.split()
+    words.insert(0, '<s>')
+    words.append('</s>')
+    tot = 0
+    for a, b in zip(words, words[1:]):
+        tot += np.log(1 / P[a][b])
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
+
+
+def PP(sentences,
+       prob=lambda a, b: P[a][b]):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+    tot, N = 0, 0
+    for sentence in sentences:
+        words = sentence.split()
+        words.insert(0, '<s>')
+        words.append('</s>')
+        tot = 0
+        for a, b in zip(words, words[1:]):
+            tot += np.log(1 / prob(a, b))
+        N += (len(words) - 1)
+    _ = tot / (len(words) - 1)
+    return np.exp(_)
+
+
+text = 'I like to play football'
+PP(text)
+
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)])
+
+## Laplace Smoothing
+
+prev_l = dict()
+for (a, b), v in bigrams.items():
+    try:
+        prev_l[a] += v + 1
+    except KeyError:
+        prev_l[a] = v + 1
+
+P_l = defaultdict(Counter)
+for (a, b), v in bigrams.items():
+    next = P_l[a]
+    next[b] = v / prev_l[a]
+
+for (w, a), (_, b) in zip(P['<s>'].most_common(4),
+                          P_l['<s>'].most_common(4)):
+    print("|{}|{:4f}|{:4f}|".format(w, a, b))
+
+
+def laplace(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return 1 / prev_l[a]
+    return 1 / len(prev_l)
+
+
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)],
+    prob=laplace)
