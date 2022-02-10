@@ -228,6 +228,17 @@ def sum_last(data):
         output.update({key: v})
     return output
 
+
+def cond_prob(ngrams, prev):
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = (v) / prev[key]
+    return output
+
+
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
 ngrams = compute_ngrams(fname, n=3)
 bigrams = sum_last(ngrams)
+P_l = cond_prob(ngrams, bigrams)
