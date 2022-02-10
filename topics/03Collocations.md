@@ -468,7 +468,7 @@ As can be seen, the most important bigrams are similar to the ones observed on t
 
 The Wald test assumes normality on the estimation, which is a fair assumption when the number of counts is high; however, for the case of bigrams, as we have seen on the [Vocabulary Laws](/NLP-Course/topics/02Vocabulary), the majority of words appear infrequent; thus most of the bigrams are also infrequent. 
 
-The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p_1 \neq p2 = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
+The likelihood ratios are more appropriate for this problem; the idea is to model two hypotheses that encode the behavior of collocations. On the one hand, the first hypothesis is $$\mathcal H_1: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1) $$ which corresponds to the independence assumption. On the other hand, the second hypothesis is $$\mathcal H_2: \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=w_1) = p_1 \neq p_2 = \mathbb P(\mathcal X_c=w_2 \mid \mathcal X_r=\neg w_1).$$ Then the log of the likelihood ratio $\lambda$ is defined as follows:
 
 $$\log \lambda = \log \frac{\mathcal L(\mathcal H_1)}{\mathcal L(\mathcal H_2)},$$
 
