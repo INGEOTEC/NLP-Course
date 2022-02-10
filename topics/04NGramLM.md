@@ -443,17 +443,17 @@ for (a, b), v in bigrams.items():
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = v / prev_l[a] 
+    next[b] = (v + 1) / prev_l[a] 
 ```
 
 The following table compares the four words more probable given the starting symbol using the approach that does not handle the OOV and using the Laplace smoothing. 
 
 |Word|Baseline|Laplace |
 |----|--------|--------|
-|I   |0.028640|0.018085|
-|The |0.020600|0.013008|
-|This|0.009020|0.005696|
-|A   |0.006780|0.004281|
+|I   |0.028640|0.018098|
+|The |0.020600|0.013021|
+|This|0.009020|0.005709|
+|A   |0.006780|0.004294|
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
 
@@ -471,7 +471,7 @@ def laplace(a, b):
 
 ```python
 PP('I like to play football', prob=laplace)
-94.3524062684732
+88.4199193867824
 ```
 
 higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 96.81.
@@ -482,7 +482,7 @@ The Perplexity of an LM is measured on a corpus that has not been seen; for exam
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-257.87154556315807
+233.29659952374467
 ```
 
 # Activities
@@ -502,4 +502,13 @@ def compute_ngrams(fname, n=3):
         _ = [a for a in zip(*(words[i:] for i in range(n)))]
         ngrams.update(_)
     return ngrams
+```
+
+```python
+def sum_last(data):
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+    return output
 ```

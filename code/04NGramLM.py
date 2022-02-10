@@ -150,17 +150,6 @@ for _ in range(20):
 # Performance
 
 
-def PP(sentence):
-    words = sentence.split()
-    words.insert(0, '<s>')
-    words.append('</s>')
-    tot = 0
-    for a, b in zip(words, words[1:]):
-        tot += np.log(1 / P[a][b])
-    _ = tot / (len(words) - 1)
-    return np.exp(_)
-
-
 def PP(sentences,
        prob=lambda a, b: P[a][b]):
     if isinstance(sentences, str):
@@ -196,7 +185,7 @@ for (a, b), v in bigrams.items():
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = v / prev_l[a]
+    next[b] = (v + 1) / prev_l[a]
 
 for (w, a), (_, b) in zip(P['<s>'].most_common(4),
                           P_l['<s>'].most_common(4)):
@@ -219,7 +208,7 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 # Activities
 
-fname = join('dataset', 'tweets-2022-01-17.json.gz')
+
 def compute_ngrams(fname, n=3):
     ngrams = Counter()
     for text in tweet_iterator(fname):
@@ -231,5 +220,14 @@ def compute_ngrams(fname, n=3):
         ngrams.update(_)
     return ngrams
 
-ngrams = compute_ngrams(fname, n=3)
 
+def sum_last(data):
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+    return output
+
+fname = join('dataset', 'tweets-2022-01-17.json.gz')
+ngrams = compute_ngrams(fname, n=3)
+bigrams = sum_last(ngrams)
