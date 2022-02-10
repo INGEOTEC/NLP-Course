@@ -268,7 +268,7 @@ The marginal distribution and the definition of independence are used to obtain 
 array using `np.atleast_2d` function. 
 
 ```python
-ind = np.dot(np.atleast_2d(R).T, np.atleast_2d(C))
+ind = np.dot(np.atleast_2d(R_m).T, np.atleast_2d(C_m))
 ```
 
 `W` contains the estimated bivariate distribution, and `ind` could be the bivariate distribution only if $$\mathcal X_r$$ and $$\mathcal X_c$$ are independent. The following matrix shows `W-ind`, which would be a zero matrix if the variables are independent. 
