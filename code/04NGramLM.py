@@ -216,3 +216,20 @@ def laplace(a, b):
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
+
+# Activities
+
+fname = join('dataset', 'tweets-2022-01-17.json.gz')
+def compute_ngrams(fname, n=3):
+    ngrams = Counter()
+    for text in tweet_iterator(fname):
+        text = text['text']
+        words = text.split()
+        [words.insert(0, '<s>') for _ in range(n-1)]
+        words.append('</s>')
+        _ = [a for a in zip(*(words[i:] for i in range(n)))]
+        ngrams.update(_)
+    return ngrams
+
+ngrams = compute_ngrams(fname, n=3)
+
