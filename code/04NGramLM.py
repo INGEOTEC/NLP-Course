@@ -244,6 +244,6 @@ def cond_prob(ngrams, prev):
 
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
-ngrams = compute_ngrams(fname, n=3)
+ngrams = compute_ngrams(fname, n=2)
 bigrams = sum_last(ngrams)
 P_l = cond_prob(ngrams, bigrams)
