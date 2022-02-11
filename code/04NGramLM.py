@@ -245,12 +245,5 @@ def cond_prob(ngrams, prev):
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
 ngrams = compute_ngrams(fname, n=3)
-
 bigrams = sum_last(ngrams)
 P_l = cond_prob(ngrams, bigrams)
-
-
-wc = WC().generate_from_frequencies(P_l[('one', 'of')])
-plt.imshow(wc)
-plt.axis('off')
-plt.tight_layout()
