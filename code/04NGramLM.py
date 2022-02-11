@@ -175,17 +175,20 @@ PP([x['text'] for x in tweet_iterator(fname2)])
 
 ## Laplace Smoothing
 
+V = set()
+_ = [[V.add(x) for x in key] for key in bigrams.keys()]
+
 prev_l = dict()
 for (a, b), v in bigrams.items():
     try:
-        prev_l[a] += v + 1
+        prev_l[a] += v
     except KeyError:
-        prev_l[a] = v + 1
+        prev_l[a] = v
 
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = (v + 1) / prev_l[a]
+    next[b] = (v + 1) / (prev_l[a] + len(V))
 
 for (w, a), (_, b) in zip(P['<s>'].most_common(4),
                           P_l['<s>'].most_common(4)):
@@ -230,15 +233,24 @@ def sum_last(data):
 
 
 def cond_prob(ngrams, prev):
+    V = set()
+    [[V.add(x) for x in key] for key in ngrams.keys()]
     output = defaultdict(Counter)
     for (*a, b), v in ngrams.items():
         key = tuple(a)
         next = output[key]
-        next[b] = (v) / prev[key]
+        next[b] = (v + 1) / (prev[key] + len(V))
     return output
 
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
 ngrams = compute_ngrams(fname, n=3)
+
 bigrams = sum_last(ngrams)
 P_l = cond_prob(ngrams, bigrams)
+
+
+wc = WC().generate_from_frequencies(P_l[('one', 'of')])
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()

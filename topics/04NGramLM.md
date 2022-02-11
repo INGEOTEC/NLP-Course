@@ -433,27 +433,30 @@ Traditionally, the approach followed is to reduce the mass given to those words 
 One approach is to increase the frequency of all the words in the training corpus by one. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
 
 ```python
+V = set()
+[[V.add(x) for x in key] for key in bigrams.keys()]
+
 prev_l = dict()
 for (a, b), v in bigrams.items():
     try:
-        prev_l[a] += v + 1
+        prev_l[a] += v
     except KeyError:
-        prev_l[a] = v + 1
+        prev_l[a] = v
 
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = (v + 1) / prev_l[a] 
+    next[b] = (v + 1) / (prev_l[a] + len(V))
 ```
 
 The following table compares the four words more probable given the starting symbol using the approach that does not handle the OOV and using the Laplace smoothing. 
 
 |Word|Baseline|Laplace |
 |----|--------|--------|
-|I   |0.028640|0.018098|
-|The |0.020600|0.013021|
-|This|0.009020|0.005709|
-|A   |0.006780|0.004294|
+|I   |0.028640|0.004450|
+|The |0.020600|0.003201|
+|This|0.009020|0.001403|
+|A   |0.006780|0.001056|
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
 
@@ -471,7 +474,7 @@ def laplace(a, b):
 
 ```python
 PP('I like to play football', prob=laplace)
-88.4199193867824
+2954.057900872384
 ```
 
 higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 96.81.
@@ -482,7 +485,7 @@ The Perplexity of an LM is measured on a corpus that has not been seen; for exam
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-233.29659952374467
+2432.596983557164
 ```
 
 # Activities
@@ -510,5 +513,17 @@ def sum_last(data):
     for (*prev, last), v in data.items():
         key = tuple(prev)
         output.update({key: v})
+    return output
+```
+
+```python
+def cond_prob(ngrams, prev):
+    V = set()
+    [[V.add(x) for x in key] for key in ngrams.keys()]
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = (v + 1) / (prev[key] + len(V))
     return output
 ```
