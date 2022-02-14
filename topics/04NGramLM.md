@@ -500,7 +500,7 @@ def compute_ngrams(fname, n=3):
     for text in tweet_iterator(fname):
         text = text['text']
         words = text.split()
-        [words.insert(0, '<s>') for _ in range(n-1)]
+        [words.insert(0, '<s>') for _ in range(n - 1)]
         words.append('</s>')
         _ = [a for a in zip(*(words[i:] for i in range(n)))]
         ngrams.update(_)
@@ -517,13 +517,13 @@ def sum_last(data):
 ```
 
 ```python
-def cond_prob(ngrams, prev):
+def cond_prob(ngrams, prev, k=1):
     V = set()
     [[V.add(x) for x in key] for key in ngrams.keys()]
     output = defaultdict(Counter)
     for (*a, b), v in ngrams.items():
         key = tuple(a)
         next = output[key]
-        next[b] = (v + 1) / (prev[key] + len(V))
+        next[b] = (v + k) / (prev[key] + k * len(V))
     return output
 ```

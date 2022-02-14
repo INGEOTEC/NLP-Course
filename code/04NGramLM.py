@@ -191,6 +191,7 @@ for (w, a), (_, b) in zip(P['<s>'].most_common(4),
     print("|{}|{:4f}|{:4f}|".format(w, a, b))
 
 
+MIN = min([min(list(x.values())) for x in P_l.values()]) 
 def laplace(a, b):
     if a in P_l:
         next = P_l[a]
@@ -198,10 +199,10 @@ def laplace(a, b):
             return next[b]
     if a in prev_l:
         return 1 / (prev_l[a] + len(V))
-    return 1 / len(V)
+    return MIN
 
 
-fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
 
@@ -213,7 +214,7 @@ def compute_ngrams(fname, n=3):
     for text in tweet_iterator(fname):
         text = text['text']
         words = text.split()
-        [words.insert(0, '<s>') for _ in range(n-1)]
+        [words.insert(0, '<s>') for _ in range(n - 1)]
         words.append('</s>')
         _ = [a for a in zip(*(words[i:] for i in range(n)))]
         ngrams.update(_)
@@ -241,8 +242,8 @@ def cond_prob(ngrams, prev, k=1):
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
 ngrams = compute_ngrams(fname, n=2)
-bigrams = sum_last(ngrams)
-P_l = cond_prob(ngrams, bigrams, k=1)
+prev_l = sum_last(ngrams)
+P_l = cond_prob(ngrams, prev_l, k=0.3)
 
 
 def PP(sentences,
@@ -262,15 +263,5 @@ def PP(sentences,
     return np.exp(_)
 
 
-def laplace(a, b):
-    if a in P_l:
-        next = P_l[a]
-        if b in next:
-            return next[b]
-    if a in prev_l:
-        return 1 / prev_l[a]
-    return 1 / len(prev_l)
-
-
-fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
-PP([x['text'] for x in tweet_iterator(fname2)], n=2)    
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=laplace)    
