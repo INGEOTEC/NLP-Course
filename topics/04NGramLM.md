@@ -376,7 +376,7 @@ It is not always possible to embed different LM in the final application and tes
 
 $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1, \ldots, \mathcal X_N)}}.$$
 
-The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1=\epsilon_s) \prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}} = \sqrt[N]{\frac{1}{\prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}}.$$ For a moment, let us assume that $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) = c$$ is constant for all the bigrams. Under this assumption, the Perprexity is $$\sqrt[N]{\frac{1}{c^{N-1}}}$$; however, if $$N$$ does not consider the starting symbol which has a probability of $$1$$, the Perplexity would be $$\sqrt[N-1]{\frac{1}{c^{N-1}}}=c$$ which is more interpretable than the previous equation, and it is related to the branching factor of the language. Consequently, we the starting symbol will not contribute to the value of $$N$$ in the computation of Perplexity. 
+The PP of a bigram LM is $$PP(\mathcal X_1, \ldots, \mathcal X_N) = \sqrt[N]{\frac{1}{\mathbb P(\mathcal X_1=\epsilon_s) \prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}} = \sqrt[N]{\frac{1}{\prod_{\ell=2}^N \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell -1})}}.$$ For a moment, let us assume that $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell -1}) = c$$ is constant for all the bigrams. Under this assumption, the Perprexity is $$\sqrt[N]{\frac{1}{c^{N-1}}}$$; however, if $$N$$ does not consider the starting symbol which has a probability of $$1$$, the Perplexity would be $$\sqrt[N-1]{\frac{1}{c^{N-1}}}=c$$ which is more interpretable than the previous equation, and it is related to the branching factor of the language. Consequently, the starting symbol will not contribute to the value of $$N$$ in the computation of Perplexity. 
 
 The following function computes the Perplexity assuming a sentence or a list of sentences as inputs. The product $$\prod \mathbb P(\mathcal X_{\ell} \mid \mathcal X_{\ell-1})$$ is transformed into a sum using the logarithm, and the rest of the operations continue on log space. The last step is to change the result using the exponent. 
 
@@ -430,7 +430,7 @@ Traditionally, the approach followed is to reduce the mass given to those words 
 
 ## Laplace Smoothing
 
-One approach is to increase the frequency of all the words in the training corpus by one. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
+One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
 
 ```python
 V = set()
@@ -458,7 +458,7 @@ The following table compares the four words more probable given the starting sym
 |This|0.009020|0.001403|
 |A   |0.006780|0.001056|
 
-It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.37.$$ 
+It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.25.$$ 
 
 ```python
 def laplace(a, b):
@@ -467,8 +467,8 @@ def laplace(a, b):
         if b in next:
             return next[b]
     if a in prev_l:
-        return 1 / prev_l[a]
-    return 1 / len(prev_l)
+        return 1 / (prev_l[a] + len(V))
+    return 1 / len(V)
 ```
 
 
@@ -477,7 +477,7 @@ PP('I like to play football', prob=laplace)
 2954.057900872384
 ```
 
-higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 96.81.
+higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 5342.18.
 
 The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
 
@@ -485,7 +485,7 @@ The Perplexity of an LM is measured on a corpus that has not been seen; for exam
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-2432.596983557164
+30327.776811333995
 ```
 
 # Activities

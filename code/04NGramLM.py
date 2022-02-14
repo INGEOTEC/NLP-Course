@@ -119,6 +119,14 @@ plt.axis('off')
 plt.tight_layout()
 plt.savefig('wordcloud_prob_start.png', dpi=300)
 
+sentence = ['<s>']
+while sentence[-1] != '</s>':
+    var = P[sentence[-1]]
+    pos = var.most_common(20)
+    index = np.random.randint(len(pos))
+    sentence.append(pos[index][0])
+len(sentence)
+
 
 def joint_prob(sentence):
     words = sentence.split()
@@ -130,22 +138,8 @@ def joint_prob(sentence):
     return tot
 
 joint_prob('I like to play football')
-joint_prob('I like to dance')
+joint_prob('I like to play soccer')
 
-
-sentence = ['<s>']
-while sentence[-1] != '</s>':
-    var = P[sentence[-1]]
-    pos = var.most_common(20)
-    index = np.random.randint(len(pos))
-    sentence.append(pos[index][0])
-len(sentence)
-
-sentence = ['<s>']
-for _ in range(20):
-    var = P[sentence[-1]]
-    pos = var.most_common(1)
-    sentence.append(pos[0][0])
 
 # Performance
 
@@ -172,6 +166,8 @@ PP(text)
 
 fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)])
+
+PP('I like to play soccer')
 
 ## Laplace Smoothing
 
