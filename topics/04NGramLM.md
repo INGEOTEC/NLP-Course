@@ -458,7 +458,7 @@ The following table compares the four words more probable given the starting sym
 |This|0.009020|0.001403|
 |A   |0.006780|0.001056|
 
-It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.25.$$ 
+It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.7541.$$ 
 
 ```python
 def laplace(a, b):
@@ -468,7 +468,7 @@ def laplace(a, b):
             return next[b]
     if a in prev_l:
         return 1 / (prev_l[a] + len(V))
-    return 1 / len(V)
+    return 1 / (2 * len(V))
 ```
 
 
@@ -526,4 +526,31 @@ def cond_prob(ngrams, prev, k=1):
         next = output[key]
         next[b] = (v + k) / (prev[key] + k * len(V))
     return output
+```
+
+```python
+def PP(sentences,
+       prob=lambda a, b: P_l[a][b], n=3):
+    if isinstance(sentences, str):
+        sentences = [sentences]
+    tot, N = 0, 0
+    for sentence in sentences:
+        words = sentence.split()
+        [words.insert(0, '<s>') for _ in range(n-1)]
+        words.append('</s>')
+        tot = 0
+        for *a, b in zip(*(words[i:] for i in range(n))):
+            tot += np.log(1 / prob(tuple(a), b))
+        N += (len(words) - (n - 1))
+    _ = tot / (len(words) - (n - 1))
+    return np.exp(_)
+```
+
+```python
+fname = join('dataset', 'tweets-2022-01-17.json.gz')
+ngrams = compute_ngrams(fname, n=2)
+V = set()
+_ = [[V.add(x) for x in key] for key in ngrams.keys()]
+prev_l = sum_last(ngrams)
+P_l = cond_prob(ngrams, prev_l, k=1)
 ```
