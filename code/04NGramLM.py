@@ -191,14 +191,15 @@ for (w, a), (_, b) in zip(P['<s>'].most_common(4),
     print("|{}|{:4f}|{:4f}|".format(w, a, b))
 
 
+K = 1 
 def laplace(a, b):
     if a in P_l:
         next = P_l[a]
         if b in next:
             return next[b]
     if a in prev_l:
-        return 1 / (prev_l[a] + len(V))
-    return 1 / (2 * len(V))
+        return K / (prev_l[a] + K * len(V))
+    return K / (len(V) + K * len(V))
 
 
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
@@ -264,13 +265,29 @@ def PP(sentences,
     return np.exp(_)
 
 
-fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 
 output = []
 for k in np.linspace(0.1, 1, 10):
+    K = k
     P_l = cond_prob(ngrams, prev_l, k=k)
     _ = PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=laplace)
     output.append(_)
+
+
+# one=output when the file is 'tweets-2022-01-17.json.gz'
+x = np.linspace(0.1, 1, 10)
+plt.plot(x, one)
+plt.plot(x, output)
+plt.grid()
+plt.xlabel(r'$k$')
+plt.ylabel(r'$PP$')
+plt.legend(['Training', 'Test'])
+plt.tight_layout()
+plt.savefig('laplace_smoothing.png', dpi=300)
+
+
+
 
 
 def sum_last(data):

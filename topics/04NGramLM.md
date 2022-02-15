@@ -488,6 +488,8 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 31830.441910142268
 ```
 
+![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
+
 # Activities
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 

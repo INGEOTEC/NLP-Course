@@ -217,7 +217,7 @@ Once the information of the bigrams has been transformed into a bivariate distri
 The bivariate distribution shown in the previous table contains the probability of obtaining a bigram, i.e., $$\mathbb P(\mathcal X_r=r, \mathcal X_c=c)$$; this information is helpful when combined with the concept of independence and marginal distribution.
 
 Two random variables $$\mathcal X$$ and $$\mathcal Y$$ are **independent** if
-$$\mathbb P(\mathcal X, \mathcal Y)=\mathbb P(\mathcal X) \mathbb(\mathcal Y).$$ 
+$$\mathbb P(\mathcal X, \mathcal Y)=\mathbb P(\mathcal X) \mathbb P(\mathcal Y).$$ 
 
 The definition of independence is useless if $$\mathbb P(\mathcal X)$$ and $$\mathbb P(\mathcal Y)$$ are unknown. Fortunately, the **marginal distribution** definition describes the procedure to obtain $$\mathbb P(\mathcal X=x)$$ and $$\mathbb P(\mathcal Y=y)$$ from the bivariate distribution. Let $$f_{\mathcal X, \mathcal Y}$$ be the joint distribution mass function (i.e., $$f_{\mathcal X, \mathcal Y}(x, y)=\mathbb P(\mathcal X=x, \mathcal Y=y)$$) then the marginal mass function for $$\mathcal X$$ is 
 
