@@ -281,7 +281,7 @@ def sum_last(data):
         output.update({key: v})
         tokens.update({key: 1})
     for key, v in tokens.items():
-        output.update({key: len(V) - v})
+        output.update({key: K * (len(V) - v)})
     return output
 
 
@@ -293,9 +293,9 @@ def cond_prob(ngrams, prev):
         next[b] = v / prev[key]
     return output 
 
+K = 0.01
 prev_l = sum_last(ngrams)
 P_l = cond_prob(ngrams, prev_l)
-
 
 def prob_max(a, b):
     if a in P_l:
@@ -303,8 +303,8 @@ def prob_max(a, b):
         if b in next:
             return next[b]
     if a in prev_l:
-        return 1 / prev_l[a]
-    return 1 / len(V)
+        return K / prev_l[a]
+    return K / len(V)
 
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=prob_max)
