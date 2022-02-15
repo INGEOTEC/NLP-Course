@@ -161,9 +161,9 @@ count = dict()
 for k, v in bigrams.items():
     for x in k.split('~'):
         try:
-            count[x] += v
+            count[x] += v / 2
         except KeyError:
-            count[x] = v 
+            count[x] = v / 2
 
 N = sum(list(count.values()))
 
@@ -206,7 +206,6 @@ plt.ylabel('Wald Statistic')
 plt.tight_layout()
 plt.savefig('scatter_plot_hypw.png', dpi=300)
 
-
 plt.rcParams['text.usetex'] = True
 scatter = [[bigrams[k], v] for k, v in r.items()]
 plt.loglog([x for x, _ in scatter],
@@ -225,7 +224,7 @@ bigrams = Counter({k: v for k, v in voc.voc.items() if k.count("~")})
 d = [(k, v) for k, v in r.items()]
 d.sort(key=lambda x: x[1], reverse=True)
 
-_ = {k: v for k, v in d[200:400]}
+_ = {k: v for k, v in d[100:300]}
 wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')

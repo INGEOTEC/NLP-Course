@@ -483,9 +483,9 @@ count = dict()
 for k, v in bigrams.items():
     for x in k.split('~'):
         try:
-            count[x] += v
+            count[x] += v / 2
         except KeyError:
-            count[x] = v 
+            count[x] = v / 2
 ```
 
 The function $$L$$ and the ratio can be computed as follows.
