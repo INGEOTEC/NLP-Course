@@ -485,7 +485,7 @@ The Perplexity of an LM is measured on a corpus that has not been seen; for exam
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-30327.776811333995
+31830.441910142268
 ```
 
 # Activities

@@ -199,10 +199,10 @@ def laplace(a, b):
             return next[b]
     if a in prev_l:
         return 1 / (prev_l[a] + len(V))
-    return MIN
+    return 1 / (2 * len(V))
 
 
-fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
 
@@ -242,8 +242,10 @@ def cond_prob(ngrams, prev, k=1):
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
 ngrams = compute_ngrams(fname, n=2)
+V = set()
+_ = [[V.add(x) for x in key] for key in ngrams.keys()]
 prev_l = sum_last(ngrams)
-P_l = cond_prob(ngrams, prev_l, k=0.3)
+P_l = cond_prob(ngrams, prev_l, k=0.2)
 
 
 def PP(sentences,
@@ -264,4 +266,4 @@ def PP(sentences,
 
 
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
-PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=laplace)    
+PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=laplace)
