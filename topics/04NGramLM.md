@@ -488,9 +488,56 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 31830.441910142268
 ```
 
-![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
-
 # Activities
+
+$$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$
+
+$$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV$$
+
+```python
+def cond_prob(ngrams, prev, k=1):
+    V = set()
+    [[V.add(x) for x in key] for key in ngrams.keys()]
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = (v + k) / (prev[key] + k * len(V))
+    return output
+```
+
+```python
+def sum_last(data):
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+    return output
+```
+
+```python
+K = 1 
+def laplace(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return K / (prev_l[a] + K * len(V))
+    return K / (len(V) + K * len(V))
+```
+
+```python
+V = set()
+[[V.add(x) for x in key] for key in bigrams.keys()]
+prev_l = sum_last(bigrams)
+K = 0.1
+P_l = cond_prob(bigrams, prev_l, k=K)
+PP('I like to play soccer', 
+   prob=lambda a, b: laplace((a, ), b))
+```
+
+![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
 
@@ -507,27 +554,6 @@ def compute_ngrams(fname, n=3):
         _ = [a for a in zip(*(words[i:] for i in range(n)))]
         ngrams.update(_)
     return ngrams
-```
-
-```python
-def sum_last(data):
-    output = Counter()
-    for (*prev, last), v in data.items():
-        key = tuple(prev)
-        output.update({key: v})
-    return output
-```
-
-```python
-def cond_prob(ngrams, prev, k=1):
-    V = set()
-    [[V.add(x) for x in key] for key in ngrams.keys()]
-    output = defaultdict(Counter)
-    for (*a, b), v in ngrams.items():
-        key = tuple(a)
-        next = output[key]
-        next[b] = (v + k) / (prev[key] + k * len(V))
-    return output
 ```
 
 ```python

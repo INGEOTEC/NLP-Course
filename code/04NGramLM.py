@@ -208,6 +208,55 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 # Activities
 
+def cond_prob(ngrams, prev, k=1):
+    V = set()
+    [[V.add(x) for x in key] for key in ngrams.keys()]
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = (v + k) / (prev[key] + k * len(V))
+    return output
+
+
+def sum_last(data):
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+    return output
+
+
+V = set()
+[[V.add(x) for x in key] for key in bigrams.keys()]
+prev_l = sum_last(bigrams)
+K = 0.1
+P_l = cond_prob(bigrams, prev_l, k=K)
+PP('I like to play soccer', 
+   prob=lambda a, b: laplace((a, ), b))
+
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+
+output = []
+for k in np.linspace(0.1, 1, 10):
+    K = k
+    P_l = cond_prob(bigrams, prev_l, k=k)
+    _ = PP([x['text'] for x in tweet_iterator(fname2)], 
+            prob=lambda a, b: laplace((a, ), b))
+    output.append(_)
+
+
+# one=output when the file is 'tweets-2022-01-17.json.gz'
+x = np.linspace(0.1, 1, 10)
+plt.plot(x, one)
+plt.plot(x, output)
+plt.grid()
+plt.xlabel(r'$k$')
+plt.ylabel(r'$PP$')
+plt.legend(['Training', 'Test'])
+plt.tight_layout()
+plt.savefig('laplace_smoothing.png', dpi=300)
+
 
 def compute_ngrams(fname, n=3):
     ngrams = Counter()
@@ -221,23 +270,7 @@ def compute_ngrams(fname, n=3):
     return ngrams
 
 
-def sum_last(data):
-    output = Counter()
-    for (*prev, last), v in data.items():
-        key = tuple(prev)
-        output.update({key: v})
-    return output
 
-
-def cond_prob(ngrams, prev, k=1):
-    V = set()
-    [[V.add(x) for x in key] for key in ngrams.keys()]
-    output = defaultdict(Counter)
-    for (*a, b), v in ngrams.items():
-        key = tuple(a)
-        next = output[key]
-        next[b] = (v + k) / (prev[key] + k * len(V))
-    return output
 
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
@@ -264,31 +297,7 @@ def PP(sentences,
     _ = tot / (len(words) - (n - 1))
     return np.exp(_)
 
-
-fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
-
-output = []
-for k in np.linspace(0.1, 1, 10):
-    K = k
-    P_l = cond_prob(ngrams, prev_l, k=k)
-    _ = PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=laplace)
-    output.append(_)
-
-
-# one=output when the file is 'tweets-2022-01-17.json.gz'
-x = np.linspace(0.1, 1, 10)
-plt.plot(x, one)
-plt.plot(x, output)
-plt.grid()
-plt.xlabel(r'$k$')
-plt.ylabel(r'$PP$')
-plt.legend(['Training', 'Test'])
-plt.tight_layout()
-plt.savefig('laplace_smoothing.png', dpi=300)
-
-
-
-
+### 
 
 def sum_last(data):
     tokens = Counter()
