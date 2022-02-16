@@ -224,7 +224,7 @@ bigrams = Counter({k: v for k, v in voc.voc.items() if k.count("~")})
 d = [(k, v) for k, v in r.items()]
 d.sort(key=lambda x: x[1], reverse=True)
 
-_ = {k: v for k, v in d[100:300]}
+_ = {k: v for k, v in d[200:400]}
 wc = WC().generate_from_frequencies(_)
 plt.imshow(wc)
 plt.axis('off')
