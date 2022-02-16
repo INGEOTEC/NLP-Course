@@ -492,7 +492,7 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 # Activities
 
-The Perplexity of the corpus used to estimate the parameters is $$40950.37$$ 
+The Perplexity of the corpus used to estimate the parameters is $$40950.37$$, which is higher than the Perplexity measured on a test set; this indicates that the unknown words are lightly penalized. Laplace smoothing can be modified to address this problem by replacing the constant one with a parameter. 
 
 ## Add-$$k$$ Smoothing
 
