@@ -430,7 +430,7 @@ Traditionally, the approach followed is to reduce the mass given to those words 
 
 ## Laplace Smoothing
 
-One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
+One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size counting the unknown word. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
 
 ```python
 V = set()
@@ -472,13 +472,14 @@ def laplace(a, b):
     return 1 / len(V)
 ```
 
+The Perplexity of the sentence *I like to play football* is higher than that computed previously. On the other hand, the Perplexity of *I like to play soccer* is $$5342.2$$.
 
 ```python
 PP('I like to play football', prob=laplace)
 2954.067962071032
 ```
 
-higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is $$5342.2$$.
+
 
 The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
 

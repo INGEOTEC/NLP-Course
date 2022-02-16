@@ -209,6 +209,8 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 # Activities
 
+## Add-$$k$$ Smoothing
+
 def cond_prob(ngrams, prev):
     output = defaultdict(Counter)
     for (*a, b), v in ngrams.items():
@@ -254,7 +256,8 @@ plt.legend(['Training', 'Test'])
 plt.tight_layout()
 plt.savefig('laplace_smoothing.png', dpi=300)
 
-#
+## Max Smoothing
+
 def sum_last_max(data):
     tokens = Counter()
     output = Counter()
@@ -314,8 +317,7 @@ plt.legend(['Training', 'Test'])
 plt.tight_layout()
 plt.savefig('max_smoothing.png', dpi=300)
 
-##
-
+## N-Gram
 
 def compute_ngrams(fname, n=3):
     ngrams = Counter()
