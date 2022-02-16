@@ -235,7 +235,7 @@ P_l = cond_prob(bigrams, prev_l, k=K)
 PP('I like to play soccer', 
    prob=lambda a, b: laplace((a, ), b))
 
-fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 
 output = []
 for k in np.linspace(0.1, 1, 10):
@@ -257,6 +257,69 @@ plt.legend(['Training', 'Test'])
 plt.tight_layout()
 plt.savefig('laplace_smoothing.png', dpi=300)
 
+#
+def sum_last_max(data):
+    tokens = Counter()
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+        tokens.update({key: 1})
+    for key, v in tokens.items():
+        output.update({key: K * (len(V) - v)})
+    return output
+
+
+def cond_prob_max(ngrams, prev):
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = v / prev[key]
+    return output 
+
+
+def prob_max(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return K / prev_l[a]
+    return 1 / len(V)
+
+K = 0.1
+prev_l = sum_last_max(bigrams)
+P_l = cond_prob_max(bigrams, prev_l)
+PP('I like to play soccer', 
+   prob=lambda a, b: prob_max((a, ), b))
+1762.8996482259656   
+
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
+
+output = []
+for k in np.linspace(0.01, 1, 10):
+    K = k
+    prev_l = sum_last_max(bigrams)
+    P_l = cond_prob_max(bigrams, prev_l)
+    _ = PP([x['text'] for x in tweet_iterator(fname2)], 
+            prob=lambda a, b: prob_max((a, ), b))
+    output.append(_)
+
+
+# one=output when the file is 'tweets-2022-01-17.json.gz'
+x = np.linspace(0.01, 1, 10)
+plt.plot(x, one)
+plt.plot(x, output)
+plt.grid()
+plt.xlabel(r'$k$')
+plt.ylabel(r'$PP$')
+plt.legend(['Training', 'Test'])
+plt.tight_layout()
+plt.savefig('max_smoothing.png', dpi=300)
+
+##
+
 
 def compute_ngrams(fname, n=3):
     ngrams = Counter()
@@ -268,9 +331,6 @@ def compute_ngrams(fname, n=3):
         _ = [a for a in zip(*(words[i:] for i in range(n)))]
         ngrams.update(_)
     return ngrams
-
-
-
 
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
@@ -299,38 +359,3 @@ def PP(sentences,
 
 ### 
 
-def sum_last(data):
-    tokens = Counter()
-    output = Counter()
-    for (*prev, last), v in data.items():
-        key = tuple(prev)
-        output.update({key: v})
-        tokens.update({key: 1})
-    for key, v in tokens.items():
-        output.update({key: K * (len(V) - v)})
-    return output
-
-
-def cond_prob(ngrams, prev):
-    output = defaultdict(Counter)
-    for (*a, b), v in ngrams.items():
-        key = tuple(a)
-        next = output[key]
-        next[b] = v / prev[key]
-    return output 
-
-K = 0.01
-prev_l = sum_last(ngrams)
-P_l = cond_prob(ngrams, prev_l)
-
-def prob_max(a, b):
-    if a in P_l:
-        next = P_l[a]
-        if b in next:
-            return next[b]
-    if a in prev_l:
-        return K / prev_l[a]
-    return K / len(V)
-
-fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
-PP([x['text'] for x in tweet_iterator(fname2)], n=2, prob=prob_max)

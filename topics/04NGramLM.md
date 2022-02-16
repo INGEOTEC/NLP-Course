@@ -535,9 +535,58 @@ K = 0.1
 P_l = cond_prob(bigrams, prev_l, k=K)
 PP('I like to play soccer', 
    prob=lambda a, b: laplace((a, ), b))
+1780.7504943310958   
 ```
 
 ![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
+
+```python
+def sum_last_max(data):
+    tokens = Counter()
+    output = Counter()
+    for (*prev, last), v in data.items():
+        key = tuple(prev)
+        output.update({key: v})
+        tokens.update({key: 1})
+    for key, v in tokens.items():
+        output.update({key: K * (len(V) - v)})
+    return output
+```
+
+```python
+def cond_prob_max(ngrams, prev):
+    output = defaultdict(Counter)
+    for (*a, b), v in ngrams.items():
+        key = tuple(a)
+        next = output[key]
+        next[b] = v / prev[key]
+    return output 
+```
+
+```python
+def prob_max(a, b):
+    if a in P_l:
+        next = P_l[a]
+        if b in next:
+            return next[b]
+    if a in prev_l:
+        return K / prev_l[a]
+    return 1 / len(V)
+```
+
+```python
+K = 0.1
+prev_l = sum_last_max(bigrams)
+P_l = cond_prob_max(bigrams, prev_l)
+PP('I like to play soccer', 
+   prob=lambda a, b: prob_max((a, ), b))
+1762.8996482259656  
+```
+
+$$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.3269$$
+
+![Max Smoothing](/NLP-Course/assets/images/max_smoothing.png)
+
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
 
