@@ -496,7 +496,7 @@ The Perplexity of the corpus used to estimate the parameters is $$40950.37$$, wh
 
 ## Add-$$k$$ Smoothing
 
-The function $$C^\start$$ would be $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$; for the case of bigrams the frequency for the words corresponds to $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV.$$ 
+The function $$C^\star$$ would be $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$; for the case of bigrams the frequency for the words corresponds to $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV.$$ 
 
 The conditional probability for bigrams (i.e., $$\mathbb P(\mathcal X, \mid \mathcal X_{\ell -1}$$) can be implemented as follows; where `ngrams` corresponds to $$C$$ and `prev` is $$C(\mathcal X_{\ell - 1}).$$
 
