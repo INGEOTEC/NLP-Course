@@ -173,6 +173,7 @@ PP('I like to play soccer')
 
 V = set()
 _ = [[V.add(x) for x in key] for key in bigrams.keys()]
+V = len(V) + 1
 
 prev_l = dict()
 for (a, b), v in bigrams.items():
@@ -184,7 +185,7 @@ for (a, b), v in bigrams.items():
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = (v + 1) / (prev_l[a] + len(V))
+    next[b] = (v + 1) / (prev_l[a] + V)
 
 for (w, a), (_, b) in zip(P['<s>'].most_common(4),
                           P_l['<s>'].most_common(4)):
@@ -198,8 +199,8 @@ def laplace(a, b):
         if b in next:
             return next[b]
     if a in prev_l:
-        return K / (prev_l[a] + K * len(V))
-    return K / (len(V) + K * len(V))
+        return K / (prev_l[a] + K * V)
+    return 1 / V
 
 
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
@@ -208,14 +209,14 @@ PP([x['text'] for x in tweet_iterator(fname2)],
 
 # Activities
 
-def cond_prob(ngrams, prev, k=1):
-    V = set()
-    [[V.add(x) for x in key] for key in ngrams.keys()]
+## Add-$$k$$ Smoothing
+
+def cond_prob(ngrams, prev):
     output = defaultdict(Counter)
     for (*a, b), v in ngrams.items():
         key = tuple(a)
         next = output[key]
-        next[b] = (v + k) / (prev[key] + k * len(V))
+        next[b] = (v + K) / (prev[key] + K * V)
     return output
 
 
@@ -227,27 +228,25 @@ def sum_last(data):
     return output
 
 
-V = set()
-[[V.add(x) for x in key] for key in bigrams.keys()]
 prev_l = sum_last(bigrams)
 K = 0.1
-P_l = cond_prob(bigrams, prev_l, k=K)
+P_l = cond_prob(bigrams, prev_l)
 PP('I like to play soccer', 
    prob=lambda a, b: laplace((a, ), b))
 
-fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
+fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 
 output = []
-for k in np.linspace(0.1, 1, 10):
+for k in np.linspace(0.01, 1, 10):
     K = k
-    P_l = cond_prob(bigrams, prev_l, k=k)
+    P_l = cond_prob(bigrams, prev_l)
     _ = PP([x['text'] for x in tweet_iterator(fname2)], 
             prob=lambda a, b: laplace((a, ), b))
     output.append(_)
 
 
 # one=output when the file is 'tweets-2022-01-17.json.gz'
-x = np.linspace(0.1, 1, 10)
+x = np.linspace(0.01, 1, 10)
 plt.plot(x, one)
 plt.plot(x, output)
 plt.grid()
@@ -257,7 +256,8 @@ plt.legend(['Training', 'Test'])
 plt.tight_layout()
 plt.savefig('laplace_smoothing.png', dpi=300)
 
-#
+## Max Smoothing
+
 def sum_last_max(data):
     tokens = Counter()
     output = Counter()
@@ -266,7 +266,7 @@ def sum_last_max(data):
         output.update({key: v})
         tokens.update({key: 1})
     for key, v in tokens.items():
-        output.update({key: K * (len(V) - v)})
+        output.update({key: K * (V - v)})
     return output
 
 
@@ -286,14 +286,13 @@ def prob_max(a, b):
             return next[b]
     if a in prev_l:
         return K / prev_l[a]
-    return 1 / len(V)
+    return 1 / V
 
 K = 0.1
 prev_l = sum_last_max(bigrams)
 P_l = cond_prob_max(bigrams, prev_l)
 PP('I like to play soccer', 
    prob=lambda a, b: prob_max((a, ), b))
-1762.8996482259656   
 
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 
@@ -318,8 +317,7 @@ plt.legend(['Training', 'Test'])
 plt.tight_layout()
 plt.savefig('max_smoothing.png', dpi=300)
 
-##
-
+## N-Gram
 
 def compute_ngrams(fname, n=3):
     ngrams = Counter()

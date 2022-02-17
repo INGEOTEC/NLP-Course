@@ -430,11 +430,12 @@ Traditionally, the approach followed is to reduce the mass given to those words 
 
 ## Laplace Smoothing
 
-One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
+One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size counting the unknown word. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
 
 ```python
 V = set()
 [[V.add(x) for x in key] for key in bigrams.keys()]
+V = len(V) + 1
 
 prev_l = dict()
 for (a, b), v in bigrams.items():
@@ -446,7 +447,7 @@ for (a, b), v in bigrams.items():
 P_l = defaultdict(Counter)
 for (a, b), v in bigrams.items():
     next = P_l[a]
-    next[b] = (v + 1) / (prev_l[a] + len(V))
+    next[b] = (v + 1) / (prev_l[a] + V)
 ```
 
 The following table compares the four words more probable given the starting symbol using the approach that does not handle the OOV and using the Laplace smoothing. 
@@ -460,6 +461,8 @@ The following table compares the four words more probable given the starting sym
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.7541.$$ 
 
+The Perplexity can be computed using the method described previously; however, the Laplace Smoothing modifies how the conditional probability is calculated. The following code considers the use of Laplace smoothing; it can be observed that the probability of a sequence is obtained even for the unknown words. 
+
 ```python
 def laplace(a, b):
     if a in P_l:
@@ -467,17 +470,18 @@ def laplace(a, b):
         if b in next:
             return next[b]
     if a in prev_l:
-        return 1 / (prev_l[a] + len(V))
-    return 1 / (2 * len(V))
+        return 1 / (prev_l[a] + V)
+    return 1 / len(V)
 ```
 
+The Perplexity of the sentence *I like to play football* is higher than that computed previously. On the other hand, the Perplexity of *I like to play soccer* is $$5342.2$$.
 
 ```python
 PP('I like to play football', prob=laplace)
-2954.057900872384
+2954.067962071032
 ```
 
-higher than the one computed previously. On the other hand, the Perplexity of *I like to play soccer* is 5342.18.
+
 
 The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
 
@@ -485,26 +489,30 @@ The Perplexity of an LM is measured on a corpus that has not been seen; for exam
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-31830.441910142268
+30327.884298225727
 ```
 
 # Activities
 
-$$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$
+The Perplexity of the corpus used to estimate the parameters is $$40950.37$$, which is higher than the Perplexity measured on a test set; this indicates that the unknown words are lightly penalized. Laplace smoothing can be modified to address this problem by replacing the constant one with a parameter. 
 
-$$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV$$
+## Add-$$k$$ Smoothing
+
+The function $$C^\star$$ would be $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$; for the case of bigrams the frequency for the words corresponds to $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV.$$ 
+
+The conditional probability for bigrams (i.e., $$\mathbb P(\mathcal X, \mid \mathcal X_{\ell -1}$$) can be implemented as follows; where `ngrams` corresponds to $$C$$ and `prev` is $$C(\mathcal X_{\ell - 1}).$$
 
 ```python
-def cond_prob(ngrams, prev, k=1):
-    V = set()
-    [[V.add(x) for x in key] for key in ngrams.keys()]
+def cond_prob(ngrams, prev):
     output = defaultdict(Counter)
     for (*a, b), v in ngrams.items():
         key = tuple(a)
         next = output[key]
-        next[b] = (v + k) / (prev[key] + k * len(V))
+        next[b] = (v + K) / (prev[key] + K * V)
     return output
 ```
+
+
 
 ```python
 def sum_last(data):
@@ -528,17 +536,17 @@ def laplace(a, b):
 ```
 
 ```python
-V = set()
-[[V.add(x) for x in key] for key in bigrams.keys()]
 prev_l = sum_last(bigrams)
 K = 0.1
 P_l = cond_prob(bigrams, prev_l, k=K)
 PP('I like to play soccer', 
    prob=lambda a, b: laplace((a, ), b))
-1780.7504943310958   
+1780.7548164607583  
 ```
 
 ![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
+
+## Max Smoothing
 
 ```python
 def sum_last_max(data):
@@ -549,7 +557,7 @@ def sum_last_max(data):
         output.update({key: v})
         tokens.update({key: 1})
     for key, v in tokens.items():
-        output.update({key: K * (len(V) - v)})
+        output.update({key: K * (V - v)})
     return output
 ```
 
@@ -571,7 +579,7 @@ def prob_max(a, b):
             return next[b]
     if a in prev_l:
         return K / prev_l[a]
-    return 1 / len(V)
+    return 1 / V
 ```
 
 ```python
@@ -580,13 +588,14 @@ prev_l = sum_last_max(bigrams)
 P_l = cond_prob_max(bigrams, prev_l)
 PP('I like to play soccer', 
    prob=lambda a, b: prob_max((a, ), b))
-1762.8996482259656  
+1762.903955247848  
 ```
 
 $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.3269$$
 
 ![Max Smoothing](/NLP-Course/assets/images/max_smoothing.png)
 
+## N-Gram
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
 
