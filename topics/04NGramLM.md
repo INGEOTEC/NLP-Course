@@ -430,7 +430,7 @@ Traditionally, the approach followed is to reduce the mass given to those words 
 
 ## Laplace Smoothing
 
-One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size counting the unknown word. The method can be implemented with the following code, which as difference the increase of the frequency by one. 
+One approach is to increase the frequency of all the words in the training corpus by one. The idea is to define a function $$C^\star$$ as follows $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, for the case of bigrams corresponds to $$C^\star(\mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\mathcal X_{\ell-1}, \mathcal X_{\ell}) + 1$$, where $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + V$$, where $$V$$ is the vocabulary size counting the unknown word. The method can be implemented with the following code. 
 
 ```python
 V = set()
@@ -461,7 +461,7 @@ The following table compares the four words more probable given the starting sym
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.7541.$$ 
 
-The Perplexity can be computed using the method described previously; however, the Laplace Smoothing modifies how the conditional probability is calculated. The following code considers the use of Laplace smoothing; it can be observed that the probability of a sequence is obtained even for the unknown words. 
+The Perplexity can be computed using the method described previously; however, the Laplace Smoothing modifies how the conditional probability is calculated. The Perplexity method uses a helper function that is the conditional probability in the standard case. In the Laplace smoothing, the helper function considers the case where the next word is unknown, and even when both words are not known, this can be observed in the following code. 
 
 ```python
 def laplace(a, b):
@@ -481,9 +481,7 @@ PP('I like to play football', prob=laplace)
 2954.067962071032
 ```
 
-
-
-The Perplexity of an LM is measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
+The Perplexity of an LM must be measured on a corpus that has not been seen; for example, its value for the tweets collected on January 10, 2022, is 
 
 ```python
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
@@ -498,9 +496,13 @@ The Perplexity of the corpus used to estimate the parameters is $$40950.37$$, wh
 
 ## Add-$$k$$ Smoothing
 
-The function $$C^\star$$ would be $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$; for the case of bigrams the frequency for the words corresponds to $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV.$$ 
+The idea is to replace $$1$$ by a constant $$k$$ in $$C^\star$$; with this modification $$C^\star$$ is defined as: $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) + k$$. For the case of bigrams, the frequency for the words corresponds to $$C^\star(\mathcal X_{\ell-1}) = \sum_i C^\star(\mathcal X_{\ell-1}, \mathcal X_i) = C(\mathcal X_{\ell-1}) + kV.$$ 
 
-The conditional probability for bigrams (i.e., $$\mathbb P(\mathcal X, \mid \mathcal X_{\ell -1}$$) can be implemented as follows; where `ngrams` corresponds to $$C$$ and `prev` is $$C(\mathcal X_{\ell - 1}).$$
+The conditional probability for bigrams is 
+
+$$\mathbb P(\mathcal X_\ell, \mid \mathcal X_{\ell -1}) =  \frac{C^\star (\mathcal X_{\ell -1}, \mathcal X_\ell)}{\sum_i C^\star (\mathcal X_{\ell - 1}, \mathcal X_i)} = \frac{C(\mathcal X_{\ell -1}, \mathcal X_\ell) + k}{C(\mathcal X_{\ell - 1}) + kV}, $$
+
+which can be implemented as follows; where `ngrams` corresponds to $$C$$ and `prev` is $$C(\mathcal X_{\ell - 1}).$$
 
 ```python
 def cond_prob(ngrams, prev):
@@ -512,7 +514,7 @@ def cond_prob(ngrams, prev):
     return output
 ```
 
-
+A method to compute $$C(\mathcal X_{\ell} - 1)$$ from $$C(\mathcal X_{\ell-1}, \mathcal X_i)$$ is shown below where `data` corresponds to the later frequency.
 
 ```python
 def sum_last(data):
@@ -522,6 +524,8 @@ def sum_last(data):
         output.update({key: v})
     return output
 ```
+
+The constant $$k$$ also impacts the procedure used to compute the conditional probability; the difference is the swap between one and $$k$$, as observed in the following code.
 
 ```python
 K = 1 
@@ -535,18 +539,33 @@ def laplace(a, b):
     return K / (len(V) + K * len(V))
 ```
 
+The Perplexity of the sentence *I like to play soccer* can be computed with the following code, the difference is that the parameter $$k$$ is set to $$0.1$$.
+
 ```python
 prev_l = sum_last(bigrams)
 K = 0.1
-P_l = cond_prob(bigrams, prev_l, k=K)
+P_l = cond_prob(bigrams, prev_l)
 PP('I like to play soccer', 
    prob=lambda a, b: laplace((a, ), b))
 1780.7548164607583  
 ```
 
+The parameter $$k$$ can be varied for different values to illustrate the behavior of Perplexity for different smoothing factors. Furthermore, the Perplexity obtained in a training corpus (January 17, 2022) was higher than the Perplexity on a test set (January 10, 2022) using the standard Laplace smoothing. However, it might be possible that for some $$k$$ values, the associated Perplexity could be more related to the intuition that the unknown words are less probable than known ones, that is, that the Perplexity of the training corpus would be smaller than the one of the test corpus. 
+
+The following picture presents the Perplexity for different values of $$k$$ when $$k$$ is in the range from $$0.01$$ to $$1$$. The blue line presents the Perplexity obtained from the training corpus, and the orange corresponds to the test corpus. It is observed that for approximately $$k<0.3$$, the Perplexity in the test corpus is higher than the training corpus. Therefore, any value less than $$0.3$$ is an adequate value for $$k$$
+
+
 ![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
 
 ## Max Smoothing
+
+Different techniques have been proposed to handle missing words on an LM; one similar to $$k$$ smoothing is to define $$C^\star$$ using the maximum of the frequency or the parameter $$k$$, i.e., $$C^\star(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}) = \max(C(\ldots, \mathcal X_{\ell-1}, \mathcal X_{\ell}), k).$$
+
+The conditional probability for bigrams is 
+
+$$\mathbb P(\mathcal X_\ell, \mid \mathcal X_{\ell -1}) = \frac{\max(C(\mathcal X_{\ell -1}, \mathcal X_\ell), k)}{C(\mathcal X_{\ell - 1}) + k \sum_i \delta(C(\mathcal X_{\ell-1}, \mathcal X_i)=0)}, $$
+
+where the denominator can be implemented as:
 
 ```python
 def sum_last_max(data):
@@ -561,6 +580,8 @@ def sum_last_max(data):
     return output
 ```
 
+and the conditional probabilty corresponds to the following code.
+
 ```python
 def cond_prob_max(ngrams, prev):
     output = defaultdict(Counter)
@@ -570,6 +591,8 @@ def cond_prob_max(ngrams, prev):
         next[b] = v / prev[key]
     return output 
 ```
+
+The helper function of the Perplexity method corresponds to the following function.
 
 ```python
 def prob_max(a, b):
@@ -582,6 +605,8 @@ def prob_max(a, b):
     return 1 / V
 ```
 
+The Perplexity of the sentence *I like to play soccer* is obtained with the following code; it can be observed that the Perplexity value is similar using the $$k$$ smoothing method and this later one. 
+
 ```python
 K = 0.1
 prev_l = sum_last_max(bigrams)
@@ -590,8 +615,9 @@ PP('I like to play soccer',
    prob=lambda a, b: prob_max((a, ), b))
 1762.903955247848  
 ```
+From another perspective, the parameter $$k$$ in both methods modifies the amount of mass stored to the unseen events, for the case of $$k=0.1$$ the mass stored for unseen events is $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.3269$$ which is considerably lower than the one obtained when $$k=1$$ which is the standard Laplace Smoothing. 
 
-$$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.3269$$
+As done in $$k$$ smoothing, different parameter values give different outcomes of Perplexity. The following figure presents the Perplexity of the training and test corpus when $$k$$ varies from $$0.1$$ to $$1$$. It can be observed that the values $$k<0.1$$ provide a lower Perplexity on the training set, and these values are preferable. Additionally, comparing the training Perplexity for the two methods, it is observed that the latter produce a straight line, whereas the former presents a no-linear relationship. 
 
 ![Max Smoothing](/NLP-Course/assets/images/max_smoothing.png)
 
