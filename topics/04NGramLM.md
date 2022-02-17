@@ -461,6 +461,8 @@ The following table compares the four words more probable given the starting sym
 
 It can be observed from the table that the probability using the Laplace method is reduced for the same bigram; on the other hand, the mass corresponding to unknown words given the starting symbol is: $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.7541.$$ 
 
+The Perplexity can be computed using the method described previously; however, the Laplace Smoothing modifies how the conditional probability is calculated. The following code considers the use of Laplace smoothing; it can be observed that the probability of a sequence is obtained even for the unknown words. 
+
 ```python
 def laplace(a, b):
     if a in P_l:
