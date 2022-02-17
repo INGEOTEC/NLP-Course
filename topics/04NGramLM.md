@@ -625,7 +625,7 @@ As done in $$k$$ smoothing, different parameter values give different outcomes o
 
 As expected, creating an LM using only bigrams is not enough to model the language's complexity; however, extending this model is straightforward by increasing the number of words considered. The model can be a trigram LM or a 4-gram model, and so on. However, every time the number of words is increased, there are fewer examples to estimate the joint probability, and even increasing the size of the training set is not enough. Therefore, LMs have changed to a continuous representation instead of a discrete one; this topic will be covered later in the course. 
 
-A trigram LM models $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 2}, \mathcal X_{\ell -1})$$; the first step is to estimate these values from a corpus. The procedure is equivalent to the bigrams being the only difference is that it is needed to add another starting symbol.  
+A trigram LM models $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 2}, \mathcal X_{\ell -1})$$; the first step is to estimate these values from a corpus. The procedure is equivalent to the bigrams being the only difference is that it is needed to add another starting symbol. It can be observed that $$n-1$$ starting symbols are used and that the n-grams are computed using function `zip` and the list comprehension notation. 
 
 ```python
 def compute_ngrams(fname, n=3):
@@ -639,6 +639,8 @@ def compute_ngrams(fname, n=3):
         ngrams.update(_)
     return ngrams
 ```
+
+The Perplexity helper function needs to be updated to compute the n-grams; the procedure is similar to the one used to create the n-grams.
 
 ```python
 def PP(sentences,
