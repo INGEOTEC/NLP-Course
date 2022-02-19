@@ -26,3 +26,29 @@ from microtc.textmodel import TextModel
 
 # Introduction
 
+# Stopwords
+
+# Spelling
+
+## Punctuation
+## Diactric
+## Case sensitive
+## Symbol reduction
+
+# Stemmming
+
+# Lemmatization
+
+# Entity
+
+## Users
+## URL
+## Numbers
+
+# Tokenization
+
+## q-grams
+
+## n-grams
+
+
