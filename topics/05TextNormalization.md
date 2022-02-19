@@ -26,6 +26,8 @@ from microtc.textmodel import TextModel
 
 # Introduction
 
+In all the topics covered, the assumption is that the text is well-formatted and spaces nicely surround the words (tokens). However, this is not the general case, and the spelling errors and the procedure used to define the tokens strongly impact the algorithm's performance. Consequently, this part of the course is devoted to presenting standard techniques used to normalize the text and to transform the text into tokens. 
+
 # Stopwords
 
 # Spelling
