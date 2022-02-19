@@ -660,11 +660,20 @@ def PP(sentences,
     return np.exp(_)
 ```
 
+At this point, we have all the elements to create an LM of any size; for example, the following code creates a trigram LM using max smoothing. 
+
 ```python
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
-ngrams = compute_ngrams(fname, n=2)
+ngrams = compute_ngrams(fname, n=3)
 V = set()
 _ = [[V.add(x) for x in key] for key in ngrams.keys()]
-prev_l = sum_last(ngrams)
-P_l = cond_prob(ngrams, prev_l, k=1)
+V = len(V) - 1
+K = 0.1
+prev_l = sum_last_max(ngrams)
+P_l = cond_prob_max(ngrams, prev_l)
 ```
+
+The use of the LM can be illustrated by creating a word cloud of the conditional probability 
+$$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell-2}=of, \mathcal X_{\ell-1}=the)$$ (i.e., `P_l[('of', 'the')]`) shown below.
+
+![P(x | of the)](/NLP-Course/assets/images/wordcloud_prob_of_the.png)

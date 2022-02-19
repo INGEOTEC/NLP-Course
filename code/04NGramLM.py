@@ -332,11 +332,13 @@ def compute_ngrams(fname, n=3):
 
 
 fname = join('dataset', 'tweets-2022-01-17.json.gz')
-ngrams = compute_ngrams(fname, n=2)
+ngrams = compute_ngrams(fname, n=3)
 V = set()
 _ = [[V.add(x) for x in key] for key in ngrams.keys()]
-prev_l = sum_last(ngrams)
-P_l = cond_prob(ngrams, prev_l, k=1)
+V = len(V) - 1
+K = 0.1
+prev_l = sum_last_max(ngrams)
+P_l = cond_prob_max(ngrams, prev_l)
 
 
 def PP(sentences,
@@ -355,5 +357,10 @@ def PP(sentences,
     _ = tot / (len(words) - (n - 1))
     return np.exp(_)
 
-### 
+
+wc = WC().generate_from_frequencies(P_l[('of', 'the')])
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('wordcloud_prob_of_the.png', dpi=300)
 
