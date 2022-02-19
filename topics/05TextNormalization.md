@@ -28,7 +28,17 @@ from microtc.textmodel import TextModel
 
 In all the topics covered, the assumption is that the text is well-formatted and spaces nicely surround the words (tokens). However, this is not the general case, and the spelling errors and the procedure used to define the tokens strongly impact the algorithm's performance. Consequently, this part of the course is devoted to presenting standard techniques used to normalize the text and to transform the text into tokens. 
 
-# Stopwords
+The text normalization described are mainly the ones used in the following research words:
+
+1. [An automated text categorization framework based on hyperparameter optimization](https://www.sciencedirect.com/science/article/pii/S0950705118301217)
+2. [A simple approach to multilingual polarity classification in Twitter](https://www.sciencedirect.com/science/article/abs/pii/S0167865517301721)
+3. [A case study of Spanish text transformations for twitter sentiment analysis](https://www.sciencedirect.com/science/article/abs/pii/S0957417417302312)
+
+# Entity
+
+## Users
+## URL
+## Numbers
 
 # Spelling
 
@@ -37,15 +47,11 @@ In all the topics covered, the assumption is that the text is well-formatted and
 ## Case sensitive
 ## Symbol reduction
 
+# Stopwords
+
 # Stemmming
 
 # Lemmatization
-
-# Entity
-
-## Users
-## URL
-## Numbers
 
 # Tokenization
 
