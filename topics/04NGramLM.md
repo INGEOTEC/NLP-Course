@@ -16,13 +16,12 @@ nav_order: 4
 ## Libraries used
 {: .no_toc .text-delta }
 ```python
-from text_models import Vocabulary
-from collections import Counter
 import numpy as np
-from scipy.stats import norm, chi2
-from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
-from collections import defaultdict
+from microtc.utils import tweet_iterator
+from os.path import join
+from collections import Counter, defaultdict
+from wordcloud import WordCloud as WC
 ```
 
 ## Installing external libraries

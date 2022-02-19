@@ -4,7 +4,6 @@ from microtc.utils import tweet_iterator
 from os.path import join
 from collections import Counter, defaultdict
 from wordcloud import WordCloud as WC
-from EvoMSA.utils import bootstrap_confidence_interval
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True

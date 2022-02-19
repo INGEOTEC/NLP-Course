@@ -4,7 +4,6 @@ import numpy as np
 from scipy.stats import norm, chi2
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
-from collections import defaultdict
 # %pylab inline
 
 # Collocations
