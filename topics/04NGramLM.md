@@ -676,4 +676,4 @@ P_l = cond_prob_max(ngrams, prev_l)
 The use of the LM can be illustrated by creating a word cloud of the conditional probability 
 $$\mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell-2}=of, \mathcal X_{\ell-1}=the)$$ (i.e., `P_l[('of', 'the')]`) shown below.
 
-![P(x | of the)](/NLP-Course/assets/images/wordcloud_prob_of_the.png)
+![Conditional on *of the*](/NLP-Course/assets/images/wordcloud_prob_of_the.png)
