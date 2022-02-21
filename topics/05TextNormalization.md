@@ -36,6 +36,8 @@ The text normalization described are mainly the ones used in the following resea
 
 # Entity
 
+The journey of text normalization starts with handling different entities within a text; the entities could be the mentioned of a user in a tweet, the numbers, or the URL, to mention a few. The actions performed to the entities found are to delete them or replace them for a particular token. 
+
 ## Users
 ## URL
 ## Numbers
