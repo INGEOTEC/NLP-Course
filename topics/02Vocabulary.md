@@ -230,7 +230,7 @@ Once $$k$$ and $$\beta$$ have been identified, it is possible to use them in the
 
 # Activities
 
-Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  So far, we have identified these parameters using a toy dataset. In order to illustrate how these parameters can be used to compare languages, we are going to use a dataset of words (and bi-grams) available in a library [text_models](https://arxiv.org/pdf/2009.01826.pdf). 
+Zipf's Law and Heaps' Law model two language characteristics; these characteristics are summarized in the values of the parameters $$c$$ and $$k$$ and $$\beta$$ respectively.  So far, we have identified these parameters using a toy dataset. In order to illustrate how these parameters can be used to compare languages, we are going to use a dataset of words (and bi-grams) available in a library [text_models](https://github.com/INGEOTEC/text_models) described in [A Python library for exploratory data analysis on twitter data based on tokens and aggregated origin–destination information](https://www.sciencedirect.com/science/article/pii/S0098300421002946).
 
 `text_models` contains the frequency of words and bigrams of words measured from tweets written in different languages (Arabic, Spanish, and English) and collected from the Twitter open stream. 
 

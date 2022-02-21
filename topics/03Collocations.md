@@ -52,7 +52,7 @@ The frequency of the bigrams can be represented in a co-occurrence matrix as the
 |in  |   29159 |   18345 |    6683 |       0 |   11536 |
 |and |   22768 |   17816 |    7802 |   11536 |       0 |
 
-The co-occurrence matrix was created using the data obtained from the library `text_models` using the following code. The third line retrieves all the bigrams and stores them in the variable `bigrams.` The loop goes for all the bigrams that contains one of the five words defined in `index,` it is observed that the matrix is symmetric, this is because the `text_models` library does not store the order of the words composing the bigram.
+The co-occurrence matrix was created using the data obtained from the library [text_models](https://github.com/INGEOTEC/text_models) (see [A Python library for exploratory data analysis on twitter data based on tokens and aggregated origin–destination information](https://www.sciencedirect.com/science/article/pii/S0098300421002946)) using the following code. The third line retrieves all the bigrams and stores them in the variable `bigrams.` The loop goes for all the bigrams that contains one of the five words defined in `index,` it is observed that the matrix is symmetric, this is because the `text_models` library does not store the order of the words composing the bigram.
 
 ```python 
 date = dict(year=2022, month=1, day=10)
