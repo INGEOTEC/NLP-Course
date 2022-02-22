@@ -259,7 +259,7 @@ $$
 \end{eqnarray}
 $$
 
-As can be seen, the previous steps are not feasible; consequently, it is needed to analyze this equation further to figure out how to proceed. The first characteristic to notice is that $$\mathbb P(\mathcal X_1=\epsilon_s)=1$$. The second one is that the first word is always $$\epsilon_s$$; consequently, $$\mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon_s) = \mathbb P(\mathcal X_2=x)$$; using these elements, it is obtained:
+As can be seen, the procedure used on the equation with the starting symbol is not feasible on the equation at hand; consequently, it is needed to analyze this equation further to figure out how to proceed. The first characteristic to notice is that $$\mathbb P(\mathcal X_1=\epsilon_s)=1$$. The second one is that the first word is always $$\epsilon_s$$; consequently, $$\mathbb P(\mathcal X_2=x \mid \mathcal X_1=\epsilon_s) = \mathbb P(\mathcal X_2=x)$$; using these elements, it is obtained:
 
 $$
 \begin{eqnarray}
