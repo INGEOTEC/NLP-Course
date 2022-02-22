@@ -470,7 +470,7 @@ def laplace(a, b):
             return next[b]
     if a in prev_l:
         return 1 / (prev_l[a] + V)
-    return 1 / len(V)
+    return 1 / V
 ```
 
 The Perplexity of the sentence *I like to play football* is higher than that computed previously. On the other hand, the Perplexity of *I like to play soccer* is $$5342.2$$.
