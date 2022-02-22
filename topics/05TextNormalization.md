@@ -39,14 +39,48 @@ The text normalization described are mainly the ones used in the following resea
 The journey of text normalization starts with handling different entities within a text; the entities could be the mentioned of a user in a tweet, the numbers, or the URL, to mention a few. The actions performed to the entities found are to delete them or replace them for a particular token. 
 
 ## Users
+
+The first process is to deal with username following the format of Twitter. In a tweet, the mention of a user is identified with a string starting with the character @. The two actions could be to delete all the users' mentions or change them for a common label.
+
+The procedure uses regular expressions to find the entities; for example, the following code can remove the users' mentions.
+
+```python
+text = 'Hi @xx, @mm is talking about you.'
+re.sub(r"@\S+", "", text)
+'Hi   is talking about you.'
+```
+
+On the other hand, to replace the username with a shared label can be implemented with the following code, where the label is `_usr`
+
+```python
+text = 'Hi @xx, @mm is talking about you.'
+re.sub(r"@\S+", "_usr", text)
+'Hi _usr _usr is talking about you.'
+```
+
 ## URL
+
+The previous code can be adapted to handle URL; one only needs to define the regular expression to use; see the following code that removes all the appearances of the URL. 
+
+```python
+text = "go http://google.com, and find out"
+re.sub(r"https?://\S+", "", text)
+```
+
 ## Numbers
+
+The previous code can be modified to deal with numbers and replace the number found with a shared label such as `_num`.
+
+```python
+text = "we have won 10 M"
+re.sub(r"\d+\.?\d+", "_num", text)
+```
 
 # Spelling
 
+## Case sensitive
 ## Punctuation
 ## Diactric
-## Case sensitive
 ## Symbol reduction
 
 # Stopwords
