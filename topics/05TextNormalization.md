@@ -80,7 +80,7 @@ re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
 
 ## Case sensitive
 ## Punctuation
-## Diactric
+## Diacritic
 ## Symbol reduction
 
 # Stopwords
