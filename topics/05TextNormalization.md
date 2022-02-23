@@ -118,11 +118,15 @@ for x in unicodedata.normalize('NFD', text):
     output += x
 ```
 
-# Stopwords
+# Semantic Normalizations
 
-# Stemmming
+The next set of normalization techniques aims to reduce the vocabulary size using the meaning of the words to modify them or remove them from the text.
 
-# Lemmatization
+## Stopwords
+
+## Stemmming
+
+## Lemmatization
 
 # Tokenization
 
