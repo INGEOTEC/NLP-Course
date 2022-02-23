@@ -102,14 +102,21 @@ for x in text:
     if x in SKIP_SYMBOLS:
         continue
     output += x
-output
 ```
 
-## Diactric
+## Diacritic
 
+Different languages use diacritic symbols, e.g., México; as expected, this has the consequence of increasing the vocabulary. On the other hand, in informal writing, the misuse of diacritic symbols is common; one particular way to handle this problem is to remove the diacritic symbols and treat them as the same word, e.g., México would be replaced by Mexico. 
 
-
-## Symbol reduction
+```python
+text = 'México'
+output = ""
+for x in unicodedata.normalize('NFD', text):
+    o = ord(x)
+    if 0x300 <= o and o <= 0x036F:
+        continue
+    output += x
+```
 
 # Stopwords
 

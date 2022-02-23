@@ -6,6 +6,7 @@ from microtc.params import OPTION_GROUP, OPTION_DELETE
 from b4msa.lang_dependency import LangDependency
 import re
 from microtc.textmodel import SKIP_SYMBOLS
+import unicodedata
 
 # %pylab inline
 
@@ -31,6 +32,16 @@ text = "Hi! good morning,"
 output = ""
 for x in text:
     if x in SKIP_SYMBOLS:
+        continue
+    output += x
+output
+
+
+text = 'México'
+output = ""
+for x in unicodedata.normalize('NFD', text):
+    o = ord(x)
+    if 0x300 <= o and o <= 0x036F:
         continue
     output += x
 output
