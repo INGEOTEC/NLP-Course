@@ -78,9 +78,37 @@ re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
 
 # Spelling
 
+The next block of text normalization modifies the writing of the text, removing components that, for particular applications, can be ignored to reduce the vocabulary size, which impacts the complexity of the algorithm and could be reflected in an improvement in the performance.  
+
 ## Case sensitive
+
+The first of these transformations is the conversion to lower case; transforming all the words to the lower case has the consequence that the vocabulary is reduced, e.g., the word Mexico and mexico would be considered the same token. This operation can be implemented with function `lower` as follows.
+
+```python
+text = "Mexico"
+text.lower()
+```
+
 ## Punctuation
+
+The punctuation symbols are essential to natural language understanding and generation; however, for other applications, such as sentiment analysis or text categorization, its contribution is opaque by the increase in the vocabulary size. Consequently, its removal influences the vocabulary size, which sometimes has a positive result on the performance.
+
+These symbols can be removed by traversing the string and skipping the punctuations.
+
+```python
+text = "Hi! good morning,"
+output = ""
+for x in text:
+    if x in SKIP_SYMBOLS:
+        continue
+    output += x
+output
+```
+
 ## Diactric
+
+
+
 ## Symbol reduction
 
 # Stopwords

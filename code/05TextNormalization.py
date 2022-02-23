@@ -5,6 +5,7 @@ from microtc.textmodel import TextModel
 from microtc.params import OPTION_GROUP, OPTION_DELETE
 from b4msa.lang_dependency import LangDependency
 import re
+from microtc.textmodel import SKIP_SYMBOLS
 
 # %pylab inline
 
@@ -23,5 +24,13 @@ re.sub(r"https?://\S+", "", text)
 text = "we have won 10 M"
 re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
 
-text = "we have won 10. M"
-re.sub(r"\d+\.?\d+", "_num", text)
+text = "Mexico"
+text.lower()
+
+text = "Hi! good morning,"
+output = ""
+for x in text:
+    if x in SKIP_SYMBOLS:
+        continue
+    output += x
+output
