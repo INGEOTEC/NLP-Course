@@ -73,7 +73,7 @@ The previous code can be modified to deal with numbers and replace the number fo
 
 ```python
 text = "we have won 10 M"
-re.sub(r"\d+\.?\d+", "_num", text)
+re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
 ```
 
 # Spelling

@@ -21,4 +21,7 @@ text = "go http://google.com, and find out"
 re.sub(r"https?://\S+", "", text)
 
 text = "we have won 10 M"
+re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
+
+text = "we have won 10. M"
 re.sub(r"\d+\.?\d+", "_num", text)
