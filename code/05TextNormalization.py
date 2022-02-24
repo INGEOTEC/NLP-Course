@@ -4,30 +4,32 @@ from matplotlib import pylab as plt
 from microtc.textmodel import TextModel
 from microtc.params import OPTION_GROUP, OPTION_DELETE
 from b4msa.lang_dependency import LangDependency
+from nltk.stem.porter import PorterStemmer
 import re
 from microtc.textmodel import SKIP_SYMBOLS
 import unicodedata
-
 # %pylab inline
 
-lang = LangDependency('spanish')
-lang.filterStopWords("~la~vida~es~buena~", OPTION_GROUP)
-
+## Users
 text = 'Hi @xx, @mm is talking about you.'
 re.sub(r"@\S+", "", text)
 
 text = 'Hi @xx, @mm is talking about you.'
 re.sub(r"@\S+", "_usr", text)
 
+## URL
 text = "go http://google.com, and find out"
 re.sub(r"https?://\S+", "", text)
 
+## Numbers
 text = "we have won 10 M"
 re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
 
+## Case sensitive
 text = "Mexico"
 text.lower()
 
+## Punctuation
 text = "Hi! good morning,"
 output = ""
 for x in text:
@@ -36,7 +38,7 @@ for x in text:
     output += x
 output
 
-
+## Diacritic
 text = 'México'
 output = ""
 for x in unicodedata.normalize('NFD', text):
@@ -44,4 +46,27 @@ for x in unicodedata.normalize('NFD', text):
     if 0x300 <= o and o <= 0x036F:
         continue
     output += x
+output
+
+## Stop words
+lang = LangDependency('english')
+
+text = 'Good morning! Today, we have a warm weather.'
+output = []
+for word in text.split():
+    if word.lower() in lang.stopwords[len(word)]:
+        continue
+    output.append(word)
+output = " ".join(output) 
+
+
+## Stemmming and Lemmatization
+stemmer = PorterStemmer()
+
+text = 'I like playing football'
+output = []
+for word in text.split():
+    w = stemmer.stem(word)
+    output.append(w)
+output = " ".join(output) 
 output

@@ -122,11 +122,41 @@ for x in unicodedata.normalize('NFD', text):
 
 The next set of normalization techniques aims to reduce the vocabulary size using the meaning of the words to modify them or remove them from the text.
 
-## Stopwords
+## Stop words
 
-## Stemmming
+The stop words are the most frequent words used in the language. These words are essential to communicate but are not so much on tasks where the aim is to discriminate texts according to their meaning. 
 
-## Lemmatization
+The stop words can be stored in a dictionary, and then the process of removing them consists of traversing all the tokens from a text and then removing those in the dictionary. The process is exemplified with the following code.
+
+```python
+lang = LangDependency('english')
+
+text = 'Good morning! Today, we have a warm weather.'
+output = []
+for word in text.split():
+    if word.lower() in lang.stopwords[len(word)]:
+        continue
+    output.append(word)
+output = " ".join(output) 
+```
+
+## Stemmming and Lemmatization
+
+The idea of stemming and lemmatization, seen as a normalization process, is to group different words based on their root; for example, the process would associate words like *playing*, *player*, *plays* with the token *play*.
+
+Stemming treats the problem with fewer constraints than lemmatization, having as a consequence that the common word found cannot be the common root of the words; additionally, the algorithms do not consider the role of the word being processed in the sentence. On the other hand, a lemmatization algorithm obtains the root of the word considering the part of the speech of the processed word.
+
+```python
+stemmer = PorterStemmer()
+
+text = 'I like playing football'
+output = []
+for word in text.split():
+    w = stemmer.stem(word)
+    output.append(w)
+output = " ".join(output) 
+output
+```
 
 # Tokenization
 
