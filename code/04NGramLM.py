@@ -142,7 +142,6 @@ joint_prob('I like to play soccer')
 
 # Performance
 
-
 def PP(sentences,
        prob=lambda a, b: P[a][b]):
     if isinstance(sentences, str):
@@ -152,11 +151,10 @@ def PP(sentences,
         words = sentence.split()
         words.insert(0, '<s>')
         words.append('</s>')
-        tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / prob(a, b))
+            tot += np.log(prob(a, b))
         N += (len(words) - 1)
-    _ = tot / (len(words) - 1)
+    _ = - tot / N
     return np.exp(_)
 
 
@@ -307,14 +305,17 @@ for k in np.linspace(0.01, 1, 10):
 
 # one=output when the file is 'tweets-2022-01-17.json.gz'
 x = np.linspace(0.01, 1, 10)
+plt.plot(x, one_laplace)
+plt.plot(x, output_laplace)
 plt.plot(x, one)
 plt.plot(x, output)
 plt.grid()
 plt.xlabel(r'$k$')
 plt.ylabel(r'$PP$')
-plt.legend(['Training', 'Test'])
+plt.legend(['Training (Laplace)', 'Test (Laplace)', 
+            'Training (Max)', 'Test (Max)'])
 plt.tight_layout()
-plt.savefig('max_smoothing.png', dpi=300)
+plt.savefig('laplace_max_smoothing.png', dpi=300)
 
 ## N-Gram
 
@@ -351,9 +352,9 @@ def PP(sentences,
         words.append('</s>')
         tot = 0
         for *a, b in zip(*(words[i:] for i in range(n))):
-            tot += np.log(1 / prob(tuple(a), b))
+            tot += np.log(prob(tuple(a), b))
         N += (len(words) - (n - 1))
-    _ = tot / (len(words) - (n - 1))
+    _ = - tot / N
     return np.exp(_)
 
 

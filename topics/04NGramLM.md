@@ -389,11 +389,10 @@ def PP(sentences,
         words = sentence.split()
         words.insert(0, '<s>')
         words.append('</s>')
-        tot = 0
         for a, b in zip(words, words[1:]):
-            tot += np.log(1 / prob(a, b))
+            tot += np.log(prob(a, b))
         N += (len(words) - 1)
-    _ = tot / (len(words) - 1)
+    _ = - tot / N
     return np.exp(_)
 ```
 
@@ -410,7 +409,7 @@ The Perplexity of the corpus used to train the LM is:
 ```python
 fname2 = join('dataset', 'tweets-2022-01-17.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)])
-76.94789152533505
+66.8740729934466
 ```
 
 Another example could be *I like to play soccer* which is computed as follows.
@@ -486,12 +485,14 @@ The Perplexity of an LM must be measured on a corpus that has not been seen; for
 fname2 = join('dataset', 'tweets-2022-01-10.json.gz')
 PP([x['text'] for x in tweet_iterator(fname2)],
     prob=laplace)
-30327.884298225727
+49563.71966143271
 ```
+
+The Perplexity of the corpus used to estimate the parameters is $$30646.76$$, which is lower than the Perplexity measured on a test set, which is the expected behavior.
 
 # Activities
 
-The Perplexity of the corpus used to estimate the parameters is $$40950.37$$, which is higher than the Perplexity measured on a test set; this indicates that the unknown words are lightly penalized. Laplace smoothing can be modified to address this problem by replacing the constant one with a parameter. 
+Laplace smoothing can be modified to change the mass store for the unseen tokens. 
 
 ## Add-$$k$$ Smoothing
 
@@ -548,13 +549,6 @@ PP('I like to play soccer',
    prob=lambda a, b: laplace((a, ), b))
 1780.7548164607583  
 ```
-
-The parameter $$k$$ can be varied for different values to illustrate the behavior of Perplexity for different smoothing factors. Furthermore, the Perplexity obtained in a training corpus (January 17, 2022) was higher than the Perplexity on a test set (January 10, 2022) using the standard Laplace smoothing. However, it might be possible that for some $$k$$ values, the associated Perplexity could be more related to the intuition that the unknown words are less probable than known ones, that is, that the Perplexity of the training corpus would be smaller than the one of the test corpus. 
-
-The following picture presents the Perplexity for different values of $$k$$ when $$k$$ is in the range from $$0.01$$ to $$1$$. The blue line presents the Perplexity obtained from the training corpus, and the orange corresponds to the test corpus. It is observed that for approximately $$k<0.3$$, the Perplexity in the test corpus is higher than the training corpus. Therefore, any value less than $$0.3$$ is an adequate value for $$k$$
-
-
-![Laplace Smoothing](/NLP-Course/assets/images/laplace_smoothing.png)
 
 ## Max Smoothing
 
@@ -614,11 +608,13 @@ PP('I like to play soccer',
    prob=lambda a, b: prob_max((a, ), b))
 1762.903955247848  
 ```
+
 From another perspective, the parameter $$k$$ in both methods modifies the amount of mass stored to the unseen events, for the case of $$k=0.1$$ the mass stored for unseen events is $$1 - \sum \mathbb P(\mathcal X_\ell \mid \mathcal X_{\ell - 1}=\epsilon_s) \approx 0.3269$$ which is considerably lower than the one obtained when $$k=1$$ which is the standard Laplace Smoothing. 
 
-As done in $$k$$ smoothing, different parameter values give different outcomes of Perplexity. The following figure presents the Perplexity of the training and test corpus when $$k$$ varies from $$0.1$$ to $$1$$. It can be observed that the values $$k<0.1$$ provide a lower Perplexity on the training set, and these values are preferable. Additionally, comparing the training Perplexity for the two methods, it is observed that the latter produce a straight line, whereas the former presents a no-linear relationship. 
+The parameter $$k$$ can be varied for different values to illustrate the behavior of Perplexity for different smoothing factors. The following picture presents the Perplexity for different values of $$k$$ when $$k$$ is in the range from $$0.01$$ to $$1$$. The values presented are the Perplexity obtained on the training set for the Laplace and Max Smoothing method and the Perplexity on the test set for both methods.
 
-![Max Smoothing](/NLP-Course/assets/images/max_smoothing.png)
+
+![Max Smoothing](/NLP-Course/assets/images/laplace_max_smoothing.png)
 
 ## N-Gram
 
