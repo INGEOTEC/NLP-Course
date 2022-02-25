@@ -78,3 +78,11 @@ n_grams = []
 for a in zip(*[words[i:] for i in range(n)]):
     n_grams.append("~".join(a))
 n_grams
+
+
+text = 'I like playing'
+q = 4
+q_grams = []
+for a in zip(*[text[i:] for i in range(q)]):
+    q_grams.append("".join(a))
+q_grams

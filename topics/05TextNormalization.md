@@ -65,6 +65,7 @@ The previous code can be adapted to handle URL; one only needs to define the reg
 ```python
 text = "go http://google.com, and find out"
 re.sub(r"https?://\S+", "", text)
+'go  and find out'
 ```
 
 ## Numbers
@@ -74,6 +75,7 @@ The previous code can be modified to deal with numbers and replace the number fo
 ```python
 text = "we have won 10 M"
 re.sub(r"(\d+\.\d+)|(\.\d+)|(\d+\.)|(\d+)", "_num", text)
+'we have won _num M'
 ```
 
 # Spelling
@@ -87,6 +89,7 @@ The first of these transformations is the conversion to lower case; transforming
 ```python
 text = "Mexico"
 text.lower()
+'mexico'
 ```
 
 ## Punctuation
@@ -102,6 +105,8 @@ for x in text:
     if x in SKIP_SYMBOLS:
         continue
     output += x
+output
+'Hi good morning'
 ```
 
 ## Diacritic
@@ -116,6 +121,8 @@ for x in unicodedata.normalize('NFD', text):
     if 0x300 <= o and o <= 0x036F:
         continue
     output += x
+output
+'Mexico'
 ```
 
 # Semantic Normalizations
@@ -138,6 +145,8 @@ for word in text.split():
         continue
     output.append(word)
 output = " ".join(output) 
+output
+'Good morning! Today, warm weather.'
 ```
 
 ## Stemmming and Lemmatization
@@ -156,6 +165,7 @@ for word in text.split():
     output.append(w)
 output = " ".join(output) 
 output
+'i like play footbal'
 ```
 
 # Tokenization
@@ -174,9 +184,26 @@ n_grams = []
 for a in zip(*[words[i:] for i in range(n)]):
     n_grams.append("~".join(a))
 n_grams
+['I~like~playing', 'like~playing~football',
+ 'playing~football~on', 'football~on~Saturday']
 ```
 
 ## q-grams
+
+The q-gram tokenizer complements the n-grams one; it is defined as the substring of length $$q$$. The q-grams have two relevant features; the first one is that they are language agnostic consequently can be applied to any language, and the second is that they tackle the misspelling problem from an approximate matching perspective.  
+
+The code is equivalent to the one used to compute n-grams, being the difference that the iteration is on characters instead of words.
+
+```python
+text = 'I like playing'
+q = 4
+q_grams = []
+for a in zip(*[text[i:] for i in range(q)]):
+    q_grams.append("".join(a))
+q_grams
+['I li', ' lik',  'like', 'ike ', 'ke p', 'e pl',
+ ' pla', 'play', 'layi', 'ayin', 'ying']
+```
 
 
 
