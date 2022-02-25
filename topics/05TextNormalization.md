@@ -205,6 +205,15 @@ q_grams
  ' pla', 'play', 'layi', 'ayin', 'ying']
 ```
 
+# TextModel
+
+The class `TextModel` of the library [B4MSA](https://b4msa.readthedocs.io/en/latest/) contains the text normalization and tokenizers described and can be used as follows. 
+
+The first step is to instantiate the class given the desired parameters. The [#Entity](Entity) parameters have three options to delete the entity, replace it with a predefined token, or do not apply that operation. These parameters are:
+
+* usr_option
+* url_option
+* num_option
 
 
 

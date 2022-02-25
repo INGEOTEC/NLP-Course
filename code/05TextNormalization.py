@@ -1,7 +1,7 @@
 import numpy as np
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
-from microtc.textmodel import TextModel
+from b4msa.textmodel import TextModel
 from microtc.params import OPTION_GROUP, OPTION_DELETE
 from b4msa.lang_dependency import LangDependency
 from nltk.stem.porter import PorterStemmer
@@ -86,3 +86,9 @@ q_grams = []
 for a in zip(*[text[i:] for i in range(q)]):
     q_grams.append("".join(a))
 q_grams
+
+text = 'I like playing football'
+tm = TextModel(token_list=[-1, 3], lang='english', stemming=True)
+tm.text_transformations('I like playing football')
+
+tm.tokenize('I like playing football')
