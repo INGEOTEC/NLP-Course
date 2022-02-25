@@ -70,3 +70,11 @@ for word in text.split():
     output.append(w)
 output = " ".join(output) 
 output
+
+text = 'I like playing football on Saturday'
+words = text.split()
+n = 3
+n_grams = []
+for a in zip(*[words[i:] for i in range(n)]):
+    n_grams.append("~".join(a))
+n_grams

@@ -160,8 +160,24 @@ output
 
 # Tokenization
 
-## q-grams
+Once the text has been normalized, it is time to transform it into its fundamental elements, which could be words, bigrams, n-grams, substrings, or a combination of them; this process is known as tokenization. Different methods can be applied to tokenize a text, the one used is so far is to transform a text into a list of words where the word is surrounded by space or non-printable characters. The decision of which tokenizer to use depends on the application; for example, in order to generate text, it is crucial to learn the punctuation symbols, so these symbols are tokens. On the other hand, in the text categorization problem, where the task is to classify a text, it might be irrelevant to keep the order of the words. 
 
 ## n-grams
+
+The first tokenizer review corresponds to transforming the text into words, bigrams, and in general, n-grams. The case of words is straightforward using the function `split`; once the words have been obtained, these can be combined to form an n-gram of any size, as shown below. 
+
+```python
+text = 'I like playing football on Saturday'
+words = text.split()
+n = 3
+n_grams = []
+for a in zip(*[words[i:] for i in range(n)]):
+    n_grams.append("~".join(a))
+n_grams
+```
+
+## q-grams
+
+
 
 
