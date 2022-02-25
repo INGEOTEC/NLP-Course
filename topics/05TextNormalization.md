@@ -209,11 +209,60 @@ q_grams
 
 The class `TextModel` of the library [B4MSA](https://b4msa.readthedocs.io/en/latest/) contains the text normalization and tokenizers described and can be used as follows. 
 
-The first step is to instantiate the class given the desired parameters. The [#Entity](Entity) parameters have three options to delete the entity, replace it with a predefined token, or do not apply that operation. These parameters are:
+The first step is to instantiate the class given the desired parameters. The [Entity](#entity) parameters have three options to delete (`OPTION_DELETE`) the entity, replace (`OPTION_GROUP`) it with a predefined token, or do not apply that operation (`OPTION_NONE`). These parameters are:
 
 * usr_option
 * url_option
 * num_option
 
+The class has three additional transformation which are:
 
+* emo_option
+* hashtag_option
+* ent_option
+
+The [Spelling](#spelling) transformations can be triggered with the following keywords:
+
+* lc 
+* del_punc
+* del_diac
+
+which corresponds to lower case, punctuation, and diacritic.
+
+The [Semantic](#semantic-normalizations) normalizations are set up with the parameters:
+
+* stopwords
+* stemming
+
+Finally, the tokenizer is configured with the `token_list` parameter, which has the following format; negative numbers indicate $$n$$-grams and positive numbers $$q$$-grams.
+
+For example, the following code invokes the text normalization algorithm; the only difference is that spaces are replaced with `~`.
+
+```python
+text = 'I like playing football with @mgraffg'
+tm = TextModel(token_list=[-1, 3], lang='english', 
+               usr_option=OPTION_GROUP,
+               stemming=True)
+tm.text_transformations(text)
+'~i~like~play~fotbal~with~_usr~'
+```
+
+On the other hand, the tokenizer is used as follows.
+
+```python
+text = 'I like playing football with @mgraffg'
+tm = TextModel(token_list=[-1, 5], lang='english', 
+               usr_option=OPTION_GROUP,
+               stemming=True)
+tm.tokenize(text)               
+['i', 'like', 'play', 'fotbal', 'with', '_usr',
+ 'q:~i~li', 'q:i~lik', 'q:~like', 'q:like~', 'q:ike~p',
+ 'q:ke~pl', 'q:e~pla', 'q:~play', 'q:play~', 'q:lay~f',
+ 'q:ay~fo', 'q:y~fot', 'q:~fotb', 'q:fotba', 'q:otbal',
+ 'q:tbal~', 'q:bal~w', 'q:al~wi', 'q:l~wit', 'q:~with',
+ 'q:with~', 'q:ith~_', 'q:th~_u', 'q:h~_us', 'q:~_usr',
+ 'q:_usr~']
+ ```
+
+ It can be observed that all $$q$$-grams start with the prefix *q:*.
 
