@@ -16,3 +16,4 @@ pip install microtc
 pip install b4msa
 pip install evomsa
 pip install text_models
+pip install wordcloud
