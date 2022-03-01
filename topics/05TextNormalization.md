@@ -19,7 +19,13 @@ nav_order: 5
 import numpy as np
 from wordcloud import WordCloud as WC
 from matplotlib import pylab as plt
-from microtc.textmodel import TextModel
+from b4msa.textmodel import TextModel
+from microtc.params import OPTION_GROUP, OPTION_DELETE, OPTION_NONE
+from b4msa.lang_dependency import LangDependency
+from nltk.stem.porter import PorterStemmer
+import re
+from microtc.textmodel import SKIP_SYMBOLS
+import unicodedata
 ```
 
 ---
