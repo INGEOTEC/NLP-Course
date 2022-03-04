@@ -27,17 +27,19 @@ It is important to note that in order to use a classifier such as Naive Bayes, t
 
 ## Classification
 
-$$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$
+$$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ 
+where $$\mathbf x_i \in \mathbb R^d$$
 
 ## Text Categorization
 
-$$\{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$, i.e., inputs are texts.
+$$\{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$
+, i.e., inputs are texts.
 
 ## Solution
 
 Create a function $m$ that transforms a text into a vector, i.e., $$m: \text{text} \rightarrow \mathbb R^d$$.
 
-$$\mathcal X_d = \{(m(\text{text_i}), y_i) \mid (\text{text_i}, y_i) \in \mathcal X\}$$
+$$\mathcal X_d = \{(m(\text{text}_i), y_i) \mid (\text{text}_i, y_i) \in \mathcal X\}$$
 
 ## Train the model.
 
