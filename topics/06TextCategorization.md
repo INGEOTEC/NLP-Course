@@ -17,9 +17,9 @@ nav_order: 6
 
 # Introduction
 
-Text Categorization aims to identify the class of a given text. The approach followed is to treat this problem as a supervised learning problem. As in any supervised learning problem, the starting point is a set of pairs, where the first element of the pair is the element and the second one corresponds to the output, which is the category. 
+Text Categorization is an NLP task that deals with creating algorithms capable of identifying the category of a text from a set of predefined categories. For example, sentiment analysis belongs to this task, and the aim is to detect the polarity (e.g., positive, neutral, or negative) of a text. The importance of this problem is that different tasks can be posed as text categorization; even problems that at first do not seem related can be formulated as a classification one such as question answering and sentence entailment, to mention a few. 
 
-Let $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_k\}$$ and $$\text{text}_i$$ is a text. $$\mathcal D$$ can be split into two sets $$\mathcal X$$ and $$\mathcal T$$; the former is used to train the algorithm and the later is used to test the algorithms' performance.
+Text Categorization can be tackled from different perspectives; the one followed here is to treat it as a supervised learning problem. As in any supervised learning problem, the starting point is a set of pairs, where the first element of the pair is the input and the second one corresponds to the output. Let $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_k\}$$ and $$\text{text}_i$$ is a text. 
 
 We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
 
