@@ -24,7 +24,8 @@ The goal of the course is to introduce the students to the field of Natural Lang
 
 |Symbol            | Meaning                                                  |
 |------------------|----------------------------------------------------------|
-|$$x$$             | Variable                                                 |
+|$$x$$             | Variable commonly used as input                          |
+|$$y$$             | Variable commonly used as output                         |
 |$$w$$             | Variable mostly used for words (tokens)                  |
 |$$\mathbb R$$     | The real numbers                                         |
 |$$\mathbf x$$     | Column vector $$\mathbf x \in \mathbb R^d$$              |
@@ -33,10 +34,10 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$\mathcal D$$    | Dataset of pairs $$\{(x_i, y_i) \mid i=1, \dots N\}$$    |
 |$$N$$             | Number of examples                                       | 
 |$$K$$             | Number of classes or labels                              |
-|$$\mathbb P(A)$$  | Probability of event $$A$$                               |
+|$$\mathbb P(\cdot)$$  | Probability distribution                             |
 |$$\mathcal X, \mathcal Y$$    | Random variables                             |
 |$$\mathcal N$$    | Normal distribution                                      |
-|$$f_{\mathcal X}$$| $$\mathcal X$$'s probability distribution function (pdf) |
+|$$f_{\mathcal X}$$| $$\mathcal X$$'s probability density function (pdf)      |
 |$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true          |
 |$$\Omega$$        | Search space                                             |
 
