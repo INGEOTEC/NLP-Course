@@ -30,6 +30,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$\mathbf x$$     | Column vector $$\mathbf x \in \mathbb R^d$$              |
 |$$d$$             | Dimension                                                |
 |$$\mathbf w^\intercal \cdot \mathbf x$$ | Dot  product where $$\mathbf w$$ and $$\mathbf x \in \mathbb R^d$$ |
+|$$\mathcal D$$    | Dataset of pairs $$\{(x_i, y_i) \mid i=1, \dots N\}$$    |
 |$$N$$             | Number of examples                                       | 
 |$$K$$             | Number of classes or labels                              |
 |$$\mathbb P(A)$$  | Probability of event $$A$$                               |
