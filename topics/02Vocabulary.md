@@ -196,15 +196,15 @@ where $$\mathbf w$$ is a vector containing the parameters, and $$\mathbf a_i$$ i
 
 Let us analyze in more detail the previous objective function. The sum goes for all the measurements; there are $$N$$ pairs of observations composed by the response (dependent variable) and the independent variables. For each observation $$i$$, the square error is computed between the dependent variable ($$y_i$$) and the dot product of the independent variable ($$\mathbf a_i$$) and parameters ($$\mathbf x$$). 
 
-This notation is specific for OLS; however, it is helpful to define the general case. The first step is to define the set $$\mathcal X$$ composed by the $$N$$ observations, i.e., $$\mathcal X=\{(y_i, \mathbf x_i) \mid 1 \leq i \leq N\}$$ where $$y_i$$ is the response variable and $$\mathbf x$$ contains the independent variables. The second step is to  use an unspecified loss function as $$L(y, \hat y) = (y - \hat y)^2$$. The last step is to abstract the model, that is replace $$\mathbf a_i \cdot \mathbf w$$ with a function $$g(\mathbf x) = \mathbf a_i \cdot \mathbf w$$.  Combining these components the general version of the OLS optimization problem can be expressed as:
+This notation is specific for OLS; however, it is helpful to define the general case. The first step is to define the set $$\mathcal D$$ composed by the $$N$$ observations, i.e., $$\mathcal D=\{(y_i, \mathbf x_i) \mid 1 \leq i \leq N\}$$ where $$y_i$$ is the response variable and $$\mathbf x$$ contains the independent variables. The second step is to  use an unspecified loss function as $$L(y, \hat y) = (y - \hat y)^2$$. The last step is to abstract the model, that is replace $$\mathbf a_i \cdot \mathbf w$$ with a function $$g(\mathbf x) = \mathbf a_i \cdot \mathbf w$$.  Combining these components the general version of the OLS optimization problem can be expressed as:
 
-$$\min_{g \in \Omega} \sum_{(y, \mathbf x) \in \mathcal X} L(y, g(\mathbf x)),$$
+$$\min_{g \in \Omega} \sum_{(y, \mathbf x) \in \mathcal D} L(y, g(\mathbf x)),$$
  
-where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal X$$ contains $$N$$ pairs of observations. This optimization problem is known as **supervised learning** in machine learning.
+where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal D$$ contains $$N$$ pairs of observations. This optimization problem is known as **supervised learning** in machine learning.
 
 Returning to Heaps' Law problem where the goal is to identify the coefficients $$k$$ and $$\beta$$ of the model $$\mid v \mid = kn^\beta$$. That is, function $$g$$ can be defined as $$g_{k,\alpha}(n) = kn^\beta$$ and using the square error as $$L$$ the optimization problem is:
 
-$$\min_{(k, \beta) \in \mathbb R^2} \sum_{(\mid v \mid, n) \in \mathcal X} (\mid v \mid -  kn^\beta)^2.$$
+$$\min_{(k, \beta) \in \mathbb R^2} \sum_{(\mid v \mid, n) \in \mathcal D} (\mid v \mid -  kn^\beta)^2.$$
 
 As mentioned previously, there are many optimization algorithms; some can be found on the function [scipy.optimize.minimize](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html). The function admits as arguments the objective function and the initial values of the parameters. 
 
