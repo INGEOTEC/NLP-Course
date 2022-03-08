@@ -21,6 +21,12 @@ Text Categorization is an NLP task that deals with creating algorithms capable o
 
 Text Categorization can be tackled from different perspectives; the one followed here is to treat it as a supervised learning problem. As in any supervised learning problem, the starting point is a set of pairs, where the first element of the pair is the input and the second one corresponds to the output. Let $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_k\}$$ and $$\text{text}_i$$ is a text. 
 
+
+[Optimization](/NLP-Course/topics/02Vocabulary/#sec:optimization)
+
+$$\min_{g \in \Omega} \sum_{(y, \mathbf x) \in \mathcal D} L(y, g(\mathbf x)).$$
+
+
 We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
 
 It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
