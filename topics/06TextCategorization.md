@@ -25,7 +25,7 @@ Supervised learning problems can be seen as finding a mapping function from inpu
 
 $$\min_{g \in \Omega} \sum_{(\mathbf x, y) \in \mathcal D} L(y, g(\mathbf x)).$$
 
-Additionally, if one is also interested in measuring the uncertainty, the path relies on the probability. In this latter scenario, the conditional probability is used, that is, $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f: \mathcal X \rightarrow [0, 1]^K$$ encodes a probability mass function. For the case of a binary classification problem, this can be expressed using the Bernoulli distribution as $$\textsf{Bernoulli}(\mathcal Y \mid f(x))$$, for more labels, the Categorical distribution can be used. 
+Additionally, if one is also interested in measuring the uncertainty, the path relies on the probability. In this latter scenario, the conditional probability is used, that is, $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f: \mathcal X \rightarrow [0, 1]^K$$ encodes a probability mass function. For the case of a binary classification problem, this can be expressed using the Bernoulli distribution as $$\mathcal Y \sim \textsf{Bernoulli}(f(x))$$, for more labels, the Categorical distribution can be used. 
 
 We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
 
