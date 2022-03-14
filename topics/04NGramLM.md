@@ -42,6 +42,7 @@ A Language Model (LM) assigns probabilities to words (tokens), sentences, or doc
 LM deals with modeling the multivariate probability $$\mathbb P(\mathcal X_1, \mathcal X_2, \ldots, \mathcal X_\ell)$$ of observing $$\ell$$ words (tokens).  As expected, these $$\ell$$ random variables are dependent (see the definition of the complement concept, i.e., [independence](/NLP-Course/topics/03Collocations/#sec:independence-marginal).), and in order to work with them, it is needed to define the concept of conditional probability. 
   
 # Conditional Probability
+{: #sec:conditional-probability }
 
 The conditional probability of two random variables $$\mathcal X$$ and $$\mathcal Y$$ is defined as:
 
