@@ -89,6 +89,7 @@ It is essential to mention that a random variable is a mapping that assigns a re
 The co-occurrence matrix contains the information of two random variables; each one can have $$d$$ (length of the dictionary) different outcomes. Sometimes, working with two random variables might be challenging, so a more suitable approach is starting the description with the most simple case, which corresponds to a single random variable with only two outcomes. 
 
 # Bernoulli Distribution
+{: #sec:bernoulli }
 
 Let $$\mathcal{X}$$ be a random variable with two outcomes ($$\{1, 0\}$$), e.g., this variable corresponds to a language that only has two words. At this point, one might realize that different experiments can be represented with a random variable of two outcomes; perhaps the most famous one is tossing a coin.
 
@@ -97,7 +98,7 @@ The random variable $$\mathcal{X}$$ has a Bernoulli distribution, i.e., $$\mathc
 For example, the language under study has two words _good_ and _bad_, and we encountered a sequence "good bad bad good good." Using the following mapping 
 
 $$\mathcal X(w) = \begin{cases}
-1 \text{when } w \text{ is good}\\
+1 \text{ when } w \text{ is good}\\
 0 \text{ when } w \text{ is good}
 \end{cases}.$$
 
