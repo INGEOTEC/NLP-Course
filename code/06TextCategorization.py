@@ -61,3 +61,21 @@ plt.legend([r'$P(\mathcal Y=1 \mid \mathcal X)$',
 plt.tight_layout()
 plt.grid()
 plt.savefig('two_classes_posteriori.png', dpi=300)
+
+
+klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 0
+
+plt.clf()
+plt.plot([x for x, k in D if k==1 and klass(x) == 1],
+         pos.pdf([x for x, k in D if k==1 and klass(x) == 1]), 'k.')
+plt.plot([x for x, k in D if k==0 and klass(x) == 0],
+         neg.pdf([x for x, k in D if k==0 and klass(x) == 0]), 'k.')
+
+plt.plot([x for x, k in D if k==1 and klass(x) == 0],
+         pos.pdf([x for x, k in D if k==1 and klass(x) == 0]), 'r.')
+plt.plot([x for x, k in D if k==0 and klass(x) == 1],
+         neg.pdf([x for x, k in D if k==0 and klass(x) == 1]), 'r.')
+
+plt.tight_layout()
+plt.grid()
+plt.savefig('two_classes_posteriori_error.png', dpi=300)
