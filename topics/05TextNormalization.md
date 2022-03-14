@@ -28,6 +28,14 @@ from microtc.textmodel import SKIP_SYMBOLS
 import unicodedata
 ```
 
+## Installing external libraries
+{: .no_toc .text-delta }
+
+```bash
+pip install b4msa
+pip install nltk
+```
+
 ---
 
 # Introduction

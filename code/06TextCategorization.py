@@ -1,7 +1,8 @@
+from matplotlib.pyplot import axis
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from scipy.stats import norm
+from scipy.stats import norm, multinomial
 from matplotlib import pylab as plt
 # %pylab inline
 
@@ -51,10 +52,12 @@ post_neg = l_neg.pdf(x) * prior_neg
 
 post = np.vstack([post_pos, post_neg])
 evidence = post.sum(axis=0)
+post_pos /= evidence
+post_neg /= evidence
 
 plt.clf()
-plt.plot(x, post_pos / evidence, 'b')
-plt.plot(x, post_neg / evidence, 'r')
+plt.plot(x, post_pos, 'b')
+plt.plot(x, post_neg, 'r')
 
 plt.legend([r'$P(\mathcal Y=1 \mid \mathcal X)$',
             r'$P(\mathcal Y=0 \mid \mathcal X)$'])
@@ -79,3 +82,28 @@ plt.plot([x for x, k in D if k==0 and klass(x) == 1],
 plt.tight_layout()
 plt.grid()
 plt.savefig('two_classes_posteriori_error.png', dpi=300)
+
+
+pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
+neg = multinomial(1, [0.35, 0.20, 0.25, 0.20])
+length = norm(loc=10, scale=3)
+D = []
+for l in length.rvs(size=1000):
+    D.append((pos.rvs(round(l)).argmax(axis=1), 1))
+    D.append((neg.rvs(round(l)).argmax(axis=1), 0))
+
+
+D_pos = []
+[D_pos.extend(data.tolist()) for data, k in D if k == 1]
+D_neg = []
+[D_neg.extend(data.tolist()) for data, k in D if k == 0]
+
+_, l_pos = np.unique(D_pos, return_counts=True)
+l_pos = l_pos / l_pos.sum()
+_, l_neg = np.unique(D_neg, return_counts=True)
+
+_, priors = np.unique([k for _, k in D], return_counts=True)
+N = priors.sum()
+prior_pos = priors[1] / N
+prior_neg = priors[0] / N
+

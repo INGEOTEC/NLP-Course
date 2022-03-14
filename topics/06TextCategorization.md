@@ -13,6 +13,24 @@ nav_order: 6
 1. TOC
 {:toc}
 
+## Libraries used
+{: .no_toc .text-delta }
+```python
+import numpy as np
+from b4msa.textmodel import TextModel
+from EvoMSA.tests.test_base import TWEETS
+from scipy.stats import norm
+from matplotlib import pylab as plt
+```
+
+## Installing external libraries
+{: .no_toc .text-delta }
+
+```bash
+pip install b4msa
+pip install evomsa
+```
+
 ---
 
 # Introduction
@@ -50,10 +68,45 @@ where $$\mathbb P(\mathcal Y \mid \mathcal X)$$ is the **posterior probability**
 
 ## Example
 
+```python
+pos = norm(loc=3, scale=2.5)
+neg = norm(loc=-0.5, scale=0.75)
+```
 
 ![Two Normals](/NLP-Course/assets/images/two_normals.png)
 
+```python
+_min = neg.ppf(0.05)
+_max = neg.ppf(0.95)
+D = [(x, 0) for x in neg.rvs(100) if x >= _min and x <= _max]
+D += [(x, 1) for x in pos.rvs(1000) if x < _min or x > _max]
+```
+
 ![Two Normal Samples](/NLP-Course/assets/images/two_normal_samples.png)
+
+```python
+l_pos = norm(loc=np.mean([x for x, k in D if k == 1]),
+             scale=np.std([x for x, k in D if k == 1]))
+l_neg = norm(loc=np.mean([x for x, k in D if k == 0]),
+             scale=np.std([x for x, k in D if k == 0]))            
+
+_, priors = np.unique([k for _, k in D], return_counts=True)
+N = priors.sum()
+prior_pos = priors[1] / N
+prior_neg = priors[0] / N
+```
+
+```
+x = np.array([x for x, _ in D])
+x.sort()
+post_pos = l_pos.pdf(x) * prior_pos
+post_neg = l_neg.pdf(x) * prior_neg
+
+post = np.vstack([post_pos, post_neg])
+evidence = post.sum(axis=0)
+post_pos /= evidence
+post_neg /= evidence
+```
 
 ![Posteriori of Two Classes](/NLP-Course/assets/images/two_classes_posteriori.png)
 
@@ -62,6 +115,19 @@ where $$\mathbb P(\mathcal Y \mid \mathcal X)$$ is the **posterior probability**
 We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
 
 It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
+
+# Multinomial Example
+
+```python
+pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
+neg = multinomial(1, [0.35, 0.20, 0.25, 0.20])
+length = norm(loc=10, scale=3)
+D = []
+for l in length.rvs(size=1000):
+    D.append((pos.rvs(round(l)).argmax(axis=1), 1))
+    D.append((neg.rvs(round(l)).argmax(axis=1), 0))
+```
+
 
 ## Classification
 
