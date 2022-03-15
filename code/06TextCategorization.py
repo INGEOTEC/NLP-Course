@@ -1,4 +1,3 @@
-from typing import Counter
 from matplotlib.pyplot import axis
 import numpy as np
 from b4msa.textmodel import TextModel
@@ -11,6 +10,7 @@ from sklearn.model_selection import StratifiedKFold
 from scipy.special import logsumexp
 from sklearn.metrics import recall_score, precision_score, f1_score
 from EvoMSA.utils import bootstrap_confidence_interval
+from sklearn.naive_bayes import MultinomialNB
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -244,6 +244,8 @@ ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
 ci
 
+# Tokenizer
+
 tm = TextModel(lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
@@ -260,4 +262,3 @@ y = np.array([uniq_labels[y] for _, y in D])
 ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
 ci
-
