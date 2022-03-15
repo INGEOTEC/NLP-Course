@@ -126,6 +126,14 @@ for l in length.rvs(size=1000):
     D.append((id2w(neg.rvs(round(l))), 0))
 ```
 
+|Text          |Label    |
+|--------------|---------|
+|x w x x z w y | 1       |
+|y w z z z x w | 0       |
+|z x x x z x z w x w | 1 |
+|x w z w y z z z z w | 0 |
+
+
 ```python
 D_pos = []
 [D_pos.extend(data.split()) for data, k in D if k == 1]
@@ -137,8 +145,16 @@ D_neg = []
 words, l_pos = np.unique(D_pos, return_counts=True)
 w2id = {v: k for k, v in enumerate(words)}
 l_pos = l_pos / l_pos.sum()
+l_pos
+array([0.25489421, 0.33854064, 0.20773186, 0.1988333 ])
+```
+
+```python
 _, l_neg = np.unique(D_neg, return_counts=True)
 l_neg = l_neg / l_neg.sum()
+```
+
+```python
 _, priors = np.unique([k for _, k in D], return_counts=True)
 N = priors.sum()
 prior_pos = priors[1] / N

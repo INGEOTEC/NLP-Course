@@ -95,6 +95,7 @@ for l in length.rvs(size=1000):
     D.append((id2w(pos.rvs(round(l))), 1))
     D.append((id2w(neg.rvs(round(l))), 0))
 
+D[:5]
 
 D_pos = []
 [D_pos.extend(data.split()) for data, k in D if k == 1]
