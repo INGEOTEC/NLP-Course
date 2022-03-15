@@ -237,8 +237,8 @@ def posteriori(txt):
             x[w2id[i]] += v
         except KeyError:
             continue
-    l = np.exp((x * l_tokens).sum(axis=1) + priors)
-    l = l / l.sum()
+    _ = (x * l_tokens).sum(axis=1) + priors
+    l = np.exp(_ - logsumexp(_))
     return l
 ```
 
@@ -247,6 +247,59 @@ hy = np.array([posteriori(x).argmax() for x, _ in D])
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.977
+```
+
+# KFold and StratifiedKFold
+
+```python
+def train(D):
+    tok = tm.tokenize
+    D =[(tok(x), y) for x, y in D]
+    words = set()
+    [words.update(x) for x, y in D]
+    w2id = {v: k for k, v in enumerate(words)}
+    uniq_labels, priors = np.unique([k for _, k in D], return_counts=True)
+    priors = np.log(priors / priors.sum())
+    uniq_labels = {str(v): k for k, v in enumerate(uniq_labels)}
+    l_tokens = np.zeros((len(uniq_labels), len(w2id)))
+    for x, y in D:
+        w = l_tokens[uniq_labels[y]]
+        cnt = Counter(x)
+        for i, v in cnt.items():
+            w[w2id[i]] += v
+    l_tokens += 0.1
+    l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
+    l_tokens = np.log(l_tokens)
+    return w2id, uniq_labels, l_tokens, priors
+
+
+D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
+tm = TextModel(token_list=[-1], lang='english')
+folds = StratifiedKFold(shuffle=True, random_state=0)
+hy = np.empty(len(D))
+for tr, val in folds.split(D, y):
+    training = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = train(training)
+    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+
+y = np.array([uniq_labels[y] for _, y in D])
+(y == hy).mean()
+0.615
+```
+
+```python
+tm = TextModel(lang='english')
+folds = StratifiedKFold(shuffle=True, random_state=0)
+hy = np.empty(len(D))
+for tr, val in folds.split(D, y):
+    training = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = train(training)
+    assert np.all(np.isfinite([posteriori(D[x][0]) for x in val]))
+    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+
+y = np.array([uniq_labels[y] for _, y in D])
+(y == hy).mean()
+0.651
 ```
 
 
