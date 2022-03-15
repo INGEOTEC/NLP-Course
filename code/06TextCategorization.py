@@ -83,7 +83,7 @@ plt.tight_layout()
 plt.grid()
 plt.savefig('two_classes_posteriori_error.png', dpi=300)
 
-# Multinomial Example
+# Categorical distribution 
 
 m = {k: chr(122 - k) for k in range(4)}
 pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])

@@ -112,7 +112,7 @@ post_neg /= evidence
 
 ![Posteriori Errors](/NLP-Course/assets/images/two_classes_posteriori_error.png)
 
-# Multinomial Example
+# Categorical distribution
 
 ```python
 m = {k: chr(122 - k) for k in range(4)}
@@ -184,6 +184,8 @@ hy = np.where(post_pos > post_neg, 1, 0)
 y = np.array([y for _, y in D])
 (hy == y).mean()
 ```
+
+
 
 We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
 
