@@ -183,6 +183,7 @@ hy = np.where(post_pos > post_neg, 1, 0)
 ```python
 y = np.array([y for _, y in D])
 (hy == y).mean()
+0.7215
 ```
 
 
@@ -192,6 +193,63 @@ We have seen how to use Naive Bayes to solve a classification problem; that is, 
 It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
 
 
+# Text Categorization - Naive Bayes
+
+[tweets](https://raw.githubusercontent.com/INGEOTEC/EvoMSA/master/EvoMSA/tests/tweets.json)
+
+```python
+tm = TextModel(token_list=[-1], lang='english')
+tok = tm.tokenize
+```
+
+```python
+D = [(tok(x['text']), x['klass']) for x in tweet_iterator(TWEETS)]
+```
+
+```python
+words = set()
+[words.update(x) for x, y in D]
+w2id = {v: k for k, v in enumerate(words)}
+```
+
+```python
+uniq_labels, priors = np.unique([k for _, k in D], return_counts=True)
+priors = np.log(priors / priors.sum())
+uniq_labels = {str(v): k for k, v in enumerate(uniq_labels)}
+```
+
+```python
+l_tokens = np.zeros((len(uniq_labels), len(w2id)))
+for x, y in D:
+    w = l_tokens[uniq_labels[y]]
+    cnt = Counter(x)
+    for i, v in cnt.items():
+        w[w2id[i]] += v
+l_tokens += 0.1
+l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
+l_tokens = np.log(l_tokens)
+```
+
+```python
+def posteriori(txt):
+    x = np.zeros(len(w2id))
+    cnt = Counter(tm.tokenize(txt))
+    for i, v in cnt.items():
+        try:
+            x[w2id[i]] += v
+        except KeyError:
+            continue
+    l = np.exp((x * l_tokens).sum(axis=1) + priors)
+    l = l / l.sum()
+    return l
+```
+
+```python
+hy = np.array([posteriori(x).argmax() for x, _ in D])
+y = np.array([uniq_labels[y] for _, y in D])
+(y == hy).mean()
+0.977
+```
 
 
 ## Classification

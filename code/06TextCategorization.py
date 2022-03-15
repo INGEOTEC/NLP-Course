@@ -1,9 +1,12 @@
+from typing import Counter
 from matplotlib.pyplot import axis
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
+from microtc.utils import tweet_iterator
 from scipy.stats import norm, multinomial
 from matplotlib import pylab as plt
+from collections import Counter
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -128,6 +131,50 @@ hy = np.where(post_pos > post_neg, 1, 0)
 y = np.array([y for _, y in D])
 
 (hy == y).mean()
+
+# Text Categorization - Naive Bayes
+
+tm = TextModel(token_list=[-1], lang='english')
+tok = tm.tokenize
+D = [(tok(x['text']), x['klass']) for x in tweet_iterator(TWEETS)]
+words = set()
+[words.update(x) for x, y in D]
+w2id = {v: k for k, v in enumerate(words)}
+uniq_labels, priors = np.unique([k for _, k in D], return_counts=True)
+priors = np.log(priors / priors.sum())
+uniq_labels = {str(v): k for k, v in enumerate(uniq_labels)}
+l_tokens = np.zeros((len(uniq_labels), len(w2id)))
+for x, y in D:
+    w = l_tokens[uniq_labels[y]]
+    cnt = Counter(x)
+    for i, v in cnt.items():
+        w[w2id[i]] += v
+l_tokens += 0.1
+l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
+l_tokens = np.log(l_tokens)
+
+
+def posteriori(txt):
+    x = np.zeros(len(w2id))
+    cnt = Counter(tm.tokenize(txt))
+    for i, v in cnt.items():
+        try:
+            x[w2id[i]] += v
+        except KeyError:
+            continue
+    l = np.exp((x * l_tokens).sum(axis=1) + priors)
+    l = l / l.sum()
+    return l
+
+
+hy = np.array([posteriori(x).argmax() for x, _ in D])
+y = np.array([uniq_labels[y] for _, y in D])
+(y == hy).mean()
+
+
+
+    
+
 
 
 
