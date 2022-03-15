@@ -112,21 +112,68 @@ post_neg /= evidence
 
 ![Posteriori Errors](/NLP-Course/assets/images/two_classes_posteriori_error.png)
 
-We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
-
-It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
-
 # Multinomial Example
 
 ```python
+m = {k: chr(122 - k) for k in range(4)}
 pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
 neg = multinomial(1, [0.35, 0.20, 0.25, 0.20])
 length = norm(loc=10, scale=3)
 D = []
+id2w = lambda x: " ".join([m[_] for _ in x.argmax(axis=1)])
 for l in length.rvs(size=1000):
-    D.append((pos.rvs(round(l)).argmax(axis=1), 1))
-    D.append((neg.rvs(round(l)).argmax(axis=1), 0))
+    D.append((id2w(pos.rvs(round(l))), 1))
+    D.append((id2w(neg.rvs(round(l))), 0))
 ```
+
+```python
+D_pos = []
+[D_pos.extend(data.split()) for data, k in D if k == 1]
+D_neg = []
+[D_neg.extend(data.split()) for data, k in D if k == 0]
+```
+
+```python
+words, l_pos = np.unique(D_pos, return_counts=True)
+w2id = {v: k for k, v in enumerate(words)}
+l_pos = l_pos / l_pos.sum()
+_, l_neg = np.unique(D_neg, return_counts=True)
+l_neg = l_neg / l_neg.sum()
+_, priors = np.unique([k for _, k in D], return_counts=True)
+N = priors.sum()
+prior_pos = priors[1] / N
+prior_neg = priors[0] / N
+```
+
+```python
+def likelihood(params, txt):
+    params = np.log(params)
+    _ = [params[w2id[x]] for x in txt.split()]
+    tot = sum(_)
+    return np.exp(tot)
+```
+
+```python
+post_pos = [likelihood(l_pos, x) * prior_pos for x, _ in D]
+post_neg = [likelihood(l_neg, x) * prior_neg for x, _ in D]
+evidence = np.vstack([post_pos, post_neg]).sum(axis=0)
+post_pos /= evidence
+post_neg /= evidence
+hy = np.where(post_pos > post_neg, 1, 0)
+```
+
+# Accuracy
+
+```python
+y = np.array([y for _, y in D])
+(hy == y).mean()
+```
+
+We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
+
+It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
+
+
 
 
 ## Classification
