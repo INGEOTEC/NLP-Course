@@ -186,10 +186,23 @@ y = np.array([y for _, y in D])
 0.7215
 ```
 
-We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
+# Confidence interval
 
-It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
+```python
+p = (hy == y).mean()
+s = np.sqrt(p * (1 - p) / y.shape[0]) 
+coef = norm.ppf(0.975)
+ci = (p - coef * s, p + coef * s)
+ci
+(0.6845035761081213, 0.7244964238918787)
+```
 
+```python
+ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
+                                  metric=lambda a, b: (a == b).mean())
+ci                                  
+(0.6842375, 0.7252625)
+```
 
 # Text Categorization - Naive Bayes
 
@@ -288,6 +301,33 @@ y = np.array([uniq_labels[y] for _, y in D])
 ```
 
 ```python
+p = (hy == y).mean()
+s = np.sqrt(p * (1 - p) / y.shape[0]) 
+coef = norm.ppf(0.975)
+ci = (p - coef * s, p + coef * s)
+ci
+(0.5848410641389679, 0.6451589358610321)
+```
+
+# Precision, Recall, and F1-score
+
+```python
+p = precision_score(y, hy, average=None)
+r = recall_score(y, hy, average=None)
+
+2 * (p * r) / (p + r)
+f1_score(y, hy, average=None)
+
+metric = lambda a, b: recall_score(a, b, average='macro')
+ci = bootstrap_confidence_interval(y, hy,
+                                   metric=metric)
+ci
+(0.3967001014739609, 0.43613909993373073)
+```
+
+# Tokenizer
+
+```python
 tm = TextModel(lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
@@ -302,28 +342,41 @@ y = np.array([uniq_labels[y] for _, y in D])
 0.651
 ```
 
+```python
+metric = lambda a, b: recall_score(a, b, average='macro')
+ci = bootstrap_confidence_interval(y, hy,
+                                   metric=metric)
+ci
+(0.42520668312638243, 0.4632802320946836)
+```
 
-## Classification
+# Extra
+
+We have seen how to use Naive Bayes to solve a classification problem; that is, we start with a set $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ where $$\mathbf x_i \in \mathbb R^d$$, this set is then used to obtain the parameters of a Naive Bayes classifier, and finally, we can use the trained model to test points that have not been used in the training process.
+
+It is important to note that in order to use a classifier such as Naive Bayes, the inputs must have to be represented as vectors, i.e., $\mathbf x \in R^d$. However, in text categorization the inputs are texts.
+
+# Classification
 
 $$\{(\mathbf x_i, y_i) \mid i=1, \ldots, N\}$$ 
 where $$\mathbf x_i \in \mathbb R^d$$
 
-## Text Categorization
+# Text Categorization
 
 $$\{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$
 , i.e., inputs are texts.
 
-## Solution
+# Solution
 
 Create a function $m$ that transforms a text into a vector, i.e., $$m: \text{text} \rightarrow \mathbb R^d$$.
 
 $$\mathcal X_d = \{(m(\text{text}_i), y_i) \mid (\text{text}_i, y_i) \in \mathcal X\}$$
 
-## Train the model.
+# Train the model.
 
 Use $$\mathcal X_d$$ instead of $$\mathcal X$$ to train the model
 
-## Predict
+# Predict
 
 Let $$f$$ be the trained model, and $$t$$ a text. Then the category of $$t$$ can be predicted as: $$f(m(t))$$.
 

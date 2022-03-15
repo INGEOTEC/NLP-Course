@@ -9,6 +9,8 @@ from matplotlib import pylab as plt
 from collections import Counter
 from sklearn.model_selection import StratifiedKFold
 from scipy.special import logsumexp
+from sklearn.metrics import recall_score, precision_score, f1_score
+from EvoMSA.utils import bootstrap_confidence_interval
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -134,6 +136,20 @@ y = np.array([y for _, y in D])
 
 (hy == y).mean()
 
+# Confidence interval
+
+p = (hy == y).mean()
+s = np.sqrt(p * (1 - p) / y.shape[0]) 
+coef = norm.ppf(0.975)
+ci = (p - coef * s, p + coef * s)
+ci
+(0.6845035761081213, 0.7244964238918787)
+
+ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
+                                  metric=lambda a, b: (a == b).mean())
+ci                                  
+(0.6842375, 0.7252625)
+
 # Text Categorization - Naive Bayes
 
 tm = TextModel(token_list=[-1], lang='english')
@@ -209,6 +225,24 @@ y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.615
 
+p = (hy == y).mean()
+s = np.sqrt(p * (1 - p) / y.shape[0]) 
+coef = norm.ppf(0.975)
+ci = (p - coef * s, p + coef * s)
+ci
+
+# Precision, Recall, and F1-score
+
+p = precision_score(y, hy, average=None)
+r = recall_score(y, hy, average=None)
+
+2 * (p * r) / (p + r)
+f1_score(y, hy, average=None)
+
+metric = lambda a, b: recall_score(a, b, average='macro')
+ci = bootstrap_confidence_interval(y, hy,
+                                   metric=metric)
+ci
 
 tm = TextModel(lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
@@ -222,4 +256,8 @@ for tr, val in folds.split(D, y):
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.651
+
+ci = bootstrap_confidence_interval(y, hy,
+                                   metric=metric)
+ci
 
