@@ -117,12 +117,18 @@ prior_pos = priors[1] / N
 prior_neg = priors[0] / N
 ```
 
+The next step requires to compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$; in the following example, this term is computed for all the inputs. The first line retrieves the inputs, i.e., $$x$$, the second line sorts them; however, this step is not required and is performed because the posterior will be plotted later. The third and fourth lines compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$ for the positive and negative class.
+
+
+
 ```
 x = np.array([x for x, _ in D])
 x.sort()
 post_pos = l_pos.pdf(x) * prior_pos
 post_neg = l_neg.pdf(x) * prior_neg
+```
 
+```python
 post = np.vstack([post_pos, post_neg])
 evidence = post.sum(axis=0)
 post_pos /= evidence
