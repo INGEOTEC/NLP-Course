@@ -117,9 +117,7 @@ prior_pos = priors[1] / N
 prior_neg = priors[0] / N
 ```
 
-The next step requires to compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$; in the following example, this term is computed for all the inputs. The first line retrieves the inputs, i.e., $$x$$, the second line sorts them; however, this step is not required and is performed because the posterior will be plotted later. The third and fourth lines compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$ for the positive and negative class.
-
-
+The next step requires computing the unnormalized posterior $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$; in the following example, this term is computed for all the inputs in $$\mathcal D$$. The first line retrieves the inputs, i.e., $$x$$, the second line sorts them; however, this step is not required and is performed because the posterior will be plotted later. The third and fourth lines compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$ for the positive and negative class.
 
 ```
 x = np.array([x for x, _ in D])
@@ -128,16 +126,32 @@ post_pos = l_pos.pdf(x) * prior_pos
 post_neg = l_neg.pdf(x) * prior_neg
 ```
 
+The final steps are to calculate the evidence, $$\mathbb P(\mathcal X)$$ and use it to normalize $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$. The first line computes the evidence, and the second and four lines normalize the posterior. 
+
 ```python
-post = np.vstack([post_pos, post_neg])
-evidence = post.sum(axis=0)
+evidence = post_pos + post_neg
 post_pos /= evidence
 post_neg /= evidence
 ```
 
+The following figure presents the posterior for each class; it can be observed that the most probable class swaps from positive to negative in the cross of the two lines. 
+
 ![Posterior of Two Classes](/NLP-Course/assets/images/two_classes_posterior.png)
 
+Once the posterior is estimated, it can be used to predict the class of $$x$$; given that the truth class of any $$x$$ in $$\mathcal D$$ is known, it is possible to know when the classifier makes a mistake. The following figure depicts the data in $$\mathcal D$$, marking in red those points where the classifier and truth class differs. The function to predict the class can be implemented with the following code; it is worth mentioning that it is not needed to normalize the posterior because the interest is only on the class. 
+
+```python
+klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 0
+```
+
 ![Posterior Errors](/NLP-Course/assets/images/two_classes_posterior_error.png)
+
+# Multivariate Normal
+
+
+![Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate.png)
+
+
 
 # Categorical distribution
 

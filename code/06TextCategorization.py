@@ -1,8 +1,8 @@
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from microtc.utils import tweet_iterator
-from scipy.stats import norm, multinomial
+from microtc.utils import tweet_iterator, load_model, save_model
+from scipy.stats import norm, multinomial, multivariate_normal
 from matplotlib import pylab as plt
 from collections import Counter
 from sklearn.model_selection import StratifiedKFold
@@ -10,6 +10,7 @@ from scipy.special import logsumexp
 from sklearn.metrics import recall_score, precision_score, f1_score
 from EvoMSA.utils import bootstrap_confidence_interval
 from sklearn.naive_bayes import MultinomialNB
+from os.path import join
 # %pylab inline
 
 plt.rcParams['text.usetex'] = True
@@ -54,8 +55,7 @@ x.sort()
 post_pos = l_pos.pdf(x) * prior_pos
 post_neg = l_neg.pdf(x) * prior_neg
 
-post = np.vstack([post_pos, post_neg])
-evidence = post.sum(axis=0)
+evidence = post_pos + post_neg
 post_pos /= evidence
 post_neg /= evidence
 
@@ -65,7 +65,7 @@ plt.plot(x, post_neg, 'r')
 
 plt.legend([r'$P(\mathcal Y=1 \mid \mathcal X)$',
             r'$P(\mathcal Y=0 \mid \mathcal X)$'])
-plt.xlabel(r'$\mathcal x$')
+plt.xlabel(r'$x$')
 plt.grid()
 plt.tight_layout()
 plt.savefig('two_classes_posterior.png', dpi=300)
@@ -87,6 +87,30 @@ plt.plot([x for x, k in D if k==0 and klass(x) == 1],
 plt.tight_layout()
 plt.grid()
 plt.savefig('two_classes_posterior_error.png', dpi=300)
+
+
+# Multivariate Normal
+
+pos = multivariate_normal([2, 2], [[1, -1], [-1, 5]])
+neg = multivariate_normal([-2, -2], [[3, .5], [.5, 0.3]])
+
+D = [(x, 1) for x in pos.rvs(size=1000)]
+D += [(x, 0) for x in neg.rvs(size=5000)]
+
+plt.plot([x[0] for x, y in D if y == 1],
+         [x[1] for x, y in D if y == 1], 'b.')
+plt.plot([x[0] for x, y in D if y == 0],
+         [x[1] for x, y in D if y == 0], 'r.')
+plt.grid()
+plt.legend(['Positive', 'Negative'])
+plt.tight_layout()
+plt.savefig('two_classes_multivariate.png', dpi=300)
+
+save_model(D, join('dataset', 'two_classes_multivariate.gz'))
+
+D = load_model(join('dataset', 'two_classes_multivariate.gz'))
+
+
 
 # Categorical distribution 
 
