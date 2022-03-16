@@ -45,7 +45,7 @@ $$\min_{g \in \Omega} \sum_{(\mathbf x, y) \in \mathcal D} L(y, g(\mathbf x)),$$
 
 where $$\Omega$$ is the search space of the feasible mapping functions.
 
-Additionally, if one is also interested in measuring the uncertainty, the path relies on the probability. In this latter scenario, one approach is to assume the form of the conditional probability, i.e., $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f_k$$ is the $$k$$-th value of $$f: \mathcal X \rightarrow [0, 1]^K$$ which encodes a probability mass function. For the case of a binary classification problem the function is $$f: \mathcal X \rightarrow [0, 1]$$. As can be seen, in this scenario, an adequate distribution is [Bernoulli](/NLP-Course/topics/03Collocations/#sec:bernoulli), where function $$f$$ takes the place of the parameter of the distribution, that is, $$\mathcal Y \sim \textsf{Bernoulli}(f(\mathcal X))$$; for more labels, the Categorical distribution can be used. The complement path is to rely on Bayes' theorem. 
+Additionally, if one is also interested in measuring the uncertainty, the path relies on the probability. In this latter scenario, one approach is to assume the form of the conditional probability, i.e., $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f_k$$ is the $$k$$-th value of $$f: \mathcal X \rightarrow [0, 1]^K$$ which encodes a probability mass function. For the case of a binary classification problem the function is $$f: \mathcal X \rightarrow [0, 1]$$. As can be seen, in this scenario, an adequate distribution is [Bernoulli](/NLP-Course/topics/03Collocations/#sec:bernoulli), where function $$f$$ takes the place of the parameter of the distribution, that is, $$\mathcal Y \sim \textsf{Bernoulli}(f(\mathcal X))$$; for more labels, the Categorical distribution can be used. On the other hand, the complement path is to rely on Bayes' theorem. 
 
 # Bayes' theorem
 {: #sec:bayes-theorem }
@@ -66,7 +66,13 @@ $$\begin{eqnarray}
 
 where $$\mathbb P(\mathcal Y \mid \mathcal X)$$ is the **posterior probability**, $$\mathbb P(\mathcal X \mid \mathcal Y)$$ corresponds to the **likelihood**, $$\mathbb P(\mathcal Y)$$ is the **prior**, and $$\mathbb P(\mathcal X)$$ is the **evidence**. The evidence can be expressed as $$\mathbb P(\mathcal X) = \sum_y \mathbb P(\mathcal X \mid \mathcal y) \mathbb P(\mathcal y)$$ which corresponds to the marginal $$\mathbb P(\mathcal X)$$ using the conditional probability; it can be observed that this term acts as a normalization constant.
 
+The Bayes' theorem has two features that make it amenable to addressing classification problems. The first is that it is a generative model; besides tackling the classification problem, the model can be used to generate the data, i.e., the model learns the distribution of the dataset. 
+
+The second characteristic is that the likelihood is a probability distribution given any class. Consequently, the problem is to estimate $$K$$ different distribution using the subset of the training set belonging to each different class. On the other hand, the prior is the estimated probability of each class, and the evidence can be estimated using the previous two values. 
+
 ## Example
+
+In order to illustrate the process of computing the posterior, the following example uses two normals, each one corresponding to a different class; the red one is the negative class, and blue is used to depict the positive one.
 
 ```python
 pos = norm(loc=3, scale=2.5)
@@ -74,6 +80,8 @@ neg = norm(loc=-0.5, scale=0.75)
 ```
 
 ![Two Normals](/NLP-Course/assets/images/two_normals.png)
+
+
 
 ```python
 _min = neg.ppf(0.05)
