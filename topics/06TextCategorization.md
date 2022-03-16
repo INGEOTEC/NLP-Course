@@ -19,8 +19,15 @@ nav_order: 6
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from scipy.stats import norm
+from microtc.utils import tweet_iterator
+from scipy.stats import norm, multinomial
 from matplotlib import pylab as plt
+from collections import Counter
+from sklearn.model_selection import StratifiedKFold
+from scipy.special import logsumexp
+from sklearn.metrics import recall_score, precision_score, f1_score
+from EvoMSA.utils import bootstrap_confidence_interval
+from sklearn.naive_bayes import MultinomialNB
 ```
 
 ## Installing external libraries
@@ -81,7 +88,7 @@ neg = norm(loc=-0.5, scale=0.75)
 
 ![Two Normals](/NLP-Course/assets/images/two_normals.png)
 
-
+The normal associated with the negative class is sampled 100 times; however, the sampled elements in the tail corresponding to a mass lower than 0.05 or higher than 0.95 are discarded. The distribution of the positive class is sampled 1000 times using the constraint that the points in the interval of the negative class are not considered.  
 
 ```python
 _min = neg.ppf(0.05)
@@ -90,14 +97,20 @@ D = [(x, 0) for x in neg.rvs(100) if x >= _min and x <= _max]
 D += [(x, 1) for x in pos.rvs(1000) if x < _min or x > _max]
 ```
 
+The following picture shows the distribution of the positive and negative classes; it can be observed that the two classes are separated by the constraints imposed. These points will be used to illustrate the procedure to estimate the posterior distribution given a dataset; the dataset is $$\mathcal D=\{(x_i, y_i \mid i=1, \ldots, N)\}$$ where $$x_i \in \mathbb R$$ and $$y_i \in \{0, 1\}$$.
+
 ![Two Normal Samples](/NLP-Course/assets/images/two_normal_samples.png)
 
-```python
-l_pos = norm(loc=np.mean([x for x, k in D if k == 1]),
-             scale=np.std([x for x, k in D if k == 1]))
-l_neg = norm(loc=np.mean([x for x, k in D if k == 0]),
-             scale=np.std([x for x, k in D if k == 0]))            
+The first step is to estimate the likelihood, i.e., $$\mathbb P(\mathcal X \mid \mathcal Y)$$ where $$\mathcal Y=1$$ and $$\mathcal Y=0$$. It is assumed that the likelihood is normally distributed; thus, it requires estimating the mean and the standard deviation, which can be done with the following code. 
 
+```python
+l_pos = norm(*norm.fit([x for x, k in D if k == 1]))
+l_neg = norm(*norm.fit([x for x, k in D if k == 0]))
+```
+
+The second step is to compute the prior, i.e., $$\mathbb P(\mathcal Y)$$ which corresponds to estimating the parameters of a Categorical distribution; the following code relies on the use of `np.unique` to estimate them.
+
+```python
 _, priors = np.unique([k for _, k in D], return_counts=True)
 N = priors.sum()
 prior_pos = priors[1] / N
@@ -116,9 +129,9 @@ post_pos /= evidence
 post_neg /= evidence
 ```
 
-![Posteriori of Two Classes](/NLP-Course/assets/images/two_classes_posteriori.png)
+![Posterior of Two Classes](/NLP-Course/assets/images/two_classes_posterior.png)
 
-![Posteriori Errors](/NLP-Course/assets/images/two_classes_posteriori_error.png)
+![Posterior Errors](/NLP-Course/assets/images/two_classes_posterior_error.png)
 
 # Categorical distribution
 

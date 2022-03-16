@@ -1,4 +1,3 @@
-from matplotlib.pyplot import axis
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
@@ -42,10 +41,8 @@ plt.legend(['Positive', 'Negative'])
 plt.tight_layout()
 plt.savefig('two_normal_samples.png', dpi=300)
 
-l_pos = norm(loc=np.mean([x for x, k in D if k == 1]),
-             scale=np.std([x for x, k in D if k == 1]))
-l_neg = norm(loc=np.mean([x for x, k in D if k == 0]),
-             scale=np.std([x for x, k in D if k == 0]))            
+l_pos = norm(*norm.fit([x for x, k in D if k == 1]))
+l_neg = norm(*norm.fit([x for x, k in D if k == 0]))
 
 _, priors = np.unique([k for _, k in D], return_counts=True)
 N = priors.sum()
@@ -68,9 +65,10 @@ plt.plot(x, post_neg, 'r')
 
 plt.legend([r'$P(\mathcal Y=1 \mid \mathcal X)$',
             r'$P(\mathcal Y=0 \mid \mathcal X)$'])
-plt.tight_layout()
+plt.xlabel(r'$\mathcal x$')
 plt.grid()
-plt.savefig('two_classes_posteriori.png', dpi=300)
+plt.tight_layout()
+plt.savefig('two_classes_posterior.png', dpi=300)
 
 
 klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 0
@@ -88,7 +86,7 @@ plt.plot([x for x, k in D if k==0 and klass(x) == 1],
 
 plt.tight_layout()
 plt.grid()
-plt.savefig('two_classes_posteriori_error.png', dpi=300)
+plt.savefig('two_classes_posterior_error.png', dpi=300)
 
 # Categorical distribution 
 
