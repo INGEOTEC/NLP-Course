@@ -201,14 +201,10 @@ The following table shows four examples of this process; the first column contai
 |x w z w y z z z z w | negative |
 
 
+
 ```python
 D_pos = []
 [D_pos.extend(data.split()) for data, k in D if k == 1]
-D_neg = []
-[D_neg.extend(data.split()) for data, k in D if k == 0]
-```
-
-```python
 words, l_pos = np.unique(D_pos, return_counts=True)
 w2id = {v: k for k, v in enumerate(words)}
 l_pos = l_pos / l_pos.sum()
@@ -217,6 +213,8 @@ array([0.25489421, 0.33854064, 0.20773186, 0.1988333 ])
 ```
 
 ```python
+D_neg = []
+[D_neg.extend(data.split()) for data, k in D if k == 0]
 _, l_neg = np.unique(D_neg, return_counts=True)
 l_neg = l_neg / l_neg.sum()
 ```
