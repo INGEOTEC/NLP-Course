@@ -148,12 +148,34 @@ klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 
 
 # Multivariate Normal
 
+An equivalent procedure can be done for multivariate Normal distribution. The following figure shows an example of two multivariate distributions; one represents a positive class (blue), and the other corresponds to the negative (red). The dataset containing the pairs, $$(\mathbf x, y)$$, is found on the variable `D`. 
 
 ![Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate.png)
 
+```python
+D = load_model(join('dataset', 'two_classes_multivariate.gz'))
+```
 
+Dataset $$\mathcal D$$ can be used to estimate the posterior distribution, where the first step is to estimate the parameters of the likelihood, one set of parameters for each class. The second step is to calculate the parameters of the prior. The sum of the product of these two components corresponds to the evidence, which provides all elements to compute the posterior distribution.
+
+The following code computes the likelihood for the positive and negative class.
+
+```python
+l_pos_m = np.mean(np.array([x for x, y in D if y == 1]), axis=0)
+l_pos_cov = np.cov(np.array([x for x, y in D if y == 1]).T)
+l_pos = multivariate_normal(mean=l_pos_m, cov=l_pos_cov)
+l_neg_m = np.mean(np.array([x for x, y in D if y == 0]), axis=0)
+l_neg_cov = np.cov(np.array([x for x, y in D if y == 0]).T)
+l_neg = multivariate_normal(mean=l_neg_m, cov=l_neg_cov)
+```
+
+![Classification Errors in Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate_error.png)
 
 # Categorical distribution
+
+The description of Bayes’ theorem continues with an example of a Categorical distribution. A Categorical distribution can simulate the drawn of $$K$$ events that can be encoded as characters, and $$\ell$$ repetitions can be represented as a sequence of characters. Consequently, the distribution can illustrate the generation sequences associated with different classes, e.g., positive or negative.
+
+The first step is to create the dataset. As done previously, two distributions are defined, one for each class; it can be observed that each distribution has different parameters. The second step is to sample these distributions; the distributions are sampled 1000 times with the following procedure. Each time, a random variable representing the number of outcomes taken from each distribution is drawn from a Normal $$\mathcal N(10, 3)$$ and stored in the variable `length.` The random variable indicates the number of outcomes for each Categorical distribution; the results are transformed into a sequence, associated to the label corresponding to the positive and negative class, and stored in the list `D.`
 
 ```python
 m = {k: chr(122 - k) for k in range(4)}
@@ -167,12 +189,14 @@ for l in length.rvs(size=1000):
     D.append((id2w(neg.rvs(round(l))), 0))
 ```
 
+The following table shows four examples of this process; the first column contains the sequence, and the second the associated label.
+
 |Text          |Label    |
 |--------------|---------|
-|x w x x z w y | 1       |
-|y w z z z x w | 0       |
-|z x x x z x z w x w | 1 |
-|x w z w y z z z z w | 0 |
+|x w x x z w y | positive       |
+|y w z z z x w | negative       |
+|z x x x z x z w x w | positive |
+|x w z w y z z z z w | negative |
 
 
 ```python

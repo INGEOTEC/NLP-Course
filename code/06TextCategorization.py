@@ -111,6 +111,33 @@ save_model(D, join('dataset', 'two_classes_multivariate.gz'))
 D = load_model(join('dataset', 'two_classes_multivariate.gz'))
 
 
+l_pos_m = np.mean(np.array([x for x, y in D if y == 1]), axis=0)
+l_pos_cov = np.cov(np.array([x for x, y in D if y == 1]).T)
+l_pos = multivariate_normal(mean=l_pos_m, cov=l_pos_cov)
+l_neg_m = np.mean(np.array([x for x, y in D if y == 0]), axis=0)
+l_neg_cov = np.cov(np.array([x for x, y in D if y == 0]).T)
+l_neg = multivariate_normal(mean=l_neg_m, cov=l_neg_cov)
+
+_, priors = np.unique([k for _, k in D], return_counts=True)
+N = priors.sum()
+prior_pos = priors[1] / N
+prior_neg = priors[0] / N
+
+
+klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 0
+
+error = [x for x, y in D if y != klass(x)]
+right = [x for x, y in D if y == klass(x)]
+
+plt.plot([x[0] for x in right],
+         [x[1] for x in right], 'k.')
+plt.plot([x[0] for x in error],
+         [x[1] for x in error], 'r.')
+plt.grid()
+plt.tight_layout()
+plt.savefig('two_classes_multivariate_error.png', dpi=300)
+
+
 
 # Categorical distribution 
 
