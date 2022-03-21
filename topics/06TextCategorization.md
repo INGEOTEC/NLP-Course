@@ -169,6 +169,8 @@ l_neg_cov = np.cov(np.array([x for x, y in D if y == 0]).T)
 l_neg = multivariate_normal(mean=l_neg_m, cov=l_neg_cov)
 ```
 
+Once the likelihood has been estimated, it is straightforward to estimate the prior and the evidence and, with that, be able to compute the posterior probability. The posterior distribution can be used to predict the class for each point in $$\mathcal D$$. The following figure shows in red the points in $$\mathcal D$$ where the truth class is different from the predicted posterior distribution. 
+
 ![Classification Errors in Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate_error.png)
 
 # Categorical distribution
