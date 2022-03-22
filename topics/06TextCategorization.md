@@ -200,7 +200,7 @@ The following table shows four examples of this process; the first column contai
 |z x x x z x z w x w | positive |
 |x w z w y z z z z w | negative |
 
-
+As done previously, the first step is to compute the likelihood given that dataset; considering that the data comes from a Categorical distribution, the procedure to estimate the parameters is similar to the ones used to estimate the prior. The following code estimates the data parameters corresponding to the positive class. It can be observed that the parameters estimated are similar to the ones used to generate the dataset. 
 
 ```python
 D_pos = []
@@ -212,12 +212,16 @@ l_pos
 array([0.25489421, 0.33854064, 0.20773186, 0.1988333 ])
 ```
 
+An equivalent procedure is performed to calculate the likelihood of the negative class.
+
 ```python
 D_neg = []
 [D_neg.extend(data.split()) for data, k in D if k == 0]
 _, l_neg = np.unique(D_neg, return_counts=True)
 l_neg = l_neg / l_neg.sum()
 ```
+
+The prior is estimated with the following code, which is equivalent to the one used on all the examples seen so far. 
 
 ```python
 _, priors = np.unique([k for _, k in D], return_counts=True)
