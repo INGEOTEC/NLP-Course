@@ -221,7 +221,7 @@ _, l_neg = np.unique(D_neg, return_counts=True)
 l_neg = l_neg / l_neg.sum()
 ```
 
-The prior is estimated with the following code, which is equivalent to the one used on all the examples seen so far. 
+The prior is estimated with the following code, equivalent to the one used on all the examples seen so far. 
 
 ```python
 _, priors = np.unique([k for _, k in D], return_counts=True)
@@ -230,6 +230,8 @@ prior_pos = priors[1] / N
 prior_neg = priors[0] / N
 ```
 
+Once the parameters have been identified, these can be used to predict the class of a given sequence. The first step is to compute the likelihood, e.g., $$\mathbb P($$w w x z$$\mid \mathcal Y)$$. It can be observed that the sequence needs to be transformed into tokens which can be done with the `split` method. Then, the token is converted into an index using the mapping `w2id`; once the index is retrieved, it can be used to obtain the parameter associated with the word. The likelihood is the product of all the probabilities; however, this product is computed in log space. 
+
 ```python
 def likelihood(params, txt):
     params = np.log(params)
@@ -237,6 +239,8 @@ def likelihood(params, txt):
     tot = sum(_)
     return np.exp(tot)
 ```
+
+The likelihood combined with the prior for all the classes produces the evidence, which subsequently is used to calculate the posterior distribution. The posterior is then used to predict the class for all the sequences in $$\mathcal D$$. The predictions are stored in the variable `hy`.
 
 ```python
 post_pos = [likelihood(l_pos, x) * prior_pos for x, _ in D]
