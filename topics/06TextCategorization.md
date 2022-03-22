@@ -265,6 +265,8 @@ y = np.array([y for _, y in D])
 
 # Confidence interval
 
+Like any other performance measure applied in this domain, the accuracy behaves like a random variable. Therefore, to have a complete picture of the classifier's performance, it is needed to estimate the difference values this random variable can have under the same circumstances. One approach is to calculate the confidence interval of the performance measure used. 
+
 ```python
 p = (hy == y).mean()
 s = np.sqrt(p * (1 - p) / y.shape[0]) 
