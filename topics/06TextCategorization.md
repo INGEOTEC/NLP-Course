@@ -253,6 +253,10 @@ hy = np.where(post_pos > post_neg, 1, 0)
 
 # Accuracy
 
+In previous examples, figures have been used to depict the classification errors; however, it is not practical to rely on a figure to evaluate the classifier's performance. Instead, one can use a performance measure to assess the classifier's quality. The first performance measure revised is the accuracy. The accuracy is the ratio of correct predictions. 
+
+The accuracy of the classifier trained previously is computed with the following code, where variable `hy` contains the predictions and `y` contains the classes taken from $$\mathcal D$$.
+
 ```python
 y = np.array([y for _, y in D])
 (hy == y).mean()
