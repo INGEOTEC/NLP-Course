@@ -267,16 +267,18 @@ y = np.array([y for _, y in D])
 
 Like any other performance measure applied in this domain, the accuracy can change when the experiment is repeated; sampling the distributions and creating a new dataset would produce a different accuracy. Therefore, to have a complete picture of the classifier's performance, it is needed to estimate the difference values this measure can have under the same circumstances. One approach is to calculate the confidence interval of the performance measure used. A standard method to compute the confidence interval assumes that it is normally distributed when the size of $$\mathcal D$$ tends to infinity; in this condition, the confidence interval is $$(\hat \theta - z_{\frac{\alpha}{2}}\hat{\textsf{se}}, \hat \theta + z_{\frac{\alpha}{2}}\hat{\textsf{se})}$$, where $$\hat \theta$$ is the point estimation, e.g., the accuracy, $$z_{\frac{\alpha}{2}}$$ is the point where the mass is $$1-\frac{\alpha}{2}$$, and $$\hat{\textsf{se}} = \sqrt{\mathbb V(\hat \theta)}$$ is the standard error.  
 
-
+The accuracy is the sum of $$N$$ Bernoulli trials, therefore $$\sqrt{\mathbb V(\hat \theta)}$$ is $$\sqrt{\frac{p(1-p)}{N}}$$ where $$p$$ is the accuracy. Using these elements the confidence interval for the accuracy is computed as follows.
 
 ```python
 p = (hy == y).mean()
-s = np.sqrt(p * (1 - p) / y.shape[0]) 
+se = np.sqrt(p * (1 - p) / y.shape[0]) 
 coef = norm.ppf(0.975)
-ci = (p - coef * s, p + coef * s)
+ci = (p - coef * se, p + coef * se)
 ci
 (0.6845035761081213, 0.7244964238918787)
 ```
+
+There are performance measures that it is difficult or unfeasible to analytical obtain $$\sqrt{\mathbb V(\hat \theta)}$$, for those cases, one can use a bootstrapping method to estimate it, the following code shows the usage of a method that implements the bootstrap percentile interval when the performance measure is the accuracy. However, it can be observed that the measure is a parameter of the method, so it works for any performance measure. 
 
 ```python
 ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
