@@ -278,6 +278,8 @@ ci
 (0.6845035761081213, 0.7244964238918787)
 ```
 
+The standard error of the accuracy can be derived using the identity $$\mathbb V(\sum_i a_i \mathcal X_i) = \sum_i a_i^2 \mathbb V(\mathcal X_i)$$ where random variables $$\mathcal X_i$$ are independent and $$a_i$$ is a constant. On the other hand, the accuracy can be seen as the outcome of a random variable where $$1$$ indicates the correct prediction and $$0$$ represents an error, then the accuracy is the sum of these random variables. Let $$\mathcal X_i$$ represent the outcome of the $$i$$-th prediction, then the accuracy is $$\frac{1}{N} \sum_i^N X_i$$. The variance is $$\mathbb V(\frac{1}{N} \sum_i^N X_i) = \sum_i \frac{1}{N^2} \mathbb V(\mathcal X_i)$$; the variance of a Bernoulli distribution with parameter $$p$$ is $$p(1-p)$$, consequently $$\sum_i \frac{1}{N^2} \mathbb V(\mathcal X_i) = \frac{1}{N^2} \sum_i p(1-p) = \frac{1}{N}p(1-p)$$, which completes the derivation.
+
 There are performance measures that it is difficult or unfeasible to analytical obtain $$\sqrt{\mathbb V(\hat \theta)}$$, for those cases, one can use a bootstrapping method to estimate it, the following code shows the usage of a method that implements the bootstrap percentile interval when the performance measure is the accuracy. However, it can be observed that the measure is a parameter of the method, so it works for any performance measure. 
 
 ```python

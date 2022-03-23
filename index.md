@@ -40,6 +40,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$f_{\mathcal X}$$| $$\mathcal X$$'s probability density function (pdf)      |
 |$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true          |
 |$$\Omega$$        | Search space                                             |
+|$$\mathbb V$$     | Variance                                                 |
 
 #  Requirements
 
