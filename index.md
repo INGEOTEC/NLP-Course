@@ -36,7 +36,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$K$$             | Number of classes or labels                              |
 |$$\mathbb P(\cdot)$$  | Probability distribution                             |
 |$$\mathcal X, \mathcal Y$$    | Random variables                             |
-|$$\mathcal N$$    | Normal distribution                                      |
+|$$\mathcal N(\mu, \sigma^2)$$    | Normal distribution with parameters $$\mu$$ and $$\sigma^2$$|
 |$$f_{\mathcal X}$$| $$\mathcal X$$'s probability density function (pdf)      |
 |$$\delta(e)$$     | Indicator function; $$1$$ only if $$e$$ is true          |
 |$$\Omega$$        | Search space                                             |
