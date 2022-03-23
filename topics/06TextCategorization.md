@@ -173,18 +173,18 @@ Once the likelihood has been estimated, it is straightforward to estimate the pr
 
 ![Classification Errors in Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate_error.png)
 
-# Categorical distribution
+# Categorical Distribution
 
 The description of Bayes’ theorem continues with an example of a Categorical distribution. A Categorical distribution can simulate the drawn of $$K$$ events that can be encoded as characters, and $$\ell$$ repetitions can be represented as a sequence of characters. Consequently, the distribution can illustrate the generation sequences associated with different classes, e.g., positive or negative.
 
 The first step is to create the dataset. As done previously, two distributions are defined, one for each class; it can be observed that each distribution has different parameters. The second step is to sample these distributions; the distributions are sampled 1000 times with the following procedure. Each time, a random variable representing the number of outcomes taken from each distribution is drawn from a Normal $$\mathcal N(10, 3)$$ and stored in the variable `length.` The random variable indicates the number of outcomes for each Categorical distribution; the results are transformed into a sequence, associated to the label corresponding to the positive and negative class, and stored in the list `D.`
 
 ```python
-m = {k: chr(122 - k) for k in range(4)}
 pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
 neg = multinomial(1, [0.35, 0.20, 0.25, 0.20])
-length = norm(loc=10, scale=3)
+length = norm(loc=15, scale=3)
 D = []
+m = {k: chr(122 - k) for k in range(4)}
 id2w = lambda x: " ".join([m[_] for _ in x.argmax(axis=1)])
 for l in length.rvs(size=1000):
     D.append((id2w(pos.rvs(round(l))), 1))
@@ -260,10 +260,10 @@ The accuracy of the classifier trained previously is computed with the following
 ```python
 y = np.array([y for _, y in D])
 (hy == y).mean()
-0.7215
+0.7545
 ```
 
-# Confidence interval
+# Confidence Interval
 
 Like any other performance measure applied in this domain, the accuracy can change when the experiment is repeated; sampling the distributions and creating a new dataset would produce a different accuracy. Therefore, to have a complete picture of the classifier's performance, it is needed to estimate the difference values this measure can have under the same circumstances. One approach is to calculate the confidence interval of the performance measure used. A standard method to compute the confidence interval assumes that it is normally distributed when the size of $$\mathcal D$$ tends to infinity; in this condition, the confidence interval is $$(\hat \theta - z_{\frac{\alpha}{2}}\hat{\textsf{se}}, \hat \theta + z_{\frac{\alpha}{2}}\hat{\textsf{se})}$$, where $$\hat \theta$$ is the point estimation, e.g., the accuracy, $$z_{\frac{\alpha}{2}}$$ is the point where the mass is $$1-\frac{\alpha}{2}$$, and $$\hat{\textsf{se}} = \sqrt{\mathbb V(\hat \theta)}$$ is the standard error.  
 
