@@ -325,7 +325,7 @@ priors = np.log(priors / priors.sum())
 uniq_labels = {str(v): k for k, v in enumerate(uniq_labels)}
 ```
 
-It is time to estimate the likelihood parameter for each of the classes. It is assumed that the data comes from a Categorical distribution and that each token is independent. The likelihood parameters can be stored in a matrix (variable `l_tokens`) with $$K$$ rows, each row contains the parameter for the class, and the number of columns corresponds to the vocabulary's size. The first step is to calculate the frequency of each token per class which can be done with the following code. 
+It is time to estimate the likelihood parameters for each of the classes. It is assumed that the data comes from a Categorical distribution and that each token is independent. The likelihood parameters can be stored in a matrix (variable `l_tokens`) with $$K$$ rows, each row contains the parameters of the class, and the number of columns corresponds to the vocabulary's size. The first step is to calculate the frequency of each token per class which can be done with the following code. 
 
 ```python
 l_tokens = np.zeros((len(uniq_labels), len(w2id)))
@@ -344,7 +344,7 @@ l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
 l_tokens = np.log(l_tokens)
 ```
 
-Once all the parameters have been estimated, it is time to use the model to classify any text. The following function computes the posterior distribution. The first step is to tokenize the text (second line) and compute the frequency of each token in the text. The frequency stored in the dictionary `cnt` is converted into the vector `x` using the mapping function `w2id`. The final step is to compute the product of the likelihood and the prior. 
+Once all the parameters have been estimated, it is time to use the model to classify any text. The following function computes the posterior distribution. The first step is to tokenize the text (second line) and compute the frequency of each token in the text. The frequency stored in the dictionary `cnt` is converted into the vector `x` using the mapping function `w2id`. The final step is to compute the product of the likelihood and the prior. The product is computed in log-space; thus, this is done using the likelihood and the prior sum. The last step is to compute the evidence and normalize the result; the evidence is computed with the function `logsumexp.` 
 
 ```python
 def posterior(txt):
@@ -359,6 +359,8 @@ def posterior(txt):
     l = np.exp(_ - logsumexp(_))
     return l
 ```
+
+The posterior function can be used to predict all the text in $$\mathcal D$$; the predictions are used to compute the model's accuracy.
 
 ```python
 hy = np.array([posterior(x).argmax() for x, _ in D])
