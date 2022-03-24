@@ -201,9 +201,12 @@ ci
 
 # Text Categorization - Naive Bayes
 
+D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
+
 tm = TextModel(token_list=[-1], lang='english')
 tok = tm.tokenize
-D = [(tok(x['text']), x['klass']) for x in tweet_iterator(TWEETS)]
+D = [(tok(x), y) for x, y in D]
+
 words = set()
 [words.update(x) for x, y in D]
 w2id = {v: k for k, v in enumerate(words)}
@@ -221,7 +224,7 @@ l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
 l_tokens = np.log(l_tokens)
 
 
-def posteriori(txt):
+def posterior(txt):
     x = np.zeros(len(w2id))
     cnt = Counter(tm.tokenize(txt))
     for i, v in cnt.items():
@@ -234,7 +237,7 @@ def posteriori(txt):
     return l
 
 
-hy = np.array([posteriori(x).argmax() for x, _ in D])
+hy = np.array([posterior(x).argmax() for x, _ in D])
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 
@@ -268,7 +271,7 @@ hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
     w2id, uniq_labels, l_tokens, priors = train(training)
-    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+    hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
@@ -301,8 +304,8 @@ hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
     w2id, uniq_labels, l_tokens, priors = train(training)
-    assert np.all(np.isfinite([posteriori(D[x][0]) for x in val]))
-    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+    assert np.all(np.isfinite([posterior(D[x][0]) for x in val]))
+    hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()

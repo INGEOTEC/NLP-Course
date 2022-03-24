@@ -174,6 +174,7 @@ Once the likelihood has been estimated, it is straightforward to estimate the pr
 ![Classification Errors in Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate_error.png)
 
 # Categorical Distribution
+{: #sec:categorical-distribution }
 
 The description of Bayes’ theorem continues with an example of a Categorical distribution. A Categorical distribution can simulate the drawn of $$K$$ events that can be encoded as characters, and $$\ell$$ repetitions can be represented as a sequence of characters. Consequently, the distribution can illustrate the generation sequences associated with different classes, e.g., positive or negative.
 
@@ -291,16 +292,24 @@ ci
 
 # Text Categorization - Naive Bayes
 
-[tweets](https://raw.githubusercontent.com/INGEOTEC/EvoMSA/master/EvoMSA/tests/tweets.json)
+
+The approach followed on text categorization is to treat it as supervised learning problem where the starting point is a dataset $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_K\}$$ and $$\text{text}_i$$ is a text. For example, the next code uses a toy sentiment analysis dataset with four classes: negative (N), neutral (NEU), absence of polarity (NONE), and positive (P).
+
+```python
+D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
+```
+
+As can be observed, $$\mathcal D$$ is equivalent to the one used in the [Categorical Distribution](#sec:categorical-distribution) example. The difference is that sequence of letters is changed with a sentence. Nonetheless, a feasible approach is to obtain the tokens using the `split` method. Another approach is to retrieve the tokens using a Tokenizer, as covered in the [Text Normalization](/NLP-Course/topics/05TextNormalization) Section. 
+
+The following code uses the `TextModel` class to tokenize the text using words as the tokenizer; the tokenized text is stored in the variable `D.`
 
 ```python
 tm = TextModel(token_list=[-1], lang='english')
 tok = tm.tokenize
+D = [(tok(x), y) for x, y in D]
 ```
 
-```python
-D = [(tok(x['text']), x['klass']) for x in tweet_iterator(TWEETS)]
-```
+Before estimating the likelihood parameters, it is needed to encode the tokens using an index; by doing it, it is possible to store the parameters in an array and compute everything `numpy` operations. The following code encodes each token with a unique index; the mapping is in the dictionary `w2id`. 
 
 ```python
 words = set()
@@ -308,11 +317,15 @@ words = set()
 w2id = {v: k for k, v in enumerate(words)}
 ```
 
+Previously, the classes have been represented using natural numbers. The positive class has been associated with the number $$1$$, whereas the negative class with $$0$$. However, in this dataset, the classes are strings. It was decided to encode them as numbers to facilitate subsequent operations. The encoding process can be performed simultaneously with the estimation of the prior of each class. Please note that the priors are stored using the logarithm in the variable `priors.` 
+
 ```python
 uniq_labels, priors = np.unique([k for _, k in D], return_counts=True)
 priors = np.log(priors / priors.sum())
 uniq_labels = {str(v): k for k, v in enumerate(uniq_labels)}
 ```
+
+It is time to estimate the likelihood parameter for each of the classes. It is assumed that the data comes from a Categorical distribution and that each token is independent. The likelihood parameters can be stored in a matrix (variable `l_tokens`) with $$K$$ rows, each row contains the parameter for the class, and the number of columns corresponds to the vocabulary's size. The first step is to calculate the frequency of each token per class which can be done with the following code. 
 
 ```python
 l_tokens = np.zeros((len(uniq_labels), len(w2id)))
@@ -321,13 +334,20 @@ for x, y in D:
     cnt = Counter(x)
     for i, v in cnt.items():
         w[w2id[i]] += v
+```
+
+The next step is to normalize the frequency. However, before normalizing it, it is being used a Laplace smoothing with a value $$0.1$$. Therefore, the constant $$0.1$$ is added to all the matrix elements. The next step is to normalize (second line), and finally, the parameters are stored using the logarithm. 
+
+```python
 l_tokens += 0.1
 l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
 l_tokens = np.log(l_tokens)
 ```
 
+Once all the parameters have been estimated, it is time to use the model to classify any text. The following function computes the posterior distribution. The first step is to tokenize the text (second line) and compute the frequency of each token in the text. The frequency stored in the dictionary `cnt` is converted into the vector `x` using the mapping function `w2id`. The final step is to compute the product of the likelihood and the prior. 
+
 ```python
-def posteriori(txt):
+def posterior(txt):
     x = np.zeros(len(w2id))
     cnt = Counter(tm.tokenize(txt))
     for i, v in cnt.items():
@@ -341,7 +361,7 @@ def posteriori(txt):
 ```
 
 ```python
-hy = np.array([posteriori(x).argmax() for x, _ in D])
+hy = np.array([posterior(x).argmax() for x, _ in D])
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.977
@@ -378,7 +398,7 @@ hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
     w2id, uniq_labels, l_tokens, priors = train(training)
-    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+    hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
@@ -419,8 +439,8 @@ hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
     w2id, uniq_labels, l_tokens, priors = train(training)
-    assert np.all(np.isfinite([posteriori(D[x][0]) for x in val]))
-    hy[val] = [posteriori(D[x][0]).argmax() for x in val]
+    assert np.all(np.isfinite([posterior(D[x][0]) for x in val]))
+    hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
