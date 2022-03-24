@@ -360,7 +360,7 @@ def posterior(txt):
     return l
 ```
 
-The posterior function can be used to predict all the text in $$\mathcal D$$; the predictions are used to compute the model's accuracy.
+The posterior function can predict all the text in $$\mathcal D$$; the predictions are used to compute the model's accuracy. In order to compute the accuracy, the classes in $$\mathcal D$$ need to be transformed using the nomenclature of the likelihood matrix and priors vector; this is done with the `uniq_labels` dictionary (second line). 
 
 ```python
 hy = np.array([posterior(x).argmax() for x, _ in D])
@@ -369,10 +369,10 @@ y = np.array([uniq_labels[y] for _, y in D])
 0.977
 ```
 
-# KFold and StratifiedKFold
+# Training
 
 ```python
-def train(D):
+def train(D, tm):
     tok = tm.tokenize
     D =[(tok(x), y) for x, y in D]
     words = set()
@@ -391,15 +391,18 @@ def train(D):
     l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
     l_tokens = np.log(l_tokens)
     return w2id, uniq_labels, l_tokens, priors
+```
 
+# KFold and StratifiedKFold
 
+```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
 tm = TextModel(token_list=[-1], lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training)
+    w2id, uniq_labels, l_tokens, priors = train(training, tm)
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
@@ -440,7 +443,7 @@ folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training)
+    w2id, uniq_labels, l_tokens, priors = train(training, tm)
     assert np.all(np.isfinite([posterior(D[x][0]) for x in val]))
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
