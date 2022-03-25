@@ -397,6 +397,10 @@ def training(D, tm):
 
 # KFold and StratifiedKFold
 
+The performance of a supervised learning algorithm cannot be measured on the same data where it was trained. To illustrate this issue, imagine an algorithm that memorizes the dataset, and for all inputs that have not been seen, the algorithm outputs a random class. Consequently, this algorithm is useless because it cannot be used to predict an input outside the dataset used to train it. Nonetheless, it has a perfect score in any performance measure used in the dataset used to estimate the parameters. 
+
+Traditionally, the dataset $$\mathcal D$$ is split into two disjoint sets, $$\mathcal D = \mathcal T \cup \mathcal G$$ where $$\mathcal T \cap \mathcal G = \emptyset$$, or three sets $$\mathcal D = \mathcal T \cup \mathcal V \cup \mathcal G$$ where $$\mathcal T \cap \mathcal V \cap \mathcal G = \emptyset$$. The set $$\mathcal T$$, known as **training set**, is used to train the algorithm, i.e., to estimate the parameters, whereas the set $$\mathcal G$$, known as **test set** or **gold set**, is used to measure its performance. The set $$\mathcal V$$, known as **validation set**, is used to optimize the algorithm's hyperparameters; for example, a hyperparameter in an n-gram language model is the value of $$n$$. 
+
 ```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
 tm = TextModel(token_list=[-1], lang='english')

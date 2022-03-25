@@ -32,6 +32,9 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$d$$             | Dimension                                                |
 |$$\mathbf w^\intercal \cdot \mathbf x$$ | Dot  product where $$\mathbf w$$ and $$\mathbf x \in \mathbb R^d$$ |
 |$$\mathcal D$$    | Dataset of pairs $$\{(x_i, y_i) \mid i=1, \dots N\}$$    |
+|$$\mathcal T$$  | Training set| 
+|$$\mathcal V$$| Validation set |
+|$$\mathcal G$$| Test (Gold) set |
 |$$N$$             | Number of examples                                       | 
 |$$K$$             | Number of classes or labels                              |
 |$$\mathbb P(\cdot)$$  | Probability distribution                             |
