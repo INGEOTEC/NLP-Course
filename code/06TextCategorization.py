@@ -243,7 +243,7 @@ y = np.array([uniq_labels[y] for _, y in D])
 
 # KFold and StratifiedKFold
 
-def train(D):
+def training(D):
     tok = tm.tokenize
     D =[(tok(x), y) for x, y in D]
     words = set()
@@ -269,8 +269,8 @@ tm = TextModel(token_list=[-1], lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
-    training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training)
+    _ = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = training(_)
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
@@ -302,8 +302,8 @@ tm = TextModel(lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
-    training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training)
+    _ = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = training(_)
     assert np.all(np.isfinite([posterior(D[x][0]) for x in val]))
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 

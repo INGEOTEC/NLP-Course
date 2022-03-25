@@ -371,8 +371,10 @@ y = np.array([uniq_labels[y] for _, y in D])
 
 # Training
 
+Solving supervised learning problems requires two phases; one is the training phase, and the other is the prediction. The posterior function handles the later phase, and it is missing to organize the code described in a training function. The following code describes the training function; it requires the dataset's parameters and an instance of `TextModel.`
+
 ```python
-def train(D, tm):
+def training(D, tm):
     tok = tm.tokenize
     D =[(tok(x), y) for x, y in D]
     words = set()
@@ -401,8 +403,8 @@ tm = TextModel(token_list=[-1], lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
-    training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training, tm)
+    _ = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = training(_, tm)
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
