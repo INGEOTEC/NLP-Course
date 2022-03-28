@@ -401,10 +401,11 @@ The performance of a supervised learning algorithm cannot be measured on the sam
 
 Traditionally, this issue is handle by splitting the dataset $$\mathcal D$$ into two disjoint sets, $$\mathcal D = \mathcal T \cup \mathcal G$$ where $$\mathcal T \cap \mathcal G = \emptyset$$, or three sets $$\mathcal D = \mathcal T \cup \mathcal V \cup \mathcal G$$ where $$\mathcal T \cap \mathcal V \cap \mathcal G = \emptyset$$. The set $$\mathcal T$$, known as **training set**, is used to train the algorithm, i.e., to estimate the parameters, whereas the set $$\mathcal G$$, known as **test set** or **gold set**, is used to measure its performance. The set $$\mathcal V$$, known as **validation set**, is used to optimize the algorithm's hyperparameters; for example, a hyperparameter in an n-gram language model is the value of $$n$$.
 
-There are scenarios where the size of $$\mathcal D$$ prohibits splitting it in training, validation and test sets; for this case, an alternative approach is to split $$\mathcal D$$ several times with a different selection each time. The process is known as k-fold cross-validation when all the elements in $$\mathcal D$$ are used once in a validation set. For example, the k-fold cross-validation when $$k=3$$ corresponds to the following process. The set $$\mathcal D$$ is split into three disjoint sets $$\mathcal D_1, \mathcal D_2, \mathcal D_3$$ where $$\mathcal D=\mathcal D_1 \cup \mathcal D_2 \cup \mathcal D_3;$$ the only constraint is that all the subsets have a similar cardinality. These datasets are used to create three training and validation sets, i.e., $$\mathcal T_1=\mathcal D_2 \cup \mathcal D_3$$, $$\mathcal V_1=\mathcal D_1$$, $$\mathcal T_2=\mathcal D_1 \cup \mathcal D_3$$, $$\mathcal V_2=\mathcal D_2$$, and $$\mathcal T_3=\mathcal D_1 \cup \mathcal D_2$$, $$\mathcal V_3=\mathcal D_3.$$ As can be observed all the elements in $$\mathcal D$$ are used once in a validation set.
+There are scenarios where the size of $$\mathcal D$$ prohibits splitting it in training, validation and test sets; for this case, an alternative approach is to split $$\mathcal D$$ several times with a different selection each time. The process is known as k-fold cross-validation when all the elements in $$\mathcal D$$ are used once in a validation set. For example, the k-fold cross-validation when $$k=3$$ corresponds to the following process. The set $$\mathcal D$$ is split into three disjoint sets $$\mathcal D_1, \mathcal D_2, \mathcal D_3$$ where $$\mathcal D=\mathcal D_1 \cup \mathcal D_2 \cup \mathcal D_3;$$ with the characteristic that all the subsets have a similar cardinality. These datasets are used to create three training and validation sets, i.e., $$\mathcal T_1=\mathcal D_2 \cup \mathcal D_3$$, $$\mathcal V_1=\mathcal D_1$$, $$\mathcal T_2=\mathcal D_1 \cup \mathcal D_3$$, $$\mathcal V_2=\mathcal D_2$$, and $$\mathcal T_3=\mathcal D_1 \cup \mathcal D_2$$, $$\mathcal V_3=\mathcal D_3.$$ As can be observed all the elements in $$\mathcal D$$ are used once in a validation set.
 
+The only constraints imposed in a k-fold cross are that all validation sets have a similar cardinality and that all the elements in $$\mathcal D$$ appear once. For problems where the proportion of the different classes is unbalanced, adding another constraint in the selection process is helpful; the constraint is to force the distribution of classes to remain similar in all the validation sets. This latter process is known as stratified k-fold cross-validation. 
 
-
+The following code implements stratified k-fold cross-validation and predicts all the elements in $$\mathcal D$$ and stores the predictions in the variable `hy.` 
 
 ```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
@@ -415,7 +416,9 @@ for tr, val in folds.split(D, y):
     _ = [D[x] for x in tr]
     w2id, uniq_labels, l_tokens, priors = training(_, tm)
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
+```
 
+```python
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.615
