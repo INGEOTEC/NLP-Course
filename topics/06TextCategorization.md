@@ -418,11 +418,15 @@ for tr, val in folds.split(D, y):
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 ```
 
+Once the classes in $$\mathcal D$$ has been predicted, one can compute the accuracy of the classifier with the following code. It can be observed that the accuracy is lower than the one obtained when it was measured on the same data used to estimate the parameters.
+
 ```python
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
 0.615
 ```
+
+The confidence interval of the accuracy is computed as follows.
 
 ```python
 p = (hy == y).mean()
