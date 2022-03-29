@@ -443,7 +443,7 @@ The accuracy is a popular performance measure; however, it has drawbacks. For ex
 
 Other famous metrics used in classification are precision, recall, and score $$f_1$$. These performance measures are defined on binary classification problems; however, k-class classification problems can be codified as $$k$$ binary problems; in each of these problems, the positive class is one of the classes, and the negative class is the union of the rest of the classes.
 
-The precision is the proportion of correct classification of positive objects, that is, $$\textsf{precision}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1)}{\sum_i \delta(\hat{\mathbf y_i = 1})}.$$
+The precision is the proportion of correct classification of positive objects, that is, $$\textsf{precision}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{ \hat y_i = 1})}.$$ On the other hand, the recall is $$\textsf{recall}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{y_i = 1})}.$$ 
 
 ```python
 p = precision_score(y, hy, average=None)
