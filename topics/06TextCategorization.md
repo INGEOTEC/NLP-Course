@@ -453,7 +453,6 @@ r = recall_score(y, hy, average=None)
 Furthermore, the score $$f_1$$ is defined in terms of the precision and recall; it is the harmonic mean $$f_1 = 2 \frac{\textsf{precision} \cdot \textsf{recall}}{\textsf{precision} + \textsf{recall}}$$.
 
 ```python
-2 * (p * r) / (p + r)
 f1_score(y, hy, average=None)
 ```
 
