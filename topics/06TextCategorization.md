@@ -443,15 +443,23 @@ The accuracy is a popular performance measure; however, it has drawbacks. For ex
 
 Other famous metrics used in classification are precision, recall, and score $$f_1$$. These performance measures are defined on binary classification problems; however, k-class classification problems can be codified as $$k$$ binary problems; in each of these problems, the positive class is one of the classes, and the negative class is the union of the rest of the classes.
 
-The precision is the proportion of correct classification of positive objects, that is, $$\textsf{precision}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{ \hat y_i = 1})}.$$ On the other hand, the recall is $$\textsf{recall}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{y_i = 1})}.$$ 
+The precision is the proportion of correct classification of positive objects, that is, $$\textsf{precision}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{ \hat y_i = 1})}.$$ On the other hand, the recall is $$\textsf{recall}(\mathbf y, \hat{\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1) \delta(\mathbf{\hat y_i} = 1) }{\sum_i \delta(\mathbf{y_i = 1})}.$$ The next code uses two functions from `sklearn` to compute the precision and recall.
 
 ```python
 p = precision_score(y, hy, average=None)
 r = recall_score(y, hy, average=None)
+```
 
+Furthermore, the score $$f_1$$ is defined in terms of the precision and recall; it is the harmonic mean $$f_1 = 2 \frac{\textsf{precision} \cdot \textsf{recall}}{\textsf{precision} + \textsf{recall}}$$.
+
+```python
 2 * (p * r) / (p + r)
 f1_score(y, hy, average=None)
+```
 
+The precision, recall, and score $$f_1$$ are defined on binary classification problems, and these measures are most of the time computed for the positive class; however, nothing prohibits computing it for the other class; in the previous code, it is only needed to change $$1$$ to $$0$$. Additionally, it is possible to calculate these measures for all the classes in a $$K$$ classification problem, and the result is to have one measure per class; the average of these values is known as *macro*. The following code computes the confidence interval of the macro-recall obtained from the predictions of $$\mathcal D$$ using stratified k-fold cross-validation.
+
+```python
 metric = lambda a, b: recall_score(a, b, average='macro')
 ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
