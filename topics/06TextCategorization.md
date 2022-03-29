@@ -473,8 +473,8 @@ tm = TextModel(lang='english')
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
-    training = [D[x] for x in tr]
-    w2id, uniq_labels, l_tokens, priors = train(training, tm)
+    T = [D[x] for x in tr]
+    w2id, uniq_labels, l_tokens, priors = training(T, tm)
     assert np.all(np.isfinite([posterior(D[x][0]) for x in val]))
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
