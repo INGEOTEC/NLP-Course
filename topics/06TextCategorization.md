@@ -405,7 +405,7 @@ There are scenarios where the size of $$\mathcal D$$ prohibits splitting it in t
 
 The only constraints imposed in a k-fold cross are that all validation sets have a similar cardinality and that all the elements in $$\mathcal D$$ appear once. For problems where the proportion of the different classes is unbalanced, adding another constraint in the selection process is helpful; the constraint is to force the distribution of classes to remain similar in all the validation sets. This latter process is known as stratified k-fold cross-validation. 
 
-The following code implements stratified k-fold cross-validation and predicts all the elements in $$\mathcal D$$ and stores the predictions in the variable `hy.` 
+The following code implements stratified k-fold cross-validation, predicts all the elements in $$\mathcal D$$, and stores the predictions in the variable `hy.` 
 
 ```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
@@ -438,6 +438,12 @@ ci
 ```
 
 # Precision, Recall, and F1-score
+
+The accuracy is a popular performance measure; however, it has drawbacks. For example, in a dataset where one class is more frequent than the other, e.g., there are 99 examples of the negative class and only one example of the positive one, then the accuracy for the classifier that always predicts negative is .99. This performance can be seen as adequate; however, the classifier defined is constant, not even looking at the inputs. 
+
+Other famous metrics used in classification are precision, recall, and score $$f_1$$. These performance measures are defined on binary classification problems; however, k-class classification problems can be codified as $$k$$ binary problems; in each of these problems, the positive class is one of the classes, and the negative class is the union of the rest of the classes.
+
+The precision is the proportion of correct classification of positive objects, that is, $$\textsf{precision}(\mathbf y, \hat {\mathbf y}) = \frac{\sum_i \delta(\mathbf y_i = 1}{\hat{\mathbf y_i = 1}}.$$
 
 ```python
 p = precision_score(y, hy, average=None)
