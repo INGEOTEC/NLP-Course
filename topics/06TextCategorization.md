@@ -53,7 +53,7 @@ $$\min_{g \in \Omega} \sum_{(\mathbf x, y) \in \mathcal D} L(y, g(\mathbf x)),$$
 
 where $$\Omega$$ is the search space of the feasible mapping functions.
 
-Additionally, if one is also interested in measuring the uncertainty, the path relies on the probability. In this latter scenario, one approach is to assume the form of the conditional probability, i.e., $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f_k$$ is the $$k$$-th value of $$f: \mathcal X \rightarrow [0, 1]^K$$ which encodes a probability mass function. For the case of a binary classification problem the function is $$f: \mathcal X \rightarrow [0, 1]$$. As can be seen, in this scenario, an adequate distribution is [Bernoulli](/NLP-Course/topics/03Collocations/#sec:bernoulli), where function $$f$$ takes the place of the parameter of the distribution, that is, $$\mathcal Y \sim \textsf{Bernoulli}(f(\mathcal X))$$; for more labels, the Categorical distribution can be used. On the other hand, the complement path is to rely on Bayes' theorem. 
+Additionally, if one is also interested in measuring the uncertainty, the path relies on probability. In this latter scenario, one approach is to assume the form of the conditional probability, i.e., $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)=f_k(x)$$ where $$f_k$$ is the $$k$$-th value of $$f: \mathcal X \rightarrow [0, 1]^K$$ which encodes a probability mass function. For the case of a binary classification problem the function is $$f: \mathcal X \rightarrow [0, 1]$$. As can be seen, in this scenario, an adequate distribution is [Bernoulli](/NLP-Course/topics/03Collocations/#sec:bernoulli), where function $$f$$ takes the place of the parameter of the distribution, that is, $$\mathcal Y \sim \textsf{Bernoulli}(f(\mathcal X))$$; for more labels, the Categorical distribution can be used. On the other hand, the complement path is to rely on Bayes' theorem. 
 
 # Bayes' theorem
 {: #sec:bayes-theorem }
@@ -147,7 +147,7 @@ klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 
 
 ![Posterior Errors](/NLP-Course/assets/images/two_classes_posterior_error.png)
 
-## Multivariate Normal
+## Multivariate Normal Distribution
 
 An equivalent procedure can be done for multivariate Normal distribution. The following figure shows an example of two multivariate distributions; one represents a positive class (blue), and the other corresponds to the negative (red). The dataset containing the pairs, $$(\mathbf x, y)$$, is found on the variable `D`. 
 
