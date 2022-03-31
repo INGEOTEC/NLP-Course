@@ -19,8 +19,8 @@ nav_order: 6
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from microtc.utils import tweet_iterator
-from scipy.stats import norm, multinomial
+from microtc.utils import tweet_iterator, load_model, save_model
+from scipy.stats import norm, multinomial, multivariate_normal
 from matplotlib import pylab as plt
 from collections import Counter
 from sklearn.model_selection import StratifiedKFold
@@ -28,6 +28,7 @@ from scipy.special import logsumexp
 from sklearn.metrics import recall_score, precision_score, f1_score
 from EvoMSA.utils import bootstrap_confidence_interval
 from sklearn.naive_bayes import MultinomialNB
+from os.path import join
 ```
 
 ## Installing external libraries
@@ -77,7 +78,7 @@ The Bayes' theorem has two features that make it amenable to addressing classifi
 
 The second characteristic is that the likelihood is a probability distribution given any class. Consequently, the problem is to estimate $$K$$ different distribution using the subset of the training set belonging to each different class. On the other hand, the prior is the estimated probability of each class, and the evidence can be estimated using the previous two values. 
 
-## Example
+## Normal Distribution
 
 In order to illustrate the process of computing the posterior, the following example uses two normals, each one corresponding to a different class; the red one is the negative class, and blue is used to depict the positive one.
 
@@ -146,7 +147,7 @@ klass = lambda x: 1 if l_pos.pdf(x) * prior_pos > l_neg.pdf(x) * prior_neg else 
 
 ![Posterior Errors](/NLP-Course/assets/images/two_classes_posterior_error.png)
 
-# Multivariate Normal
+## Multivariate Normal
 
 An equivalent procedure can be done for multivariate Normal distribution. The following figure shows an example of two multivariate distributions; one represents a positive class (blue), and the other corresponds to the negative (red). The dataset containing the pairs, $$(\mathbf x, y)$$, is found on the variable `D`. 
 
@@ -173,7 +174,7 @@ Once the likelihood has been estimated, it is straightforward to estimate the pr
 
 ![Classification Errors in Two Multivariate Normals](/NLP-Course/assets/images/two_classes_multivariate_error.png)
 
-# Categorical Distribution
+## Categorical Distribution
 {: #sec:categorical-distribution }
 
 The description of Bayes’ theorem continues with an example of a Categorical distribution. A Categorical distribution can simulate the drawn of $$K$$ events that can be encoded as characters, and $$\ell$$ repetitions can be represented as a sequence of characters. Consequently, the distribution can illustrate the generation sequences associated with different classes, e.g., positive or negative.
@@ -290,8 +291,7 @@ ci
 (0.6842375, 0.7252625)
 ```
 
-# Text Categorization - Naive Bayes
-
+# Text Categorization - Categorical Distribution
 
 The approach followed on text categorization is to treat it as supervised learning problem where the starting point is a dataset $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_K\}$$ and $$\text{text}_i$$ is a text. For example, the next code uses a toy sentiment analysis dataset with four classes: negative (N), neutral (NEU), absence of polarity (NONE), and positive (P).
 
@@ -344,6 +344,8 @@ l_tokens = l_tokens / np.atleast_2d(l_tokens.sum(axis=1)).T
 l_tokens = np.log(l_tokens)
 ```
 
+## Prediction
+
 Once all the parameters have been estimated, it is time to use the model to classify any text. The following function computes the posterior distribution. The first step is to tokenize the text (second line) and compute the frequency of each token in the text. The frequency stored in the dictionary `cnt` is converted into the vector `x` using the mapping function `w2id`. The final step is to compute the product of the likelihood and the prior. The product is computed in log-space; thus, this is done using the likelihood and the prior sum. The last step is to compute the evidence and normalize the result; the evidence is computed with the function `logsumexp.` 
 
 ```python
@@ -369,7 +371,7 @@ y = np.array([uniq_labels[y] for _, y in D])
 0.977
 ```
 
-# Training
+## Training
 
 Solving supervised learning problems requires two phases; one is the training phase, and the other is the prediction. The posterior function handles the later phase, and it is missing to organize the code described in a training function. The following code describes the training function; it requires the dataset's parameters and an instance of `TextModel.`
 
@@ -395,11 +397,13 @@ def training(D, tm):
     return w2id, uniq_labels, l_tokens, priors
 ```
 
-# KFold and StratifiedKFold
+# Performance
 
 The performance of a supervised learning algorithm cannot be measured on the same data where it was trained. To illustrate this issue, imagine an algorithm that memorizes the dataset, and for all inputs that have not been seen, the algorithm outputs a random class. Consequently, this algorithm is useless because it cannot be used to predict an input outside the dataset used to train it. Nonetheless, it has a perfect score, in any performance measure, in the dataset used to estimate its parameters. 
 
 Traditionally, this issue is handle by splitting the dataset $$\mathcal D$$ into two disjoint sets, $$\mathcal D = \mathcal T \cup \mathcal G$$ where $$\mathcal T \cap \mathcal G = \emptyset$$, or three sets $$\mathcal D = \mathcal T \cup \mathcal V \cup \mathcal G$$ where $$\mathcal T \cap \mathcal V \cap \mathcal G = \emptyset$$. The set $$\mathcal T$$, known as **training set**, is used to train the algorithm, i.e., to estimate the parameters, whereas the set $$\mathcal G$$, known as **test set** or **gold set**, is used to measure its performance. The set $$\mathcal V$$, known as **validation set**, is used to optimize the algorithm's hyperparameters; for example, a hyperparameter in an n-gram language model is the value of $$n$$.
+
+## KFold and StratifiedKFold
 
 There are scenarios where the size of $$\mathcal D$$ prohibits splitting it in training, validation and test sets; for this case, an alternative approach is to split $$\mathcal D$$ several times with a different selection each time. The process is known as k-fold cross-validation when all the elements in $$\mathcal D$$ are used once in a validation set. For example, the k-fold cross-validation when $$k=3$$ corresponds to the following process. The set $$\mathcal D$$ is split into three disjoint sets $$\mathcal D_1, \mathcal D_2, \mathcal D_3$$ where $$\mathcal D=\mathcal D_1 \cup \mathcal D_2 \cup \mathcal D_3;$$ with the characteristic that all the subsets have a similar cardinality. These datasets are used to create three training and validation sets, i.e., $$\mathcal T_1=\mathcal D_2 \cup \mathcal D_3$$, $$\mathcal V_1=\mathcal D_1$$, $$\mathcal T_2=\mathcal D_1 \cup \mathcal D_3$$, $$\mathcal V_2=\mathcal D_2$$, and $$\mathcal T_3=\mathcal D_1 \cup \mathcal D_2$$, $$\mathcal V_3=\mathcal D_3.$$ As can be observed all the elements in $$\mathcal D$$ are used once in a validation set.
 
@@ -437,7 +441,7 @@ ci
 (0.5848410641389679, 0.6451589358610321)
 ```
 
-# Precision, Recall, and F1-score
+## Precision, Recall, and F1-score
 
 The accuracy is a popular performance measure; however, it has drawbacks. For example, in a dataset where one class is more frequent than the other, e.g., there are 99 examples of the negative class and only one example of the positive one, then the accuracy for the classifier that always predicts negative is .99. This performance can be seen as adequate; however, the classifier defined is constant, not even looking at the inputs. 
 
