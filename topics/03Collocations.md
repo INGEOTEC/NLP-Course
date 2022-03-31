@@ -152,7 +152,7 @@ The estimated parameter is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(
 
 The maximum likelihood estimator can be obtained by maximizing the log-likelihood, i.e., 
 
-$$l_{f_\mathcal X}(\mathbf p_j) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$ 
+$$l_{f_\mathcal X}(\mathbf p) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$ 
 
 subject to the constraint $$\sum_i^d \mathbf p_i=1$$. 
 
