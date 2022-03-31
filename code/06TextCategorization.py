@@ -144,7 +144,7 @@ plt.savefig('two_classes_multivariate_error.png', dpi=300)
 m = {k: chr(122 - k) for k in range(4)}
 pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
 neg = multinomial(1, [0.35, 0.20, 0.25, 0.20])
-length = norm(loc=10, scale=3)
+length = norm(loc=15, scale=3)
 D = []
 id2w = lambda x: " ".join([m[_] for _ in x.argmax(axis=1)])
 for l in length.rvs(size=1000):
@@ -192,12 +192,12 @@ s = np.sqrt(p * (1 - p) / y.shape[0])
 coef = norm.ppf(0.975)
 ci = (p - coef * s, p + coef * s)
 ci
-(0.6845035761081213, 0.7244964238918787)
+(0.7423093514177674, 0.7796906485822326)
 
 ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
                                   metric=lambda a, b: (a == b).mean())
 ci                                  
-(0.6842375, 0.7252625)
+(0.7415, 0.7797625)
 
 # Text Categorization - Naive Bayes
 
@@ -299,7 +299,7 @@ ci
 # Tokenizer
 
 tm = TextModel(lang='english')
-folds = StratifiedKFold(shuffle=True, random_state=0)
+# folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     _ = [D[x] for x in tr]

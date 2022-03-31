@@ -179,7 +179,7 @@ Once the likelihood has been estimated, it is straightforward to estimate the pr
 
 The description of Bayes’ theorem continues with an example of a Categorical distribution. A Categorical distribution can simulate the drawn of $$K$$ events that can be encoded as characters, and $$\ell$$ repetitions can be represented as a sequence of characters. Consequently, the distribution can illustrate the generation sequences associated with different classes, e.g., positive or negative.
 
-The first step is to create the dataset. As done previously, two distributions are defined, one for each class; it can be observed that each distribution has different parameters. The second step is to sample these distributions; the distributions are sampled 1000 times with the following procedure. Each time, a random variable representing the number of outcomes taken from each distribution is drawn from a Normal $$\mathcal N(10, 3)$$ and stored in the variable `length.` The random variable indicates the number of outcomes for each Categorical distribution; the results are transformed into a sequence, associated to the label corresponding to the positive and negative class, and stored in the list `D.`
+The first step is to create the dataset. As done previously, two distributions are defined, one for each class; it can be observed that each distribution has different parameters. The second step is to sample these distributions; the distributions are sampled 1000 times with the following procedure. Each time, a random variable representing the number of outcomes taken from each distribution is drawn from a Normal $$\mathcal N(15, 3)$$ and stored in the variable `length.` The random variable indicates the number of outcomes for each Categorical distribution; the results are transformed into a sequence, associated to the label corresponding to the positive and negative class, and stored in the list `D.`
 
 ```python
 pos = multinomial(1, [0.20, 0.20, 0.35, 0.25])
@@ -262,7 +262,7 @@ The accuracy of the classifier trained previously is computed with the following
 ```python
 y = np.array([y for _, y in D])
 (hy == y).mean()
-0.7545
+0.761
 ```
 
 # Confidence Interval
@@ -277,7 +277,7 @@ se = np.sqrt(p * (1 - p) / y.shape[0])
 coef = norm.ppf(0.975)
 ci = (p - coef * se, p + coef * se)
 ci
-(0.6845035761081213, 0.7244964238918787)
+(0.7423093514177674, 0.7796906485822326)
 ```
 
 The standard error of the accuracy can be derived using the identity $$\mathbb V(\sum_i a_i \mathcal X_i) = \sum_i a_i^2 \mathbb V(\mathcal X_i)$$ where random variables $$\mathcal X_i$$ are independent and $$a_i$$ is a constant. On the other hand, the accuracy can be seen as the outcome of a random variable where $$1$$ indicates the correct prediction and $$0$$ represents an error, then the accuracy is the sum of these random variables. Let $$\mathcal X_i$$ represent the outcome of the $$i$$-th prediction, then the accuracy is $$\frac{1}{N} \sum_i^N X_i$$. The variance is $$\mathbb V(\frac{1}{N} \sum_i^N X_i) = \sum_i \frac{1}{N^2} \mathbb V(\mathcal X_i)$$; the variance of a Bernoulli distribution with parameter $$p$$ is $$p(1-p)$$, consequently $$\sum_i \frac{1}{N^2} \mathbb V(\mathcal X_i) = \frac{1}{N^2} \sum_i p(1-p) = \frac{1}{N}p(1-p)$$, which completes the derivation.
@@ -288,7 +288,7 @@ There are performance measures that it is difficult or unfeasible to analytical 
 ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
                                   metric=lambda a, b: (a == b).mean())
 ci                                  
-(0.6842375, 0.7252625)
+(0.7415, 0.7797625)
 ```
 
 # Text Categorization - Categorical Distribution
@@ -472,9 +472,10 @@ ci
 
 # Tokenizer
 
+One of the critical components in the text categorization algorithm is the method used to tokenize the text; changing the tokenizer's parameters impacts the classifier's performance, e.g., the following code shows an example where the tokenizer used the default parameters. An increase in performance can be observed, albeit both confidence intervals overlap, so it cannot be concluded that one set of parameters is better than the other.
+
 ```python
 tm = TextModel(lang='english')
-folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     T = [D[x] for x in tr]
@@ -483,15 +484,10 @@ for tr, val in folds.split(D, y):
     hy[val] = [posterior(D[x][0]).argmax() for x in val]
 
 y = np.array([uniq_labels[y] for _, y in D])
-(y == hy).mean()
-0.651
-```
-
-```python
 metric = lambda a, b: recall_score(a, b, average='macro')
 ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
 ci
-(0.42520668312638243, 0.4632802320946836)
+(0.42474371071687494, 0.465052582103992)
 ```
 
