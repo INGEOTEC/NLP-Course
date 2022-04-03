@@ -122,7 +122,7 @@ where $$f_{\mathcal X}$$ corresponds to the probability density function, in the
 
 The maximum likelihood estimator $$\hat \theta$$ corresponds to maximizing $$\mathcal L_{f_{\mathcal X}}(\theta)$$ or equivalent maximizing $$l_{f_\mathcal X}(\theta) =  \log \mathcal L_{f_{\mathcal X}}(\theta).$$ 
 
-Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$f_{\mathcal X}(p) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the likelihood function, which can be solved analytically by following the next steps.
+Continuing with the example $$(1, 0, 0, 1, 1)$$, given that $$\mathcal X_i$$ is Bernoulli distributed then $$f_{\mathcal X}(x) = p^x(1-p)^{1-x}$$. The maximum likelihood estimator of $$p$$ is obtained by maximizing the likelihood function, which can be solved analytically by following the next steps.
 
 $$\begin{eqnarray} 
 \frac{d}{dp} \mathcal l_{f_{\mathcal X}}(p) &=& 0 \\ 
