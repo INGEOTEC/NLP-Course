@@ -98,7 +98,7 @@ D = [(x, 0) for x in neg.rvs(100) if x >= _min and x <= _max]
 D += [(x, 1) for x in pos.rvs(1000) if x < _min or x > _max]
 ```
 
-The following picture shows the distribution of the positive and negative classes; it can be observed that the two classes are separated by the constraints imposed. These points will be used to illustrate the procedure to estimate the posterior distribution given a dataset; the dataset is $$\mathcal D=\{(x_i, y_i \mid i=1, \ldots, N)\}$$ where $$x_i \in \mathbb R$$ and $$y_i \in \{0, 1\}$$.
+The following picture shows the distribution of the positive and negative classes; it can be observed that the two classes are separated by the constraints imposed. These points will be used to illustrate the procedure to estimate the posterior distribution given a dataset; the dataset is $$\mathcal D=\{(x_i, y_i) \mid i=1, \ldots, N\}$$ where $$x_i \in \mathbb R$$ and $$y_i \in \{0, 1\}$$.
 
 ![Two Normal Samples](/NLP-Course/assets/images/two_normal_samples.png)
 
@@ -118,11 +118,10 @@ prior_pos = priors[1] / N
 prior_neg = priors[0] / N
 ```
 
-The next step requires computing the unnormalized posterior $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$; in the following example, this term is computed for all the inputs in $$\mathcal D$$. The first line retrieves the inputs, i.e., $$x$$, the second line sorts them; however, this step is not required and is performed because the posterior will be plotted later. The third and fourth lines compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$ for the positive and negative class.
+The next step requires computing the unnormalized posterior $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$; in the following example, this term is computed for all the inputs in $$\mathcal D$$. The first line retrieves the inputs, i.e., $$x$$. The second and third lines compute $$\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)$$ for the positive and negative class.
 
 ```
 x = np.array([x for x, _ in D])
-x.sort()
 post_pos = l_pos.pdf(x) * prior_pos
 post_neg = l_neg.pdf(x) * prior_neg
 ```
@@ -285,7 +284,7 @@ The standard error of the accuracy can be derived using the identity $$\mathbb V
 There are performance measures that it is difficult or unfeasible to analytical obtain $$\sqrt{\mathbb V(\hat \theta)}$$, for those cases, one can use a bootstrapping method to estimate it, the following code shows the usage of a method that implements the bootstrap percentile interval when the performance measure is the accuracy. However, it can be observed that the measure is a parameter of the method, so it works for any performance measure. 
 
 ```python
-ci = bootstrap_confidence_interval(y, hy, alpha=0.025,
+ci = bootstrap_confidence_interval(y, hy, alpha=0.05,
                                   metric=lambda a, b: (a == b).mean())
 ci                                  
 (0.7415, 0.7797625)
