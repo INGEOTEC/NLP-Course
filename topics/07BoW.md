@@ -148,11 +148,15 @@ Additionally, there has been no assumption regarding the form of $$w(x)$$; given
 
 $$\mathbb P(\mathcal Y=k \mid \mathcal X=x) = \frac{\exp(\mathbf w_k m(x))}{\sum_{j=1}^K \exp(\mathbf w_j m(x))}.$$
 
-The denominator in the previous equation acts as a normalization factor, and the predicted class is invariant to this normalization factor. Additionally, the $$\log$$ of $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)$$ does not affect the prediction class with the rule $$\textsf{class(x)} = \textsf{arg max}_k \mathbb P(\mathcal Y=k \mid \mathcal X=x).$$ Considering these factors the class is predicted as 
+The denominator in the previous equation acts as a normalization factor, and the predicted class is invariant to this normalization factor. Additionally, the logarithm of $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)$$ does not affect the prediction class with the rule $$\textsf{class(x)} = \textsf{arg max}_k \mathbb P(\mathcal Y=k \mid \mathcal X=x).$$ Considering these factors the class is predicted as 
 
 $$\textsf{class(x)} = \textsf{arg max}_k \mathbf w_k m(x).$$
 
-The [first approach](/NLP-Course/topics/06TextCategorization/#sec:tc-categorical) followed to tackle the problem of Text Categorization was to use the Bayes' Theorem $$(\mathbb P(\mathcal Y \mid \mathcal X) = \frac{\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)}{\mathbb P(\mathcal X)})$$ where the likelihood ($$\mathbb P(\mathcal X \mid \mathcal Y)$$) was assume to be a Categorical Distribution. A Categorical Distribution is defined with a vector $$\mathbf p \in \mathbb R^d$$ where $$d$$ is the different distribution outcomes. The likelihood is a Categorical Distribution given the class $$\mathcal Y$$, therefore there is a parameter $$\mathbf p$$ for each class, which can be identified with a subindex $$k$$, e.g., $$\mathbf p_k$$ is the parameter corresponding to the class $$k$$. The parameters were estimated assumming indepedence, i.e., $$\mathbb P(\mathcal X=w_1,w_2,\ldots,w_\ell \mid \mathcal Y) = \prod_i \mathbb P(w_i \mid \mathcal Y).$$
+The [first approach](/NLP-Course/topics/06TextCategorization/#sec:tc-categorical) followed to tackle the problem of Text Categorization was to use the Bayes' Theorem $$(\mathbb P(\mathcal Y \mid \mathcal X) = \frac{\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)}{\mathbb P(\mathcal X)})$$ where the likelihood ($$\mathbb P(\mathcal X \mid \mathcal Y)$$) was assume to be a Categorical Distribution. A Categorical Distribution is defined with a vector $$\mathbf p \in \mathbb R^d$$ where $$d$$ is the different distribution outcomes. The likelihood is a Categorical Distribution given the class $$\mathcal Y$$, therefore there is a parameter $$\mathbf p$$ for each class, which can be identified with a subindex $$k$$, e.g., $$\mathbf p_k$$ is the parameter corresponding to the class $$k$$. The parameters were estimated assumming indepedence, i.e., $$\mathbb P(\mathcal X=w_1,w_2,\ldots,w_\ell \mid \mathcal Y) = \prod_i \mathbb P(w_i \mid \mathcal Y),$$ where $w_i$ is the $$i$$-th token in the text.
+
+The evidence $$\mathbb P(\mathcal X)$$ is a normalization factor in Bayes' theorem so it does not affect the predicted class, equivalent computing the logarithm does not change the value of the prediction, using these transformations it is obtained
+
+$$\log \mathbb P(\mathcal Y \mid \mathcal X) \propto \sum_i \log \mathbb P(w_i \mid \mathcal Y) + \log P(\mathcal Y)$$
 
 # Gradient Descent Algorithm
 
