@@ -144,23 +144,23 @@ hp = x.mean()
 # Categorical distribution
 {: #sec:categorical }
 
-Having a language with only two words seems useless; it sounds more realistic to have a language with $$d$$ words. Let $$\mathcal X$$ be a random variable with $$d$$ outcomes ($$\{1, 2, \ldots, d\}$$). The random variable $$\mathcal X$$ has a Categorical distribution, i.e., $$\mathcal X \sim \textsf{Categorical}(\mathbf p)$$ in the case $$\mathbb P(\mathcal X=i) = \mathbf p_i $$ for $$1 \leq i \leq d$$, where $$\sum_i^d \mathbf p_i =1$$ and $$\mathbf p \in \mathbb R^d$$. The probability mass function of a Categorical distribution is $$f_{\mathcal X}(x) = \prod_{i=1}^d \mathbf p_i^{\delta(i=x)}$$.
+Having a language with only two words seems useless; it sounds more realistic to have a language with $$d$$ words. Let $$\mathcal X$$ be a random variable with $$d$$ outcomes ($$\{1, 2, \ldots, d\}$$). The random variable $$\mathcal X$$ has a Categorical distribution, i.e., $$\mathcal X \sim \textsf{Categorical}(\mathbf p)$$ in the case $$\mathbb P(\mathcal X=i) = \mathbf p_i $$ for $$1 \leq i \leq d$$, where $$\sum_i^d \mathbf p_i =1$$ and $$\mathbf p \in \mathbb R^d$$. The probability mass function of a Categorical distribution is $$f_{\mathcal X}(x) = \prod_{i=1}^d \mathbf p_i^{\mathbb 1(i=x)}$$.
 
-The estimated parameter is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$
+The estimated parameter is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \mathbb 1(x_j = i).$$
 
 ## Maximum Likelihood Estimator
 
 The maximum likelihood estimator can be obtained by maximizing the log-likelihood, i.e., 
 
-$$l_{f_\mathcal X}(\mathbf p) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)},$$ 
+$$l_{f_\mathcal X}(\mathbf p) = \log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\mathbb 1(x_i=k)},$$ 
 
 subject to the constraint $$\sum_i^d \mathbf p_i=1$$. 
 
 An optimization problem with a equality constraint can be solved using Langrage multipliers which requieres setting the constraint in the original formulation and making a derivative on a introduce variable $$\lambda$$. Using Langrage multiplier the system of equations that need to be solved is the following: 
 
 $$\begin{eqnarray}
-\frac{\partial}{\partial \mathbf p_j} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
-\frac{\partial}{\partial \lambda} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\delta(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
+\frac{\partial}{\partial \mathbf p_j} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\mathbb 1(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
+\frac{\partial}{\partial \lambda} [\log \prod_{i=1}^N \prod_{k=1}^d \mathbf p_k^{\mathbb 1(x_i=k)} - \lambda (\sum_i^d \mathbf p_i -1)] &=& 0 \\
 \end{eqnarray},$$
 
 where the term $$\lambda (\sum_i^d \mathbf p_i -1)$$ corresponds to the equality constraint.
@@ -187,7 +187,7 @@ We have all the elements to realize that the co-occurrence matrix is the realiza
 
 The first step is to define a new random variable $$\mathcal X_i$$ that represents the event of getting a bigram. $$\mathcal X_i$$ is defined using $$\mathcal X_r$$ and $$\mathcal X_r$$  which correspond to the random variables of the first and second word of the bigram. For the case, $$\mathcal X_r=r$$ and $$\mathcal X_c=c$$ the random variable is defined as $$\mathcal X_i= (r + 1) \cdot (c + 1)$$, where the constant one is needed in case zero is included as one of the outcomes of the random variables $$\mathcal X_r$$ and $$\mathcal X_c$$. For example, in the co-occurrence matrix, presented previously, the realization $$\mathcal X_r=3$$ and $$\mathcal X_c=2$$ corresponds to the bigram (_in_, _of_) which has a recorded frequency of $$6683$$, using the new variable the event is $$\mathcal X_i=12$$. As can be seen, $$X_i$$ is a random variable with $$d^2$$ outcomes. We can suppose $$\mathcal X_i$$ is a Categorical distributed random variable, i.e., $$\mathcal X_i \sim \textsf{Categorical}(\mathbf p).$$
 
-The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \delta(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. For example, the following code builds the bivariate distribution from the co-occurrence matrix.
+The fact that $$\mathcal X_i$$ would be considered Categorical distributed implies that the bigrams are independent that is observing one of them is not affected by the previous words in any way. However, with this assumption it is straightforward estimating the parameter $$\mathbf p$$ which is $$\hat{\mathbf p}_i = \frac{1}{N}\sum_{j=1}^N \mathbb 1(x_j = i).$$. Consequently, the co-occurrence matrix can be converted into a bivariate distribution by dividing it by $$N$$, where $$N$$ is the sum of all the values of the co-occurrence matrix. For example, the following code builds the bivariate distribution from the co-occurrence matrix.
 
 ```python
 co_occurrence = np.zeros((len(index), len(index)))

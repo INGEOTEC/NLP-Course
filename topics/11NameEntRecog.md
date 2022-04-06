@@ -31,7 +31,7 @@ An essential component when developing an algorithm is to measure its performanc
 
 This exercise asks to create a function that computes the performance of a sentence tokenizer. The performance measure used is accuracy which is defined as the percentage of correct answers. Let $$y$$ and $$\hat y$$ be the list of correct sentences and the sentences obtained with the tokenizer. Let $$\delta (x)$$ be a function that returns 1 when $$x$$ is true and 0 otherwise. Using these elements the accuracy can be computed as: 
 
-$$\frac{1}{\mid y \mid} \sum_{x \in y} \delta(x \in \hat y),$$
+$$\frac{1}{\mid y \mid} \sum_{x \in y} \mathbb 1(x \in \hat y),$$
 
 where the operation $$x \in \hat y$$ deletes the sentence $$x$$ from $$\hat y$$ once it has been tested; this is not normal behavior but it is necessary to compute the accuracy in this situation.
 -->

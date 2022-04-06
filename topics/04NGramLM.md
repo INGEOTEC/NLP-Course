@@ -557,7 +557,7 @@ Different techniques have been proposed to handle missing words on an LM; one si
 
 The conditional probability for bigrams is 
 
-$$\mathbb P(\mathcal X_\ell, \mid \mathcal X_{\ell -1}) = \frac{\max(C(\mathcal X_{\ell -1}, \mathcal X_\ell), k)}{C(\mathcal X_{\ell - 1}) + k \sum_i \delta(C(\mathcal X_{\ell-1}, \mathcal X_i)=0)}, $$
+$$\mathbb P(\mathcal X_\ell, \mid \mathcal X_{\ell -1}) = \frac{\max(C(\mathcal X_{\ell -1}, \mathcal X_\ell), k)}{C(\mathcal X_{\ell - 1}) + k \sum_i \mathbb 1(C(\mathcal X_{\ell-1}, \mathcal X_i)=0)}, $$
 
 where the denominator can be implemented as:
 
