@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+export PATH=$HOME/miniconda3/bin:$PATH
+
+# Set up autograder files
+
+cd /autograder/source
+mkdir hy
+cp /autograder/submission/*test.json /autograder/source/hy/
+
+
+PYTHONPATH="." python3 run.py
