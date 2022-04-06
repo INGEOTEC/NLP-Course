@@ -44,6 +44,7 @@ The goal of the course is to introduce the students to the field of Natural Lang
 |$$\mathbb 1(e)$$     | Indicator function; $$1$$ only if $$e$$ is true          |
 |$$\Omega$$        | Search space                                             |
 |$$\mathbb V$$     | Variance                                                 |
+|$$\mathbb E$$     | Expectation                                                 |
 
 #  Requirements
 

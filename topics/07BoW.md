@@ -54,11 +54,16 @@ The log-likelihood estimator is defined as follows, where $$\mathcal D$$ is the 
 $$\begin{eqnarray}
 l_{f_\mathcal Y}(f) &=& \log \prod_{(x, y) \in \mathcal D} f_\mathcal Y(y \mid f(x)) \\
 &=& \log \prod_{(x, y) \in \mathcal D} \prod_{k=1}^K f_k(x)^{\mathbb 1(k=y)}\\
+\end{eqnarray}$$
+
+Assuming that function $$f$$ has a parameter $$w_j$$, the procedure to estimate the parameter is to compute the partial derivate of the log-likelihood with respect to $$w_j$$ and solve it when it is equal to zero. 
+
+$$\begin{eqnarray}
 \frac{\partial}{\partial w_j} l_{f_\mathcal Y}(f) &=& \frac{\partial}{\partial w_j} \log \prod_{(x, y) \in \mathcal D} \prod_{k=1}^K f_k(x)^{\mathbb 1(k=y)}\\
 &=& \frac{\partial}{\partial w_j} \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K \mathbb 1(k=y) \log f_k(x) = 0
 \end{eqnarray}$$
 
-
+Before solving the log-likelihood, it is essential to relate this concept with cross-entropy. First the expectation of $$\mathcal h(X)$$ is computed as $$\sum_x h(x) f(x)$$ where $$f$$ is the mass function, this can be expressed as $$\mathbb E_f[h(X)]$$. On the other hand, the information content of an event is a decreasing function that has its zero when the event has the highest probability, meaning that there is no information carried on an event that occurs always. The information content can be modeled with the function $$I_f(e) = \log(\frac{1}{f(e)})=-\log(f(e)).$$  The **entropy** measures the expected value of the information content that is $$\mathbb E_f[I_f(\mathcal X)]=-\sum_x f(x) \log(f(x)).$$
 
 # Minimizing Cross-entropy
 
