@@ -291,6 +291,7 @@ ci
 ```
 
 # Text Categorization - Categorical Distribution
+{: #sec:tc-categorical }
 
 The approach followed on text categorization is to treat it as supervised learning problem where the starting point is a dataset $$\mathcal D = \{(\text{text}_i, y_i) \mid i=1,\ldots, N\}$$ where $$y \in \{c_1, \ldots c_K\}$$ and $$\text{text}_i$$ is a text. For example, the next code uses a toy sentiment analysis dataset with four classes: negative (N), neutral (NEU), absence of polarity (NONE), and positive (P).
 

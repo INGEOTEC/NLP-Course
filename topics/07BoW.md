@@ -75,47 +75,59 @@ $$\begin{eqnarray}
 &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \frac{\mathbb 1(k=y)}{f_k(x)} \frac{\partial}{\partial w_j} f_k(x)
 \end{eqnarray}$$
 
+The function $$f_k$$ has a constraint given that it is taking the place of parameter $$\mathbf p$$ of the Categorical Distribution; this restriction is $$\sum_k^K f_k(x) = 1$$ which can be complied by dividing it with a normalization factor as:
 
+$$f_k(x) = \frac{h_k(w_k(x))}{\sum_{\ell=1}^K h_\ell(w_\ell(x))}$$
 
-$$\sum_k^K f_k(x) = 1$$
+The next step is to compute the partial derivative with respect to $$w_j$$ 
 
 $$\begin{eqnarray}
-f_k(x) &=& \frac{h_k(w_k(x))}{\sum_{\ell=1}^K h_\ell(w_\ell(x))}\\
 \frac{\partial}{\partial w_j} f_k(x) &=& \frac{\partial}{\partial w_j} \frac{h_k(w_k(x))}{\sum_{\ell=1}^K h_\ell(w_\ell(x))}\\
 &=& \frac{\sum_{\ell=1}^K h_\ell(w_\ell(x)) \frac{\partial}{\partial w_j} h_k(w_k(x)) - h_k(w_k(x)) \frac{\partial}{\partial w_j} \sum_{\ell=1}^K h_\ell(w_\ell(x))}{(\sum_{\ell=1}^K h_\ell(w_\ell(x)))^2}\\
-&=& \frac{\sum_{\ell=1}^K h_\ell(w_\ell(x)) \frac{\partial}{\partial w_j} h_k(w_k(x)) - h_k(w_k(x)) \frac{\partial}{\partial w_j} h_j(w_j(x))}{(\sum_{\ell=1}^K h_\ell(w_\ell(x)))^2} 
+&=& \frac{\sum_{\ell=1}^K h_\ell(w_\ell(x)) \frac{\partial}{\partial w_j} h_k(w_k(x)) - h_k(w_k(x)) \frac{\partial}{\partial w_j} h_j(w_j(x))}{(\sum_{\ell=1}^K h_\ell(w_\ell(x)))^2}.
 \end{eqnarray}$$
+
+Substituting the partial derivative of $$f_k$$ into the negative log-likelihood is obtained  
 
 $$\begin{eqnarray}
 -\frac{\partial}{\partial w_j}  l_{f_\mathcal Y}(f) &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \frac{\mathbb 1(k=y)}{f_k(x)} \frac{\partial}{\partial w_j} f_k(x)\\
 &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K \frac{\mathbb 1(k=y)}{h_k(w_k(x))}   \frac{\sum_{\ell=1}^K h_\ell(w_\ell(x)) \frac{\partial}{\partial w_j} h_k(w_k(x)) - h_k(w_k(x)) \frac{\partial}{\partial w_j} h_j(w_j(x))}{\sum_{\ell=1}^K h_\ell(w_\ell(x))}
 \end{eqnarray}$$
 
-# Softmax Function
+# Multinomial Logistic Regression
+
+In order to progress with derivation, it is needed to make some assumptions; the assumption that produce the Multinomial Logistic Regression algorithm is that $$h_k$$ is the exponent, i.e., $$h_k(x)= \exp(x)$$ and the resulting $$f_k$$ is the softmax function. 
+
+
 $$\begin{eqnarray}
 h_k(w_k(x)) &=& \exp(w_k(x))\\
 f_k(w_k(x)) &=& \frac{\exp(w_k(x))}{\sum_\ell \exp(w_\ell(x))}
 \end{eqnarray}$$
 
+Using $$f_k$$ as the softmax function in the negative log-likelihood produces the following 
 
 $$\begin{eqnarray}
 -\frac{\partial}{\partial w_j}  l_{f_\mathcal Y}(f) &=&  - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \frac{\mathbb 1(k=y)}{\exp(w_k(x))} \frac{\sum_{\ell=1}^K \exp(w_\ell(x)) \frac{\partial}{\partial w_j} \exp(w_k(x)) - \exp(w_k(x)) \exp(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)}{\sum_{\ell=1}^K \exp(w_\ell(x))}\\
 &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \frac{\mathbb 1(k=y)}{\exp(w_k(x))} \frac{\sum_{\ell=1}^K \exp(w_\ell(x)) \exp(w_k(x)) \frac{\partial}{\partial w_j} w_k(x) - \exp(w_k(x)) \exp(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)}{\sum_{\ell=1}^K \exp(w_\ell(x))}\\
 &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \mathbb 1(k=y) \frac{\sum_{\ell=1}^K \exp(w_\ell(x))  \frac{\partial}{\partial w_j} w_k(x) - \exp(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)}{\sum_{\ell=1}^K \exp(w_\ell(x))}\\
-&=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \mathbb 1(k=y) \left[ \frac{\partial}{\partial w_j} w_k(x) - f_j(x) \frac{\partial}{\partial w_j} w_j(x)\right]\\
-&=& - \sum_{(x, y) \in \mathcal D}  \mathbb 1(j=y) \left[ \frac{\partial}{\partial w_j} w_j(x) - f_j(x) \frac{\partial}{\partial w_j} w_j(x)\right] + \sum_{k \neq j}^K  \mathbb 1(k=y) \left[ \frac{\partial}{\partial w_j} w_k(x) - f_j(x) \frac{\partial}{\partial w_j} w_j(x)\right]\\
-&=& - \sum_{(x, y) \in \mathcal D}  \mathbb 1(j=y) \left[ 1 - f_j(x) \right] \frac{\partial}{\partial w_j} w_j(x) + \sum_{k \neq j}^K  -\mathbb 1(k=y) f_j(x) \frac{\partial}{\partial w_j} w_j(x)\\
-&=& - \sum_{(x, y) \in \mathcal D}  \left( \mathbb 1(j=y) - f_j(x) \right) \frac{\partial}{\partial w_j} w_j(x)\\
-&=& \sum_{(x, y) \in \mathcal D}  \left( f_j(x) - \mathbb 1(j=y) \right) \frac{\partial}{\partial w_j} w_j(x)
+&=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \mathbb 1(k=y) \left[ \frac{\partial}{\partial w_j} w_k(x) - f_j(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)\right]\\
+&=& - \sum_{(x, y) \in \mathcal D}  \mathbb 1(j=y) \left[ \frac{\partial}{\partial w_j} w_j(x) - f_j(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)\right] + \sum_{k \neq j}^K  \mathbb 1(k=y) \left[ \frac{\partial}{\partial w_j} w_k(x) - f_j(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)\right]\\
+&=& - \sum_{(x, y) \in \mathcal D}  \mathbb 1(j=y) \left[ 1 - f_j(w_j(x)) \right] \frac{\partial}{\partial w_j} w_j(x) + \sum_{k \neq j}^K  -\mathbb 1(k=y) f_j(w_j(x)) \frac{\partial}{\partial w_j} w_j(x)\\
+&=& - \sum_{(x, y) \in \mathcal D}  \left( \mathbb 1(j=y) - f_j(w_j(x)) \right) \frac{\partial}{\partial w_j} w_j(x)\\
+&=& \sum_{(x, y) \in \mathcal D}  \left( f_j(w_j(x)) - \mathbb 1(j=y) \right) \frac{\partial}{\partial w_j} w_j(x).
 \end{eqnarray}$$
 
 # Logistic Regression
 
+On the other hand, the Logistic Regression algorithm is obtained when one assumes that $$f_1$$ is the sigmoid function and there are two classes; furthermore, this assumption makes it possible to express $$f_2$$ in terms of $$f_1$$ as follows:
+
 $$\begin{eqnarray}
 f(x) &=& \frac{1}{1 + \exp(-x)}\\
 f_1(x) &=& f(w(x)) \\
-f_2(x) &=& 1 - f_1(x) 
+f_2(x) &=& 1 - f_1(x).
 \end{eqnarray}$$
+
+Using $$f_1$$, $$f_2$$, and the sigmoid function in the negative log-likelihood produce the following
 
 $$\begin{eqnarray}
 -\frac{\partial}{\partial w_j}  l_{f_\mathcal Y}(f) &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K  \frac{\mathbb 1(k=y)}{f_k(x)} \frac{\partial}{\partial w_j} f_k(x)\\
@@ -126,4 +138,36 @@ $$\begin{eqnarray}
 &=& - \sum_{(x, y) \in \mathcal D} \left[ (1 - f(w(x)))\mathbb 1(1=y) - f(w(x))\mathbb 1(2=y) \right] \frac{\partial}{\partial w_j} w(x)\\
 &=& - \sum_{(x, y) \in \mathcal D} (\mathbb 1(1=y) - f(w(x))) \frac{\partial}{\partial w_j} w(x)\\
 &=& \sum_{(x, y) \in \mathcal D} (f(w(x)) - \mathbb 1(1=y)) \frac{\partial}{\partial w_j} w(x) 
-\end{eqnarray}$$
+\end{eqnarray}.$$
+
+It can be observed that the form of the negative log-likelihood for the Multinomial Logistic Regression and the Logistic Regression is similar; the only difference is that there is a function $$w$$ for each class in the multinomial case, and only one function for the Logistic Regression. 
+
+# Text Categorization
+
+Additionally, there has been no assumption regarding the form of $$w(x)$$; given that the problem is text categorization, the variable $$x$$ corresponds to a text. However, the standard definition of Multinomial Logistic Regression and Logistic Regression is that function $$w$$ is a linear function, i.e., $$w(x) = \mathbf w \cdot \mathbf x + w_0$$ where $$\mathbf w \in \mathbb R^d$$, $$\mathbf x \in \mathbb R^d$$, and $$w_0 \in \mathbb R$$. Consequently, one needs to define a function $$m: text \rightarrow \mathbb R^d$$ so that $$m(x) \in \mathbb R^d$$; the Multinomial Logistic Regression in this problem turns out to be:
+
+$$\mathbb P(\mathcal Y=k \mid \mathcal X=x) = \frac{\exp(\mathbf w_k m(x))}{\sum_{j=1}^K \exp(\mathbf w_j m(x))}.$$
+
+The denominator in the previous equation acts as a normalization factor, and the predicted class is invariant to this normalization factor. Additionally, the $$\log$$ of $$\mathbb P(\mathcal Y=k \mid \mathcal X=x)$$ does not affect the prediction class with the rule $$\textsf{class(x)} = \textsf{arg max}_k \mathbb P(\mathcal Y=k \mid \mathcal X=x).$$ Considering these factors the class is predicted as 
+
+$$\textsf{class(x)} = \textsf{arg max}_k \mathbf w_k m(x).$$
+
+The [first approach](/NLP-Course/topics/06TextCategorization/#sec:tc-categorical) followed to tackle the problem of Text Categorization was to use the Bayes' Theorem $$(\mathbb P(\mathcal Y \mid \mathcal X) = \frac{\mathbb P(\mathcal X \mid \mathcal Y) \mathbb P(\mathcal Y)}{\mathbb P(\mathcal X)})$$ where the likelihood ($$\mathbb P(\mathcal X \mid \mathcal Y)$$) was assume to be a Categorical Distribution. A Categorical Distribution is defined with a vector $$\mathbf p \in \mathbb R^d$$ where $$d$$ is the different distribution outcomes. The likelihood is a Categorical Distribution given the class $$\mathcal Y$$, therefore there is a parameter $$\mathbf p$$ for each class, which can be identified with a subindex $$k$$, e.g., $$\mathbf p_k$$ is the parameter corresponding to the class $$k$$. The parameters were estimated assumming indepedence, i.e., $$\mathbb P(\mathcal X=w_1,w_2,\ldots,w_\ell \mid \mathcal Y) = \prod_i \mathbb P(w_i \mid \mathcal Y).$$
+
+# Gradient Descent Algorithm
+
+Unfortunately, the system of equations $$-\frac{\partial}{\partial w_j} l_{f_\mathcal Y}(f) = 0$$ cannot be solved analytically, so one needs to rely on numerical methods to find the $$w_j$$ value that makes the function minimal. One approach that has been very popular lately is the gradient descent algorithm. The idea is that the parameter $$w_j$$ can be found iterative using the update rule
+
+$$w^i_j = w^{i-1}_j - \eta \frac{\partial}{\partial w_j} \sum_{(x, y) \in \mathcal D} L(y, g(x)).$$
+
+The Logistic Regression update rule is
+
+$$w^i_j = w^{i-1}_j - \eta \sum_{(x, y) \in \mathcal D} (f(\mathbf w \cdot \mathbf x + w_0) - \mathbb 1(1=y)) \frac{\partial}{\partial w_j} \mathbf w \cdot \mathbf x + w_0,$$
+
+and the Multinomial Logistic Regression corresponds to
+
+$$\mathbf w^i_{j_\ell} = \mathbf w^{i-1}_{j_\ell} - \eta \sum_{(x, y) \in \mathcal D}  \left( f_j(\mathbf w_j \cdot \mathbf x + w_0) - \mathbb 1(j=y) \right) \frac{\partial}{\partial \mathbf w_{j_\ell}} \mathbf w_j \cdot \mathbf x + w_{j_0}.$$
+
+
+
+
