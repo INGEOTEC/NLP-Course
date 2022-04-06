@@ -68,7 +68,7 @@ $$\begin{eqnarray}
 Before solving the log-likelihood, it is essential to relate this concept with cross-entropy. First the expectation of $$h(\mathcal X)$$ is computed as $$\sum_x h(x) f(x)$$ where $$f$$ is the mass function, this can be expressed as $$\mathbb E_f[h(\mathcal X)]$$. On the other hand, the information content of an event is a decreasing function that has its zero when the event has the highest probability, meaning that there is no information carried on an event that occurs always. The information content can be modeled with the function $$I_f(e) = \log(\frac{1}{f(e)})=-\log(f(e)).$$  The **entropy** measures the expected value of the information content that is $$\mathbb E_f[I_f(\mathcal X)]=-\sum_x f(x) \log(f(x)).$$ Finally, the **cross-entropy** between distribution $$p$$ and $$q$$ is defined as $$H(p, q) = \mathbb E_p[I_q(\mathcal X)] = -\sum_x p(x) \log(q(x)).$$ 
 
 
-
+It can be observed that the negative of the log-likelihood is accumulating the cross-entropy for all the elements in the dataset $$\mathcal D$$; the variables $$y$$ and $$x$$ are constants in the inner summation, and variable $$k$$ goes from all the classes. Therefore, minimizing the log-likelihood is minimizing the cross-entropy, which acts as the loss function. 
 
 $$\begin{eqnarray}
 -\frac{\partial}{\partial w_j}  l_{f_\mathcal Y}(f) &=& \frac{\partial}{\partial w_j} \sum_{(x, y) \in \mathcal D} \overbrace{- \sum_{k=1}^K \mathbb 1(k=y) \log f_k(x)}^{cross-entropy} \\
