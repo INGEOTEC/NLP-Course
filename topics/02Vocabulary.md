@@ -200,6 +200,7 @@ Let us analyze in more detail the previous objective function. The sum goes for 
 This notation is specific for OLS; however, it is helpful to define the general case. The first step is to define the set $$\mathcal D$$ composed by the $$N$$ observations, i.e., $$\mathcal D=\{(\mathbf x_i, y_i) \mid 1 \leq i \leq N\}$$ where $$y_i$$ is the response variable and $$\mathbf x$$ contains the independent variables. The second step is to  use an unspecified loss function as $$L(y, \hat y) = (y - \hat y)^2$$. The last step is to abstract the model, that is replace $$\mathbf a_i \cdot \mathbf w$$ with a function $$g(\mathbf x) = \mathbf a_i \cdot \mathbf w$$.  Combining these components the general version of the OLS optimization problem can be expressed as:
 
 $$\min_{g \in \Omega} \sum_{(\mathbf x, y) \in \mathcal D} L(y, g(\mathbf x)),$$
+{: #eq:supervised-learning-optimization }
  
 where $$g$$ are all the functions defined in the search space $$\Omega$$, $$L$$ is a loss function, and $$\mathcal D$$ contains $$N$$ pairs of observations. This optimization problem is known as **supervised learning** in machine learning.
 
