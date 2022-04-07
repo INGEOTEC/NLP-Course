@@ -166,7 +166,7 @@ where $$\textsf{freq}_i(x)$$ computes the frequency of the token identified with
  
 # Gradient Descent Algorithm
 
-Unfortunately, the system of equations $$-\frac{\partial}{\partial w_j} l_{f_\mathcal Y}(f) = 0$$ cannot be solved analytically, so one needs to rely on numerical methods to find the $$w_j$$ value that makes the function minimal. One approach that has been very popular lately is the gradient descent algorithm. The idea is that the parameter $$w_j$$ can be found iterative using the update rule
+The parameters $$\mathbf w$$ and $$w_0$$ can be estimated by minimizing the negative log-likelihood or equivalently by using the cross-entropy as loss function. Unfortunately, the system of equations $$-\frac{\partial}{\partial w_j} l_{f_\mathcal Y}(f) = 0$$ cannot be solved analytically, so one needs to rely on numerical methods to find the $$w_j$$ value that makes the function minimal. One approach that has been very popular lately is the gradient descent algorithm. The idea is that the parameter $$w_j$$ can be found iterative using the update rule
 
 $$w^i_j = w^{i-1}_j - \eta \frac{\partial}{\partial w_j} \sum_{(x, y) \in \mathcal D} L(y, g(x)).$$
 
@@ -177,6 +177,8 @@ $$w^i_j = w^{i-1}_j - \eta \sum_{(x, y) \in \mathcal D} (f(\mathbf w \cdot \math
 and the Multinomial Logistic Regression corresponds to
 
 $$\mathbf w^i_{j_\ell} = \mathbf w^{i-1}_{j_\ell} - \eta \sum_{(x, y) \in \mathcal D}  \left( f_j(\mathbf w_j \cdot \mathbf x + w_0) - \mathbb 1(j=y) \right) \frac{\partial}{\partial \mathbf w_{j_\ell}} \mathbf w_j \cdot \mathbf x + w_{j_0}.$$
+
+# Term Frequency
 
 
 
