@@ -31,14 +31,16 @@ ci = bootstrap_confidence_interval(y, hy)
 ci
 (0.2839760475399691, 0.30881116416736665)
 
-
+tm = TextModel(token_list=[-1]).fit([x for x, _ in D])
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     _ = [D[x][0] for x in tr]
     X = tm.transform(_)
-    m = Multinomial().fit(X, y[tr])
+    m = LogisticRegression(multi_class='multinomial').fit(X, y[tr])
+    # m = LinearSVC().fit(X, y[tr])
     _ = [D[x][0] for x in val]
     hy[val] = m.predict(tm.transform(_))
 
 ci = bootstrap_confidence_interval(y, hy)
 ci
+

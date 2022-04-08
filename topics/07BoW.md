@@ -176,6 +176,12 @@ $$\mathbf w^i_{j_\ell} = \mathbf w^{i-1}_{j_\ell} - \eta \sum_{(x, y) \in \mathc
 
 # Term Frequency
 
+Gradient descent algorithm is an option to estimate the parameters $$\mathbf w$$ and $$w_0$$ in (Multinomial) Logistic Regression and, in general, any algorithm that uses as its last step the sigmoid or softmax function. The missing step is to define the function $$m$$; the approach that has been used in the Categorical Distribution is to use the frequency as $$m$$. 
+
+The following code relies on the class `TextModel` to represent the text in a vector space, where the vector's component is the frequency of each token of the input. 
+
+The following code reads a dataset and encodes the classes into unique identifiers; the first one is zero. 
+
 ```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
 y = [y for _, y in D]
@@ -183,10 +189,33 @@ le = LabelEncoderWrapper().fit(y)
 y = le.transform(y)
 ```
 
+Once the dataset is in $$\mathcal D$$, it can be used to train the class `TextModel,` which can be done with the method `fit.` The training is the process of associating each token with an id and identifying the size of the vocabulary in $$\mathcal D$$. 
+
 ```python
 tm = TextModel(token_list=[-1], 
                weighting='tf').fit([x for x, _ in D])
 ```
+
+The instance `tm` can be used to represent any text in the vector space; given that it is a sparse vector, it only outputs the dimensions where the value is different from zero, for example, the text *buenos dias dias* (good morning morning) is represented as: 
+
+```
+vec = tm['buenos dias dias']
+vec
+[(263, 0.3333333333333333), (87, 0.6666666666666666)]
+```
+
+where the component identified as 263 (*buenos*) has the value of $$0.33$$ and the component 87 (*dias*) is $$0.66$$; the particular method's characteristic is that the frequency is normalized.
+
+The `TextModel` contains the `transform` method that can transform a list of texts into the vector space; the output of the method is a sparse matrix. The method can be used as follows.
+
+```python
+X = tm.transform(['buenos dias dias'])
+X.shape
+(1, 3291)
+```
+
+The transform method can be combined with the implementation of Multinomial Logistic Regression of sklearn and tested under k-fold cross-validation to compute its performance in $$\mathcal D$$. 
+
 
 ```python
 folds = StratifiedKFold(shuffle=True, random_state=0)
@@ -197,12 +226,46 @@ for tr, val in folds.split(D, y):
     m = LogisticRegression(multi_class='multinomial').fit(X, y[tr])
     _ = [D[x][0] for x in val]
     hy[val] = m.predict(tm.transform(_))
-```
-
-```python
 ci = bootstrap_confidence_interval(y, hy)
 ci
 (0.2839760475399691, 0.30881116416736665)
 ```
 
+# Term Frequency - Inverse Document Frequency
 
+The term frequency is not the only weighting scheme available; one can develop different procedures that can be used to transform the text into a vector space. One of the most popular ones is the term frequency-inverse document frequency (*tf-idf*). The tf-idf is defined as the product of the term frequency, $$\textsf{tf}_i(x),$$ and the inverse document frequency $$\textsf{idf}_i(x).$$ The term frequency is defined as:
+
+$$\textsf{tf}_i(x) = \frac{\sum_{w \in x} \mathbb 1(w = i)}{\mid x \mid},$$
+
+where $$x$$ is the tokenized text represented as a multiset, using the identifiers instead of the token. On the other hand, the inverse document frequency is 
+
+$$\textsf{idf}_i(\mathcal D) = \log \frac{\mid \mathcal D \mid}{\sum_{x \in \mathcal D} 1(i \in x) },$$
+
+where $$\mathcal D$$ is the dataset used to train the algorithm and $$x$$ is the tokenized text represented as a multiset.
+
+The `TextModel` class uses as default weighting scheme tf-idf, which can 
+be tested with the following code. 
+
+```python
+tm = TextModel(token_list=[-1]).fit([x for x, _ in D])
+vec = tm['buenos dias']
+vec
+[(263, 0.7489370345067511), (87, 0.6626411686155892)]
+```
+
+The performance of this weighting scheme on $$\mathcal D$$ can be estimated with the following code.
+
+```
+hy = np.empty(len(D))
+for tr, val in folds.split(D, y):
+    _ = [D[x][0] for x in tr]
+    X = tm.transform(_)
+    m = LogisticRegression(multi_class='multinomial').fit(X, y[tr])
+    # m = LinearSVC().fit(X, y[tr])
+    _ = [D[x][0] for x in val]
+    hy[val] = m.predict(tm.transform(_))
+
+ci = bootstrap_confidence_interval(y, hy)
+ci
+(0.31927898144547495, 0.34791512559623444)
+```
