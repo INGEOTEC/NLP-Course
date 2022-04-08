@@ -19,16 +19,12 @@ nav_order: 7
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from microtc.utils import tweet_iterator, load_model, save_model
-from scipy.stats import norm, multinomial, multivariate_normal
-from matplotlib import pylab as plt
-from collections import Counter
+from microtc.utils import tweet_iterator
 from sklearn.model_selection import StratifiedKFold
-from scipy.special import logsumexp
-from sklearn.metrics import recall_score, precision_score, f1_score
-from EvoMSA.utils import bootstrap_confidence_interval
-from sklearn.naive_bayes import MultinomialNB
-from os.path import join
+from EvoMSA.utils import LabelEncoderWrapper, bootstrap_confidence_interval
+from EvoMSA.model import Multinomial
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
 ```
 
 ## Installing external libraries
@@ -180,6 +176,33 @@ $$\mathbf w^i_{j_\ell} = \mathbf w^{i-1}_{j_\ell} - \eta \sum_{(x, y) \in \mathc
 
 # Term Frequency
 
+```python
+D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
+y = [y for _, y in D]
+le = LabelEncoderWrapper().fit(y)
+y = le.transform(y)
+```
 
+```python
+tm = TextModel(token_list=[-1], 
+               weighting='tf').fit([x for x, _ in D])
+```
+
+```python
+folds = StratifiedKFold(shuffle=True, random_state=0)
+hy = np.empty(len(D))
+for tr, val in folds.split(D, y):
+    _ = [D[x][0] for x in tr]
+    X = tm.transform(_)
+    m = LogisticRegression(multi_class='multinomial').fit(X, y[tr])
+    _ = [D[x][0] for x in val]
+    hy[val] = m.predict(tm.transform(_))
+```
+
+```python
+ci = bootstrap_confidence_interval(y, hy)
+ci
+(0.2839760475399691, 0.30881116416736665)
+```
 
 

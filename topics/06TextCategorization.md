@@ -304,7 +304,7 @@ As can be observed, $$\mathcal D$$ is equivalent to the one used in the [Categor
 The following code uses the `TextModel` class to tokenize the text using words as the tokenizer; the tokenized text is stored in the variable `D.`
 
 ```python
-tm = TextModel(token_list=[-1], lang='english')
+tm = TextModel(token_list=[-1])
 tok = tm.tokenize
 D = [(tok(x), y) for x, y in D]
 ```
@@ -368,7 +368,7 @@ The posterior function can predict all the text in $$\mathcal D$$; the predictio
 hy = np.array([posterior(x).argmax() for x, _ in D])
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
-0.977
+0.974
 ```
 
 ## Training
@@ -413,7 +413,7 @@ The following code implements stratified k-fold cross-validation, predicts all t
 
 ```python
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
-tm = TextModel(token_list=[-1], lang='english')
+tm = TextModel(token_list=[-1])
 folds = StratifiedKFold(shuffle=True, random_state=0)
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
@@ -427,7 +427,7 @@ Once the classes in $$\mathcal D$$ has been predicted, one can compute the accur
 ```python
 y = np.array([uniq_labels[y] for _, y in D])
 (y == hy).mean()
-0.615
+0.618
 ```
 
 The confidence interval of the accuracy is computed as follows.
@@ -438,7 +438,7 @@ s = np.sqrt(p * (1 - p) / y.shape[0])
 coef = norm.ppf(0.975)
 ci = (p - coef * s, p + coef * s)
 ci
-(0.5848410641389679, 0.6451589358610321)
+(0.5878856141926456, 0.6481143858073544)
 ```
 
 ## Precision, Recall, and F1-score
@@ -467,7 +467,7 @@ metric = lambda a, b: recall_score(a, b, average='macro')
 ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
 ci
-(0.3967001014739609, 0.43613909993373073)
+(0.4006296585578326, 0.4415247767402683)
 ```
 
 # Tokenizer
@@ -475,7 +475,7 @@ ci
 One of the critical components in the text categorization algorithm is the method used to tokenize the text; changing the tokenizer's parameters impacts the classifier's performance, e.g., the following code shows an example where the tokenizer used the default parameters. An increase in performance can be observed, albeit both confidence intervals overlap, so it cannot be concluded that one set of parameters is better than the other.
 
 ```python
-tm = TextModel(lang='english')
+tm = TextModel()
 hy = np.empty(len(D))
 for tr, val in folds.split(D, y):
     T = [D[x] for x in tr]
@@ -488,6 +488,6 @@ metric = lambda a, b: recall_score(a, b, average='macro')
 ci = bootstrap_confidence_interval(y, hy,
                                    metric=metric)
 ci
-(0.42474371071687494, 0.465052582103992)
+(0.4326075670113598, 0.47454989683417365)
 ```
 
