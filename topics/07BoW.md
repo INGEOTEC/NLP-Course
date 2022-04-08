@@ -231,6 +231,10 @@ ci
 (0.2839760475399691, 0.30881116416736665)
 ```
 
+The following wordcloud shows the frequency in [Semeval-2017 Task 4](https://aclanthology.org/S17-2088.pdf). It can be observed that the most frequent words are tokens that could be considered stopwords.
+
+![Term Frequency Semeval 2017 Task 4](/NLP-Course/assets/images/semeval2017_tf.png)
+
 # Term Frequency - Inverse Document Frequency
 
 The term frequency is not the only weighting scheme available; one can develop different procedures that can be used to transform the text into a vector space. One of the most popular ones is the term frequency-inverse document frequency (*tf-idf*). The tf-idf is defined as the product of the term frequency, $$\textsf{tf}_i(x),$$ and the inverse document frequency $$\textsf{idf}_i(x).$$ The term frequency is defined as:
@@ -269,3 +273,7 @@ ci = bootstrap_confidence_interval(y, hy)
 ci
 (0.31927898144547495, 0.34791512559623444)
 ```
+
+The inverse term frequency description is complemented by the word-cloud obtained with the [Semeval-2017 Task 4](https://aclanthology.org/S17-2088.pdf) dataset. It can be seen that the words with the highest weights are infrequent.
+
+![Inverse Document Frequency Semeval 2017 Task 4](/NLP-Course/assets/images/semeval2017_idf.png)

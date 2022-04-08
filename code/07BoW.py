@@ -1,3 +1,4 @@
+from typing import Counter
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
@@ -7,6 +8,9 @@ from EvoMSA.utils import LabelEncoderWrapper, bootstrap_confidence_interval
 from EvoMSA.model import Multinomial
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
+from matplotlib import pylab as plt
+from wordcloud import WordCloud as WC
+from collections import Counter
 
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
 y = [y for _, y in D]
@@ -43,4 +47,24 @@ for tr, val in folds.split(D, y):
 
 ci = bootstrap_confidence_interval(y, hy)
 ci
+
+D = list(tweet_iterator('../../../datasets/semeval/semeval2017_En_train.json'))
+tm = TextModel(token_list=[-1]).fit(D)
+
+id2word = {v:k for k, v in tm.model.word2id.items()}
+_ = {id2word[k]:v for k, v in tm.model.wordWeight.items()}
+
+wc = WC().generate_from_frequencies(_)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('semeval2017_idf.png', dpi=300)
+
+cnt = Counter()
+_ = [cnt.update(tm.tokenize(x)) for x in D]
+wc = WC().generate_from_frequencies(cnt)
+plt.imshow(wc)
+plt.axis('off')
+plt.tight_layout()
+plt.savefig('semeval2017_tf.png', dpi=300)
 
