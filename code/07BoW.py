@@ -1,8 +1,9 @@
+from imp import load_module
 from typing import Counter
 import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
-from microtc.utils import tweet_iterator
+from microtc.utils import tweet_iterator, load_model
 from sklearn.model_selection import StratifiedKFold
 from EvoMSA.utils import LabelEncoderWrapper, bootstrap_confidence_interval
 from EvoMSA.model import Multinomial
@@ -11,6 +12,10 @@ from sklearn.svm import LinearSVC
 from matplotlib import pylab as plt
 from wordcloud import WordCloud as WC
 from collections import Counter
+from scipy.stats import rankdata
+import numpy as np
+import Orange
+
 
 D = [(x['text'], x['klass']) for x in tweet_iterator(TWEETS)]
 y = [y for _, y in D]
@@ -68,3 +73,17 @@ plt.axis('off')
 plt.tight_layout()
 plt.savefig('semeval2017_tf.png', dpi=300)
 
+
+perf = load_model('dataset/performance.gz')
+algs = list(perf.keys())
+datasets = list(perf[algs[0]][1].keys())
+data = []
+for alg in algs:
+    _ = [perf[alg][1][dataset] for dataset in datasets]
+    data.append(_)
+data = np.array(data)
+r = rankdata(data, axis=0).mean(axis=1)
+
+cd = Orange.evaluation.compute_CD(r, data.shape[1])
+Orange.evaluation.graph_ranks(r, algs, cd=cd, width=6, textspace=1.5, reverse=True)
+plt.show()
