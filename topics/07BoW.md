@@ -152,11 +152,11 @@ The [first approach](/NLP-Course/topics/06TextCategorization/#sec:tc-categorical
 
 The evidence $$\mathbb P(\mathcal X)$$ is a normalization factor in Bayes' theorem, so it does not affect the predicted class; moreover, the logarithm does not change the prediction value. Incorporating into Bayes' theorem these transformations, it is obtained
 
-$$\log \mathbb P(\mathcal Y \mid \mathcal X=w_1,w_2,\ldots,w_\ell) \propto \sum_i^\ell \log \mathbb P(w_i \mid \mathcal Y) + \log P(\mathcal Y);$$
+$$\log \mathbb P(\mathcal Y \mid \mathcal X=w_1,w_2,\ldots,w_\ell) \propto \sum_i^\ell \log \mathbb P(w_i \mid \mathcal Y) + \log \mathbb P(\mathcal Y);$$
 
 which can be expressed using the parameter, $$\mathbf p_k$$, of the Categorical Distribution, and the frequency of each token as follows:
 
-$$\log \mathbb P(\mathcal Y=k \mid \mathcal X=x) \propto \sum_i^d \log(\mathbf p_{k_i}) \textsf{freq}_i(x) + \log P(\mathcal Y),$$
+$$\log \mathbb P(\mathcal Y=k \mid \mathcal X=x) \propto \sum_i^d \log(\mathbf p_{k_i}) \textsf{freq}_i(x) + \log \mathbb P(\mathcal Y),$$
 
 where $$\textsf{freq}_i(x)$$ computes the frequency of the token identified with the index $$i$$ in the text $$x$$. In order to illustrate the similarity between the previous equation and the one obtained with Multinomial Logistic Regression, it is convenient to express it using vectors, i.e., $$\log \mathbb P(\mathcal Y=k \mid \mathcal X=x) \propto \log(\mathbf p_k) \textsf{freq}(x) +  \log P(\mathcal Y),$$ where $$\log(\mathbf p_k) \in \mathbb R^d$$, $$\textsf{freq}(x) \in \mathbb R^d$$, and $$\log \mathbb P(\mathcal Y=k) \in \mathbb R.$$ Therefore, the parameters $$\log(\mathbf p_k)$$ and $$\log \mathbb P(\mathcal Y=k)$$ are equivalent to $$\mathbf w$$ and $$w_0$$ in the (Multinomial) Logistic Regression, and $$m(x)$$ is the frequency, $$\textsf{freq}(x)$$, in the Categorical Distribution approach.
  
@@ -243,7 +243,7 @@ $$\textsf{tf}_i(x) = \frac{\sum_{w \in x} \mathbb 1(w = i)}{\mid x \mid},$$
 
 where $$x$$ is the tokenized text represented as a multiset, using the identifiers instead of the token. On the other hand, the inverse document frequency is 
 
-$$\textsf{idf}_i(\mathcal D) = \log \frac{\mid \mathcal D \mid}{\sum_{x \in \mathcal D} 1(i \in x) },$$
+$$\textsf{idf}_i(\mathcal D) = \log \frac{\mid \mathcal D \mid}{\sum_{x \in \mathcal D} \mathbb 1(i \in x) },$$
 
 where $$\mathcal D$$ is the dataset used to train the algorithm and $$x$$ is the tokenized text represented as a multiset.
 
