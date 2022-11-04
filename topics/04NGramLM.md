@@ -48,7 +48,7 @@ The conditional probability of two random variables $$\mathcal X$$ and $$\mathca
 
 $$\mathbb P(\mathcal Y \mid \mathcal X) = \frac{\mathbb P(\mathcal X, \mathcal Y)}{\mathbb P(\mathcal X)},$$
 
-if $$\mathbb P(\mathcal Y) > 0.$$
+if $$\mathbb P(\mathcal X) > 0.$$
 
 The definition allows defining $$\mathbb P(\mathcal X, \mathcal Y) = \mathbb P(\mathcal Y \mid \mathcal X) \mathbb P(\mathcal X),$$ which is helpful for two words text. The general case involves $$\ell$$ words, which can be defined using the probability chain rule.
 
