@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Text Categorization
+title: Text Categorization (Categorical Distribution)
 nav_order: 6
 ---
 
-# Text Categorization
+# Text Categorization (Categorical Distribution)
 {: .fs-10 .no_toc }
 
 ## Contents

@@ -1,10 +1,10 @@
 ---
 layout: default
-title: Bag of Words Model
+title: Text Categorization (Vectors)
 nav_order: 7
 ---
 
-# Bag of Words Model
+# Text Categorization (Vectors)
 {: .fs-10 .no_toc }
 
 ## Contents
