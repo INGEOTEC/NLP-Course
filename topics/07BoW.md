@@ -20,9 +20,10 @@ import numpy as np
 from b4msa.textmodel import TextModel
 from EvoMSA.tests.test_base import TWEETS
 from microtc.utils import tweet_iterator
-from sklearn.model_selection import StratifiedKFold
 from EvoMSA.utils import LabelEncoderWrapper, bootstrap_confidence_interval
 from EvoMSA.model import Multinomial
+from EvoMSA import BoW
+from sklearn.model_selection import StratifiedKFold
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 ```
@@ -277,3 +278,114 @@ ci
 The inverse term frequency description is complemented by the word-cloud obtained with the [Semeval-2017 Task 4](https://aclanthology.org/S17-2088.pdf) dataset. It can be seen that the words with the highest weights are infrequent.
 
 ![Inverse Document Frequency Semeval 2017 Task 4](/NLP-Course/assets/images/semeval2017_idf.png)
+
+# Lab: Bag of Words Text Categorization
+{: #sec:lab-bow}
+
+The previous section and this one have presented the elements 
+to create a text classifier using a 
+Bag of Words (BoW) representation (i.e., function $$m$$ defined previously). 
+It is time to wrap all this up and describe how to use 
+Python’s class BoW that implements it. 
+
+The first step is to initialize the BoW representation; 
+this can be done in two different ways. 
+The first one is to use a pre-trained BoW representation 
+which was trained in half a million tweets in each language available. 
+The second is initializing the model with the data 
+used to fit the text classifier. 
+
+The pre-trained BoW representation can be invoked, 
+as shown in the following instruction. 
+
+```python
+bow = BoW(lang='en')
+```
+
+The instance bow can be used immediately because 
+it uses a pre-trained model. The method transform receives 
+a list of text to be transformed in the BoW representation; 
+for example, the following code converts the 
+text _good morning_ into the representation. 
+
+```python
+bow.transform(['good morning'])
+<1x16384 sparse matrix of type '<class 'numpy.float64'>'
+	with 35 stored elements in Compressed Sparse Row format>
+```
+
+It is observed that the matrix has dimensions $$1 \times 16384$$,
+which corresponds to one text, and the space is in $$\mathbb R^{16384}$$ , 
+meaning that there are $$16384$$ tokens in the vocabulary. 
+The matrix is in a sparse notation because only the tokens that appear 
+in the text have a value other than zero.
+
+The coefficients can be seen on the attribute `data` shown below.
+
+```python
+X = bow.transform(['good morning'])
+X.data
+array([0.0418059 , 0.04938095, 0.06065429, 0.06554808, 0.07118364,
+       0.07193482, 0.07464737, 0.07582207, 0.07998881, 0.08907673,
+       0.1158131 , 0.1199745 , 0.12253494, 0.12477663, 0.13641194,
+       0.13701824, 0.14673512, 0.17245292, 0.17909476, 0.18174817,
+       0.18521041, 0.19004645, 0.19137817, 0.19414765, 0.19702447,
+       0.20182253, 0.20188162, 0.20262674, 0.21067728, 0.24080574,
+       0.24246672, 0.24981461, 0.26030563, 0.26209842, 0.27140846])
+```
+
+It can be observed that only 35 tokens have a value different than zero. 
+These tokens correspond to the ones obtained from the text that are also in 
+the representation’s vocabulary. BoW uses as a weighting scheme TF-IDF; 
+however, all the vectors are normalized to be a unit vector, as can be 
+verified in the previous example. 
+
+The non-zero tokens are stored in the attribute `indices;` however, these 
+represent the index in the vector space. The attribute `BoW.names` has the 
+actual token ordered equivalent to the vector space. The following code shows 
+the tokens used to represent the text _good morning_.
+
+```python
+' '.join([bow.names[x] for x in X.indices])
+'q:in q:d~ q:~m q:ng q:or q:g~ q:ing q:ng~ q:ing~ q:~g q:oo q:ni q:mo q:go q:~go q:od q:~mo q:rn q:od~ q:ood q:mor q:nin q:ood~ q:ning q:goo q:~goo q:good q:~mor good q:orn q:rni q:rnin q:orni q:morn morning'
+```
+
+The second procedure to initialize the BoW class is using the same dataset to 
+train the classifier; this approach is illustrated using a synthetic dataset 
+found on the EvoMSA package. The dataset path is in the variable TWEETS and 
+can be read using the `tweet_iteration` function, as shown in the following 
+instructions.
+
+```
+D = list(tweet_iterator(TWEETS))
+```
+
+The BoW class is instantiated with the parameter `pretrain` set to false, as 
+illustrated next.
+
+```
+bow = BoW(pretrain=False)
+```
+
+It can be verified that, at this time, it is impossible to transform any text 
+into the BoW representations because the BoW model has yet to be trained. 
+
+The dataset in `D` is a Spanish polarity set with four positive, negative, neutral, and none labels. The text is in the keyword `text,` and the associate label is in the keyword `klass`; this can be changed and set to the appropriate values of the parameters `key` and `labe_key` of the BoW constructor. 
+
+D has all the components to train a text classifier; this can be done with the method `fit.` Internally, the method `fit` will invoke the method `b4msa_fit` to estimate the parameters of the BoW representation before training the classifier. The following code shows how to fit the text classifier. 
+
+```python
+bow.fit(D)
+```
+
+The variable `bow` can be used to predict the polarity of a given text; this 
+can be done with the method `predict.` For example, the following code 
+predicts the text _buenos días_ (good morning).
+
+```python
+bow.predict(['buenos dias'])
+array(['P'], dtype='<U4')
+```
+
+The method `predict` receives a list of text, and it can be observed that the 
+text _buenos días_ is predicted as P, which corresponds to the positive class.
