@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Text Categorization (Vectors)
+title: Text Categorization (Logistic Regression)
 nav_order: 7
 ---
 
@@ -60,7 +60,7 @@ $$\begin{eqnarray}
 &=& \frac{\partial}{\partial w_j} \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K \mathbb 1(k=y) \log f_k(x) = 0
 \end{eqnarray}$$
 
-# Minimizing Cross-entropy
+## Minimizing Cross-entropy
 
 Before solving the log-likelihood, it is essential to relate this concept with cross-entropy. First the expectation of $$h(\mathcal X)$$ is computed as $$\sum_{k \in \mathcal X} h(k) f(k)$$ where $$f$$ is the mass function, this can be expressed as $$\mathbb E_f[h(\mathcal X)]$$. On the other hand, the information content of an event is a decreasing function that has its zero when the event has the highest probability, meaning that there is no information carried on an event that occurs always. The information content can be modeled with the function $$I_f(e) = \log(\frac{1}{f(e)})=-\log(f(e)).$$  The **entropy** measures the expected value of the information content that is $$\mathbb E_f[I_f(\mathcal X)]=-\sum_{k \in \mathcal X} f(k) \log(f(k)).$$ Finally, the **cross-entropy** between distribution $$p$$ and $$q$$ is defined as $$H(p, q) = \mathbb E_p[I_q(\mathcal X)] = -\sum_{k \in \mathcal X} p(k) \log(q(k)).$$ 
 
@@ -91,7 +91,7 @@ $$\begin{eqnarray}
 &=& - \sum_{(x, y) \in \mathcal D} \sum_{k=1}^K \frac{\mathbb 1(k=y)}{h_k(w_k(x))}   \frac{\sum_{\ell=1}^K h_\ell(w_\ell(x)) \frac{\partial}{\partial w_j} h_k(w_k(x)) - h_k(w_k(x)) \frac{\partial}{\partial w_j} h_j(w_j(x))}{\sum_{\ell=1}^K h_\ell(w_\ell(x))}
 \end{eqnarray}$$
 
-# Multinomial Logistic Regression
+## Multinomial Logistic Regression
 
 In order to progress with derivation, it is needed to make some assumptions; the assumption that produce the Multinomial Logistic Regression algorithm is that $$h_k$$ is the exponent, i.e., $$h_k(x)= \exp(x)$$ and the resulting $$f_k$$ is the softmax function. 
 
@@ -114,7 +114,7 @@ $$\begin{eqnarray}
 &=& \sum_{(x, y) \in \mathcal D}  \left( f_j(w_j(x)) - \mathbb 1(j=y) \right) \frac{\partial}{\partial w_j} w_j(x).
 \end{eqnarray}$$
 
-# Logistic Regression
+## Logistic Regression
 
 On the other hand, the Logistic Regression algorithm is obtained when one assumes that $$f_1$$ is the sigmoid function and there are two classes; furthermore, this assumption makes it possible to express $$f_2$$ in terms of $$f_1$$ as follows:
 
@@ -139,7 +139,7 @@ $$\begin{eqnarray}
 
 It can be observed that the form of the negative log-likelihood for the Multinomial Logistic Regression and the Logistic Regression is similar; the only difference is that there is a function $$w$$ for each class in the multinomial case, and only one function for the Logistic Regression. 
 
-# Text Categorization
+# Text Categorization - Logistic Regression
 
 Additionally, there has been no assumption regarding the form of $$w(x)$$; given that the problem is text categorization, the variable $$x$$ corresponds to a text. However, the standard definition of Multinomial Logistic Regression and Logistic Regression is that function $$w$$ is a linear function, i.e., $$w(x) = \mathbf w \cdot \mathbf x + w_0$$ where $$\mathbf w \in \mathbb R^d$$, $$\mathbf x \in \mathbb R^d$$, and $$w_0 \in \mathbb R$$. Consequently, one needs to define a function $$m: text \rightarrow \mathbb R^d$$ so that $$m(x) \in \mathbb R^d$$; the Multinomial Logistic Regression in this problem turns out to be:
 
@@ -161,7 +161,7 @@ $$\log \mathbb P(\mathcal Y=k \mid \mathcal X=x) \propto \sum_i^d \log(\mathbf p
 
 where $$\textsf{freq}_i(x)$$ computes the frequency of the token identified with the index $$i$$ in the text $$x$$. In order to illustrate the similarity between the previous equation and the one obtained with Multinomial Logistic Regression, it is convenient to express it using vectors, i.e., $$\log \mathbb P(\mathcal Y=k \mid \mathcal X=x) \propto \log(\mathbf p_k) \textsf{freq}(x) +  \log P(\mathcal Y),$$ where $$\log(\mathbf p_k) \in \mathbb R^d$$, $$\textsf{freq}(x) \in \mathbb R^d$$, and $$\log \mathbb P(\mathcal Y=k) \in \mathbb R.$$ Therefore, the parameters $$\log(\mathbf p_k)$$ and $$\log \mathbb P(\mathcal Y=k)$$ are equivalent to $$\mathbf w$$ and $$w_0$$ in the (Multinomial) Logistic Regression, and $$m(x)$$ is the frequency, $$\textsf{freq}(x)$$, in the Categorical Distribution approach.
  
-# Gradient Descent Algorithm
+## Gradient Descent Algorithm
 
 The parameters $$\mathbf w$$ and $$w_0$$ can be estimated by minimizing the negative log-likelihood or equivalently by using the cross-entropy as loss function. Unfortunately, the system of equations $$-\frac{\partial}{\partial w_j} l_{f_\mathcal Y}(f) = 0$$ cannot be solved analytically, so one needs to rely on numerical methods to find the $$w_j$$ value that makes the function minimal. One approach that has been very popular lately is the gradient descent algorithm. The idea is that the parameter $$w_j$$ can be found iterative using the update rule
 
@@ -175,7 +175,7 @@ and the Multinomial Logistic Regression corresponds to
 
 $$\mathbf w^i_{j_\ell} = \mathbf w^{i-1}_{j_\ell} - \eta \sum_{(x, y) \in \mathcal D}  \left( f_j(\mathbf w_j \cdot \mathbf x + w_0) - \mathbb 1(j=y) \right) \frac{\partial}{\partial \mathbf w_{j_\ell}} \mathbf w_j \cdot \mathbf x + w_{j_0}.$$
 
-# Term Frequency
+## Term Frequency
 
 Gradient descent algorithm is an option to estimate the parameters $$\mathbf w$$ and $$w_0$$ in (Multinomial) Logistic Regression and, in general, any algorithm that uses as its last step the sigmoid or softmax function. The missing step is to define the function $$m$$; the approach that has been used in the Categorical Distribution is to use the frequency as $$m$$. 
 
@@ -236,7 +236,7 @@ The following wordcloud shows the frequency in [Semeval-2017 Task 4](https://acl
 
 ![Term Frequency Semeval 2017 Task 4](/NLP-Course/assets/images/semeval2017_tf.png)
 
-# Term Frequency - Inverse Document Frequency
+## Term Frequency - Inverse Document Frequency
 
 The term frequency is not the only weighting scheme available; one can develop different procedures that can be used to transform the text into a vector space. One of the most popular ones is the term frequency-inverse document frequency (*tf-idf*). The tf-idf is defined as the product of the term frequency, $$\textsf{tf}_i(x),$$ and the inverse document frequency $$\textsf{idf}_i(x).$$ The term frequency is defined as:
 
